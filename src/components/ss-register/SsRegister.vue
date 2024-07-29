@@ -1,3 +1,3 @@
 <template>
-    <span>registro</span>
+    <span>Componente de registro</span>
 </template>
