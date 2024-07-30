@@ -11,7 +11,11 @@ const routes = [
       component: () => import('../components/ss-register/SsRegister.vue'),
 
     },
-  
+    {
+      path: '/signIn',
+      name : 'signIn',
+      component: () => import('../pages/auth/Login.vue'),
+    },
   ]
   
   export default routes
