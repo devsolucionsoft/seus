@@ -6,7 +6,7 @@
 import SsHeader from '@/components/ss-header/SsHeader.vue';
 
 export default {
-  name: 'Empresas',
+  name: 'Companies',
   components: {
     SsHeader
   }

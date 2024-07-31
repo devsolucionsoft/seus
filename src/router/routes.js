@@ -9,7 +9,6 @@ const routes = [
       path: '/register',
       name : 'register',
       component: () => import('../components/ss-register/SsRegister.vue'),
-
     },
   
   ]
