@@ -91,9 +91,20 @@
 
           <div v-if="termsModalVisible" class="modal">
             <div class="modal-content">
-              <span class="close" @click="hideTermsModal">&times;</span>
-              <h2>Política de Tratamiento de Datos</h2>
-              <p>Aquí va el contenido de la política de tratamiento de datos...</p>
+              <div class="modal-header">
+                <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
+                <span class="close" @click="hideTermsModal">&times;</span>
+              </div>
+              <div class="content">
+                <h5>Términos y Condiciones</h5>
+                <p>
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. <br><br>
+
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. <br><br>
+                  
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -604,17 +615,69 @@
 
     .modal-content {
       background-color: #fff;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      width: 80%;
-      max-width: 600px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 443px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-height: 694px;
     }
 
-    .close {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
+    .modal-content .modal-header{
+      background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 22px 30px;
+      align-items: center;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .modal-content .modal-header img{
+      max-width: 147px;
+    }
+
+    .modal-content .modal-header .close {
       cursor: pointer;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      border: 1px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content .content{
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      padding: 34px 40px;
+      overflow-y: auto;
+    }
+    
+    .modal-content .content h5{
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 26.82px;
+      letter-spacing: -0.02em;
+      text-align: center;
+      color: #023D6A;
+      margin: 0;
+    }
+
+    .modal-content .content p{
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 14.63px;
+      letter-spacing: -0.02em;
+      text-align: left;
+      color: black;
+      margin: 0;
     }
 
     section .content .startCarrer form .document-row {
