@@ -35,26 +35,30 @@
             </div>
             <div class="element document-row">
               <div class="select-wrapper">
-                <select id="documentType" v-model="documentType" required>
-                  <option value="" disabled selected>Tipo de Documento</option>
-                  <option value="CC">Cédula de Ciudadanía</option>
-                  <option value="TI">Tarjeta de Identidad</option>
-                  <option value="CE">Cédula de Extranjería</option>
-                </select>
-                <div class="custom-arrow">
-                  <img src="@/assets/icons/down-arrow.svg" alt="Custom Arrow">
+                <div class="contentElement">
+                  <select id="documentType" v-model="documentType" required>
+                    <option value="" disabled selected>Tipo de Documento</option>
+                    <option value="CC">Cédula de Ciudadanía</option>
+                    <option value="TI">Tarjeta de Identidad</option>
+                    <option value="CE">Cédula de Extranjería</option>
+                  </select>
+                  <div class="custom-arrow">
+                    <img src="@/assets/icons/down-arrow.svg" alt="Custom Arrow">
+                  </div>
                 </div>
+                <span v-if="documentTypeError" class="error-message">{{ documentTypeError }}</span>
               </div>
               <div class="input-wrapper">
                 <img src="@/assets/icons/fingerprint.svg" alt="ID Card Icon" class="input-icon">
                 <input type="text" id="documentNumber" v-model="documentNumber" required placeholder="Número de Documento">
+                <span v-if="documentNumberError" class="error-message">{{ documentNumberError }}</span>
               </div>
             </div>
             <div class="element">
               <div class="input-wrapper">
                 <img src="@/assets/icons/lock.svg" alt="Lock Icon" class="input-icon">
                 <input :type="showPassword ? 'text' : 'password'" id="password" v-model="password" required @input="checkPasswordStrength" placeholder="Contraseña">
-                <img @click="togglePasswordVisibility('password')" style="cursor: pointer;" src="@/assets/icons/hidden-eye.svg" alt="Eye Icon" class="eye-icon">
+                <img @click="togglePasswordVisibility('showPassword')" style="cursor: pointer;" src="@/assets/icons/hidden-eye.svg" alt="Eye Icon" class="eye-icon">
               </div>
               <div class="password-strength-bar">
                 <div class="strength-bar weak"></div>
@@ -68,7 +72,7 @@
               <div class="input-wrapper">
                 <img src="@/assets/icons/lock.svg" alt="Lock Icon" class="input-icon">
                 <input :type="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" v-model="confirmPassword" required placeholder="Confirmar contraseña">
-                <img @click="togglePasswordVisibility('confirmPassword')" style="cursor: pointer;" src="@/assets/icons/hidden-eye.svg" alt="Eye Icon" class="eye-icon">
+                <img @click="togglePasswordVisibility('showConfirmPassword')" style="cursor: pointer;" src="@/assets/icons/hidden-eye.svg" alt="Eye Icon" class="eye-icon">
               </div>
               <span v-if="confirmPasswordError" class="error-message">{{ confirmPasswordError }}</span>
             </div>
@@ -92,16 +96,8 @@
               <p>Aquí va el contenido de la política de tratamiento de datos...</p>
             </div>
           </div>
-          
         </div>
-        <div class="opportunityMarket">
-          <div class="contentSection">
-
-          </div>
-          <div class="buttonsSection">
-
-          </div>
-        </div>
+        <SsOpportunityMarket/>
       </div>
     </section>
     <SsFooter></SsFooter>
@@ -111,12 +107,14 @@
 <script>
   import SsHeader from '@/components/ss-header/SsHeader.vue';
   import SsFooter from '@/components/ss-footer/SsFooter.vue';
+  import SsOpportunityMarket from '@/components/ss-opportunityMarket/SsOpportunityMarket.vue';
 
   export default {
     name: 'Companies',
     components: {
       SsHeader,
-      SsFooter
+      SsFooter,
+      SsOpportunityMarket,
     },
     data() {
       return {
@@ -129,6 +127,7 @@
         confirmPassword: '',
         acceptTerms: false,
         showPassword: false,
+        showConfirmPassword: false,
         namesError: '',
         lastNamesError: '',
         emailError: '',
@@ -233,8 +232,8 @@
         }
         return strength;
       },
-      togglePasswordVisibility() {
-        this.showPassword = !this.showPassword;
+      togglePasswordVisibility(field) {
+        this[field] = !this[field];
       },
       resetErrors() {
         this.namesError = '';
@@ -256,6 +255,32 @@
         this.termsModalVisible = false;
       }
     },
+    watch: {
+      names(value) {
+        if (value) this.namesError = '';
+      },
+      lastNames(value) {
+        if (value) this.lastNamesError = '';
+      },
+      email(value) {
+        if (value && this.isValidEmail(value)) this.emailError = '';
+      },
+      documentType(value) {
+        if (value) this.documentTypeError = '';
+      },
+      documentNumber(value) {
+        if (value) this.documentNumberError = '';
+      },
+      password(value) {
+        if (value && value.length >= 6) this.passwordError = '';
+      },
+      confirmPassword(value) {
+        if (value && value === this.password) this.confirmPasswordError = '';
+      },
+      acceptTerms(value) {
+        if (value) this.acceptTermsError = '';
+      }
+    }
   };
 </script>
 
@@ -265,9 +290,9 @@
       background-image: url('../../assets/images/bgLogin.jpeg');
       background-position: center;
       background-size: cover;
-      min-height: 100vh;
       padding-top: 77px;
-      z-index: 2;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+      min-height: 100vh;
     }
     
     section > .title{
@@ -285,7 +310,8 @@
       display: flex;
       flex-direction: row;
       gap: 72px;
-      padding: 0 96px 0 140px ;
+      padding: 0 96px 0 140px;
+      max-height: 93vh;
     }
 
     section .content .startCarrer{
@@ -394,11 +420,13 @@
       line-height: 18px;
       text-align: left;
       color: #4A0E54;
+      cursor: pointer;
     }
 
     section .content .startCarrer form .element .input-wrapper{
       position: relative;
       height: fit-content;
+      max-height: 47px;
     }
 
     section .content .startCarrer form .element .input-wrapper .input-icon{
@@ -467,6 +495,7 @@
       background-color: #F2F2F2;
       border: 1px solid #E6E6E6;
       border-radius: 6px;
+      max-height: 47px;
     }
 
     section .content .startCarrer form .element .select-wrapper .custom-arrow{
@@ -570,6 +599,7 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
+      z-index: 3;
     }
 
     .modal-content {
@@ -595,6 +625,11 @@
     section .content .startCarrer form .document-row .select-wrapper,
     section .content .startCarrer form .document-row .input-wrapper {
       flex: 1;
+    }
+
+    .contentElement{
+      max-height: 47px;
+      position: relative;
     }
 
   </style>
