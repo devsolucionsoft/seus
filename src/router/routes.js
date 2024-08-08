@@ -5,7 +5,7 @@ const routes = [
       component: () => import('../components/ss-register/SsRegister.vue'),
     },
     {
-      path: '/signIn',
+      path: '/',
       name : 'signIn',
       component: () => import('../pages/auth/SsLogin.vue'),
     },
