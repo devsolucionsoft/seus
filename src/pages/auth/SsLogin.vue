@@ -58,9 +58,9 @@
 </template>
 
 <script>
-import speakerImg from '@/assets/images/speaker.jpeg';
-import cityImg from '@/assets/images/city.jpeg';
-import micImg from '@/assets/images/mic.jpeg';
+import speakerImg from '@/assets/images/speaker.webp';
+import cityImg from '@/assets/images/city.webp';
+import micImg from '@/assets/images/mic.webp';
 
 export default {
     data() {

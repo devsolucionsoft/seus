@@ -1,14 +1,7 @@
 <template>
     <footer>
         <div class="brands">
-            <img src="@/assets/brands/cocacolag.png" alt="Coca Cola">
-            <img src="@/assets/brands/bancolombiag.png" alt="Bancolombia">
-            <img src="@/assets/brands/nutresag.png" alt="Nutresa">
-            <img src="@/assets/brands/velezg.png" alt="Velez">
-            <img src="@/assets/brands/cocacolag.png" alt="Coca Cola">
-            <img src="@/assets/brands/bancolombiag.png" alt="Bancolombia">
-            <img src="@/assets/brands/nutresag.png" alt="Nutresa">
-            <img src="@/assets/brands/velezg.png" alt="Velez">
+            <img v-for="(img, index) in images" :key = "index" :src="img.url" :alt="img.alt">
         </div>
         <div class="socialFooter">
             <div class="poweredby">
@@ -22,6 +15,18 @@
         </div>
     </footer>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import cocacolag from '@/assets/brands/cocacolag.png';
+import bancolombiag from '@/assets/brands/bancolombiag.png';
+
+const images = ref([
+    {url: cocacolag, alt: 'Coca Cola'},
+    {url: bancolombiag, alt: 'Bancolombia'},
+])
+
+</script>
 
 <style scoped>
     footer{

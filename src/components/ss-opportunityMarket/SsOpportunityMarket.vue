@@ -14,7 +14,7 @@
                     </div>
                     <div class="cardOpportunityContainer">
                         <div class="imgContainer">
-                            <img src="@/assets/images/groupImage.png" alt="">
+                            <img src="@/assets/images/groupImage.webp" alt="">
                         </div>
                         <div class="contentContainer">
                             <div class="charge">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="cardOpportunityContainer">
                         <div class="imgContainer">
-                            <img src="@/assets/images/groupImage.png" alt="">
+                            <img src="@/assets/images/groupImage.webp" alt="">
                         </div>
                         <div class="contentContainer">
                             <div class="charge">
