@@ -37,7 +37,7 @@
                 </form>
             </div>
             <div class="image-section">
-                <img v-for="(image, index) in images" :key="index" :src="image.src" 
+                <img v-for="(image, index) in images" :key="index" :src="image.src" :alt="image.alt"
                      :class="{'expand': expandedIndex === index}" 
                      @mouseover="expandImage(index)" 
                      @mouseout="resetExpand">
@@ -75,9 +75,9 @@ export default {
             emailError: '',
             passwordError: '',
             images: [
-                { src: speakerImg },
-                { src: cityImg },
-                { src: micImg }
+                { src: speakerImg, alt: 'Speaker Image' },
+                { src: cityImg, alt: 'City Image' },
+                { src: micImg, alt: 'Microphone Image' }
             ],
             expandedIndex: 0
         }
@@ -306,7 +306,7 @@ export default {
     }
     .page-container footer .brands{
         display: flex;
-        width: 100%;
+        width: auto;
         flex-direction: row;
         gap: 33px;
         align-self: flex-end;
@@ -391,6 +391,9 @@ export default {
         }
         .page-container .content .form-section form .element input{
             border: none;
+        }
+        .page-container footer .brands{
+            width: 100%;
         }
     }
     .page-container .content .image-section::-webkit-scrollbar,
