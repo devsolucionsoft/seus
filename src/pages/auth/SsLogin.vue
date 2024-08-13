@@ -185,7 +185,7 @@ export default {
         justify-content: space-between;
         padding: 94px 18px;
         overflow: hidden;
-        height: calc(100vh - 183px);
+        min-height: 100vh;
         box-sizing: border-box;
     }
     .page-container .content .form-section {
