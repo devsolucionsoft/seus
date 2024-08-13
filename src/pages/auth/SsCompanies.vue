@@ -262,9 +262,11 @@
       },
       showTermsModal() {
         this.termsModalVisible = true;
+        document.body.classList.add('modal-open');
       },
       hideTermsModal() {
         this.termsModalVisible = false;
+        document.body.classList.remove('modal-open');
       }
     },
     watch: {
@@ -323,7 +325,7 @@
       flex-direction: row;
       gap: 72px;
       padding: 0 96px 0 140px;
-      max-height: 93vh;
+      max-height: 200vh
     }
 
     section .content .startCarrer{
@@ -782,5 +784,8 @@
         max-height: 100%;
         height: 100%;
       }
+    }
+    .modal-open {
+      overflow: hidden;
     }
   </style>
