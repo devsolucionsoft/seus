@@ -41,6 +41,10 @@ const images = ref([
         gap: 40px;
         align-items: center;
         justify-content: center;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
     }
     footer .brands img{
         max-width: 72px;

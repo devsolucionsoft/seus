@@ -636,6 +636,7 @@
 
     .modal-content .modal-header img{
       max-width: 147px;
+      width: 100%;
     }
 
     .modal-content .modal-header .close {
@@ -695,4 +696,70 @@
       position: relative;
     }
 
+    
+    @media(max-width: 1394px){
+      section .content{
+          padding: 0 50px;
+      }
+    }
+
+    @media(max-width: 1267px){
+      section .content{
+        flex-direction: column;
+        align-items: center;
+        max-height: none;
+        gap: 0
+      }
+      
+      section .content .startCarrer{
+        border-bottom: 1px solid #023D6A;
+        border-radius: 0;
+        padding-bottom: 24px;
+        max-width: none;
+      }
+
+      section > .title{
+        padding: 0px 
+      }
+    }
+    @media(max-width: 700px){
+      header{
+        padding: 16px !important;
+      }
+      header img{
+        max-width: 144px !important;
+      }
+      section{
+        padding: 10px 16px 0 16px;
+      }
+      section > .title{
+        font-size: 56px;
+        max-width: none;
+        width: 100%;
+        text-align: center;
+      }
+      section .content{
+        padding: 0;
+      }
+      section .content .startCarrer form button{
+        max-width: 100%;
+        width: 100%;
+      }
+      section .content .startCarrer form .document-row{
+        flex-direction: column;
+        gap: 24px;
+      }
+      section .content .startCarrer form .element .input-wrapper{
+        max-height: none;
+      }  
+      section .content .startCarrer form .element input{
+        max-height: 47px;
+      }
+      section .content .startCarrer form .document-row .input-wrapper img{
+        top: 45% !important;
+      }
+      .modal-content .content{
+        padding: 16px;
+      }
+    }
   </style>

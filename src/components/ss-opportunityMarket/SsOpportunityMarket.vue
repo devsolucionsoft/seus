@@ -158,7 +158,7 @@
 }
 
 .opportunityMarket .upSection .opportunitysContainer .opportunity .cardOpportunityContainer{
-    max-width: 268px;
+    width: 268px;
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -168,7 +168,7 @@
 }
 
 .opportunityMarket .upSection .opportunitysContainer .opportunity .cardOpportunityContainer .imgContainer{
-    max-height: 155px;
+    height: 155px;
     border-radius: 12px 12px 0 0;
     overflow: hidden;
 }
@@ -288,5 +288,51 @@
     background-color: #D9D9D9;
     border: none;
     cursor: pointer;
+}
+
+@media(max-width: 1267px){
+    .opportunityMarket{
+        align-self: start;
+        background-color: transparent;
+        width: 100%;
+    }
+    .opportunityMarket .upSection{
+        padding: 24px 0 32px 0;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+    .opportunityMarket .upSection .title{
+        padding: 0;
+        align-self: flex-start;
+    }
+    .opportunityMarket .upSection .opportunitysContainer{
+        padding: 0;
+        width: auto;
+        max-width: 100%;
+        align-items: center;
+        align-self: center;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch; 
+    }
+    .opportunityMarket .downSection{
+        padding: 0 0 46px 0;
+        border: none;
+    }
+}
+
+@media(max-width: 700px){
+    .opportunityMarket .downSection{
+        gap: 3vw;
+    }
+    .opportunityMarket .downSection button{
+        width: 112px;
+        height: 112px;
+    }
+    .opportunityMarket .downSection button img{
+        max-height: 45px;
+        max-width: 32px;
+    }
 }
 </style>
