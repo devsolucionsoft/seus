@@ -1,7 +1,7 @@
 <template>
     <footer>
         <div class="brands">
-            <img v-for="(img, index) in images" :key = "index" :src="img.url" :alt="img.alt">
+            <img v-for="(img, index) in images" :key="index" :src="img.url" :alt="img.alt">
         </div>
         <div class="socialFooter">
             <div class="poweredby">
