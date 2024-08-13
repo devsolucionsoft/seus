@@ -185,6 +185,8 @@ export default {
         justify-content: space-between;
         padding: 94px 18px;
         overflow: hidden;
+        height: calc(100vh - 183px);
+        box-sizing: border-box;
     }
     .page-container .content .form-section {
         padding: 40px;
@@ -335,6 +337,7 @@ export default {
     @media(max-width: 1020px){
         .page-container .content{
             flex-direction: column;
+            height: auto;
         }
         .page-container .content .image-section{
             width: 100%;

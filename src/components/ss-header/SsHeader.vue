@@ -1,6 +1,8 @@
 <template>
     <header>
-        <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
+        <router-link to="/" class="element">
+            <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
+        </router-link>
     </header>
     <div class="content">
         

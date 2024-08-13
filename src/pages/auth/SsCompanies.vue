@@ -2,7 +2,7 @@
     <SsHeader></SsHeader>
     <section>
       <div class="title">
-        PERSONAS
+        EMPRESAS
       </div>
       <div class="content">
         <div class="startCarrer">
@@ -104,6 +104,7 @@
                   
                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
                 </p>
+                <button>Acepto términos y condiciones</button>
               </div>
             </div>
           </div>
@@ -659,6 +660,7 @@
       justify-content: center;
       padding: 34px 40px;
       overflow-y: auto;
+      height: 100%
     }
     
     .modal-content .content h5{
@@ -681,9 +683,24 @@
       margin: 0;
     }
 
+    .modal-content .content button{
+      max-width: 303px;
+      padding: 12px 24px;
+      border-radius: 28px;
+      border: none;
+      background-color: #0DC6DE;
+      color: #CDFDF3;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 19.5px;
+      text-align: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
     section .content .startCarrer form .document-row {
       display: flex;
-      gap: 32px; /* Ajustar el espacio entre los elementos */
+      gap: 32px;
     }
     
     section .content .startCarrer form .document-row .select-wrapper,
@@ -760,6 +777,10 @@
       }
       .modal-content .content{
         padding: 16px;
+      }
+      .modal-content{
+        max-height: 100%;
+        height: 100%;
       }
     }
   </style>

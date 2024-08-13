@@ -14,6 +14,11 @@ const routes = [
       name : 'companies',
       component: () => import('../pages/auth/SsCompanies.vue'),
     },
+    {
+      path: '/persons',
+      name : 'persons',
+      component: () => import('../pages/auth/SsPersons.vue'),
+    },
   
   ]
   

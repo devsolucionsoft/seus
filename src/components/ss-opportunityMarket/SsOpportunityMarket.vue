@@ -129,6 +129,7 @@
     flex-direction: column;
     gap: 29px;
     position: relative;
+    overflow: visible;
 }
 
 .opportunityMarket .upSection .opportunitysContainer .opportunity .logoOpportunity {
@@ -137,6 +138,7 @@
     top: -48px;
     width: 96px;
     height: 96px;
+    z-index: 4;
     border-radius: 50%;
     background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
     padding: 5px;
@@ -144,7 +146,7 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0px 4px 8px 0px #00000026;
-    overflow: hidden
+    overflow: visible;
 }
 
 .opportunityMarket .upSection .opportunitysContainer .opportunity .logoOpportunity .inner-circle {
@@ -301,18 +303,20 @@
         width: 100%;
         justify-content: center;
         align-items: center;
+        gap: 30px;
     }
     .opportunityMarket .upSection .title{
         padding: 0;
         align-self: flex-start;
     }
     .opportunityMarket .upSection .opportunitysContainer{
-        padding: 0;
+        padding: 48px 0 0 0;
         width: auto;
         max-width: 100%;
         align-items: center;
         align-self: center;
         overflow-x: auto;
+        overflow-y: visible;
         scrollbar-width: thin;
         -webkit-overflow-scrolling: touch; 
     }
@@ -334,5 +338,20 @@
         max-height: 45px;
         max-width: 32px;
     }
+    .opportunityMarket .upSection{
+        gap: 30px;
+    }
+    .opportunityMarket .upSection .opportunitysContainer{
+        padding: 48px 0 0 0;
+    }
 }
+.opportunityMarket .upSection .opportunitysContainer::-webkit-scrollbar{
+    display: none;
+    
+}
+.opportunityMarket .upSection .opportunitysContainer{
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
 </style>

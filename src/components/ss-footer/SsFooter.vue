@@ -18,12 +18,16 @@
 
 <script setup>
 import { ref } from 'vue';
-import cocacolag from '@/assets/brands/cocacolag.png';
-import bancolombiag from '@/assets/brands/bancolombiag.png';
+import cocacola from '@/assets/brands/cocacola.png';
+import bancolombia from '@/assets/brands/bancolombia.png';
+import nutresa from '@/assets/brands/nutresa.png';
+import velez from '@/assets/brands/velez.png';
 
 const images = ref([
-    {url: cocacolag, alt: 'Coca Cola'},
-    {url: bancolombiag, alt: 'Bancolombia'},
+    {url: cocacola, alt: 'Coca Cola'},
+    {url: bancolombia, alt: 'Bancolombia'},
+    {url: nutresa, alt: 'Nutresa'},
+    {url: velez, alt: 'Velez'},
 ])
 
 </script>
@@ -35,9 +39,8 @@ const images = ref([
         gap: 0;
     }
     footer .brands{
-        background-color: #EFEFEF;
+        background-color: #C6CBD2;
         display: flex;
-        flex-wrap: wrap;
         gap: 40px;
         align-items: center;
         justify-content: center;
@@ -45,6 +48,8 @@ const images = ref([
         scrollbar-width: thin;
         -webkit-overflow-scrolling: touch;
         width: 100%;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
     }
     footer .brands img{
         max-width: 72px;
@@ -78,5 +83,20 @@ const images = ref([
         display: flex;
         flex-direction: row;
         gap: 23px;
+    }
+    @media(max-width: 700px){
+        footer .socialFooter{
+            padding: 18px 0;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+        footer .brands{
+            gap: 30px;
+            justify-content: start;
+        }
+    }
+    footer .brands::-webkit-scrollbar{
+        display: none;
     }
 </style>
