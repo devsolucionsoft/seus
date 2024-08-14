@@ -18,4 +18,12 @@
     header img{
         max-width: 192px
     }
+    @media(max-width: 700px){
+        header{
+        padding: 16px !important;
+        }
+        header img{
+            max-width: 144px !important;
+        }
+    }
 </style>

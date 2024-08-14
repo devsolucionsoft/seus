@@ -742,12 +742,6 @@
       }
     }
     @media(max-width: 700px){
-      header{
-        padding: 16px !important;
-      }
-      header img{
-        max-width: 144px !important;
-      }
       section{
         padding: 10px 16px 0 16px;
       }

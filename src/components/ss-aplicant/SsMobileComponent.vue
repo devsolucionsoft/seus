@@ -1,12 +1,9 @@
 <template>
-    <div>
+    <div class="body">
       <component :is="currentStepComponent" />
-  
-      <div v-if="step > 1">
-        <button @click="prevStep">Anterior</button>
-      </div>
-      <div v-if="step < maxSteps">
-        <button @click="nextStep">Siguiente</button>
+      <div class="stepsNavigation">
+          <button v-if="step > 1" class="prevStep" @click="prevStep">Anterior</button>
+          <button v-if="step < maxSteps" class="nextStep" @click="nextStep">Siguiente</button>
       </div>
     </div>
   </template>
@@ -65,16 +62,36 @@
   </script>
   
 <style scoped lang="sass">
-button
-    background-color: #007bff
-    color: white
-    border: none
-    padding: 10px 20px
-    border-radius: 5px
-    cursor: pointer
-
-button:disabled
-    background-color: #ccc
-
+.body
+  display: flex
+  flex-direction: column
+  min-height: 100vh
+  .stepsNavigation
+    background: #270538
+    padding: 16px
+    justify-content: flex-end
+    display: flex
+    flex-direction: row
+    margin-top: auto
+    button
+        border: none
+        padding: 12px 24px
+        border-radius: 28px
+        cursor: pointer
+        font-size: 14px
+        font-weight: 600
+        line-height: 17.07px
+        text-align: center
+        color: white
+        &.nextStep
+          background-color: #761D74
+          border: 1px solid #761d74
+          justify-self: flex-end
+        &.prevStep
+          background-color: transparent
+          border: 1px solid white
+          margin-right: auto
+    button:disabled
+        background-color: #ccc
 </style>
   
