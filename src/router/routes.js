@@ -19,6 +19,11 @@ const routes = [
       name : 'persons',
       component: () => import('../pages/auth/SsPersons.vue'),
     },
+    {
+      path: '/configProfile',
+      name : 'configProfile',
+      component: () => import('../pages/applicant/SsConfigProfile.vue'),
+    },
   
   ]
   

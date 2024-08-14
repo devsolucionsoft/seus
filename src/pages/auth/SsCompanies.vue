@@ -298,7 +298,7 @@
   };
 </script>
 
-<style>
+<style scoped>
     section{
       position: relative;
       background-image: url('../../assets/images/bgLogin.jpeg');
