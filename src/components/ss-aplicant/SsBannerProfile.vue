@@ -140,7 +140,7 @@
 
       .upload-overlay
         position: absolute
-        bottom: 0
+        top: 15%
         left: 0
         right: 0
         display: flex
