@@ -14,18 +14,22 @@
                 <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
                 <form  @submit.prevent="validateForm" novalidate>
                     <div class="element">
-                        <label for="email">Usuario</label>
-                        <div class="inputElement">
-                            <input type="email" id="email" required v-model="email" placeholder="Ingresa un correo electrónico">
-                            <img src="@/assets/icons/mail.svg" alt="Mail Icon">
+                        <div class="input">
+                            <label for="email">Usuario</label>
+                            <div class="inputElement">
+                                <input type="email" id="email" required v-model="email" placeholder="Ingresa un correo electrónico">
+                                <img src="@/assets/icons/mail.svg" alt="Mail Icon">
+                            </div>
                         </div>
                         <span v-if="emailError" class="error-message">{{ emailError }}</span>
                     </div>
                     <div class="element">
-                        <label for="password">Contraseña</label>
-                        <div class="inputElement">
-                            <input :type="showPassword ? 'text' : 'password'" id="password" required v-model="password" placeholder="Ingresa tu contraseña">
-                            <img @click="togglePasswordVisibility" style="cursor: pointer;" src="@/assets/icons/eye.svg" alt="Eye Icon">
+                        <div class="input">
+                            <label for="password">Contraseña</label>
+                            <div class="inputElement">
+                                <input :type="showPassword ? 'text' : 'password'" id="password" required v-model="password" placeholder="Ingresa tu contraseña">
+                                <img @click="togglePasswordVisibility" style="cursor: pointer;" src="@/assets/icons/eye.svg" alt="Eye Icon">
+                            </div>
                         </div>
                         <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
                     </div>   
@@ -33,7 +37,7 @@
                 </form>
             </div>
             <div class="image-section">
-                <img v-for="(image, index) in images" :key="index" :src="image.src" 
+                <img v-for="(image, index) in images" :key="index" :src="image.src" :alt="image.alt"
                      :class="{'expand': expandedIndex === index}" 
                      @mouseover="expandImage(index)" 
                      @mouseout="resetExpand">
@@ -58,9 +62,9 @@
 </template>
 
 <script>
-import speakerImg from '@/assets/images/speaker.jpeg';
-import cityImg from '@/assets/images/city.jpeg';
-import micImg from '@/assets/images/mic.jpeg';
+import speakerImg from '@/assets/images/speaker.webp';
+import cityImg from '@/assets/images/city.webp';
+import micImg from '@/assets/images/mic.webp';
 
 export default {
     data() {
@@ -71,9 +75,9 @@ export default {
             emailError: '',
             passwordError: '',
             images: [
-                { src: speakerImg },
-                { src: cityImg },
-                { src: micImg }
+                { src: speakerImg, alt: 'Speaker Image' },
+                { src: cityImg, alt: 'City Image' },
+                { src: micImg, alt: 'Microphone Image' }
             ],
             expandedIndex: 0
         }
@@ -144,7 +148,6 @@ export default {
 <style scoped>
     .page-container {
         background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
-        
         min-height: 100vh;
         margin: 0;
         padding: 0;
@@ -180,8 +183,10 @@ export default {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        padding: 94px 0;
+        padding: 94px 18px;
         overflow: hidden;
+        min-height: 100vh;
+        box-sizing: border-box;
     }
     .page-container .content .form-section {
         padding: 40px;
@@ -210,6 +215,12 @@ export default {
     }
 
     .page-container .content .form-section form .element{
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        width: 100%;
+    }
+    .page-container .content .form-section form .element .input{
         display: flex;
         flex-direction: column;
         align-items: start;
@@ -266,8 +277,10 @@ export default {
         width: 40%;
         justify-content: start;
         align-items: center;
-        overflow: hidden;
         position: relative;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch; 
     }
     .page-container .content .image-section img {
         position: relative;
@@ -276,6 +289,7 @@ export default {
         border-radius: 51px;
         object-fit: cover;
         transition: width 0.3s ease;
+        flex-shrink: 0;
     }
 
     .page-container .content .image-section img.expand {
@@ -292,12 +306,18 @@ export default {
     }
     .page-container footer .brands{
         display: flex;
+        width: auto;
         flex-direction: row;
         gap: 33px;
         align-self: flex-end;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
     }
     .page-container footer .brands img{
         max-height: 47px;
+        flex-shrink: 0;
     }
     .page-container footer .poweredby p{
         font-size: 10px;
@@ -313,5 +333,79 @@ export default {
         text-align: left;
         text-decoration: none;
         color: white;
+    }
+    @media(max-width: 1020px){
+        .page-container .content{
+            flex-direction: column;
+            height: auto;
+        }
+        .page-container .content .image-section{
+            width: 100%;
+            align-self: flex-start;
+        }
+        .page-container .content .image-section img{
+            width: 316px !important;
+        }
+        .page-container footer{
+            gap: 16px;
+            overflow: hidden;
+            padding-bottom: 24px;
+        }
+        .page-container footer .brands{
+            align-self: flex-start;
+            gap: 30px;
+        }
+        .page-container footer .brands img{
+            max-height: 37px;
+        }
+        .page-container footer .poweredby{
+            order: -1;
+        }
+    }
+    @media(max-width: 700px){
+        .page-container .content .form-section{
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .page-container .content .form-section form{
+            padding: 0 18px;
+        }
+        
+        .page-container nav{
+            margin-right: 0px;
+            margin: 0 26px 0 26px;
+            padding: 24px 0 34px 0;
+            gap: 16px;
+        }
+        .page-container nav .element{
+            font-size: 14px;
+            line-height: 17px;
+        }
+        .page-container .content .form-section form button{
+            width: 100%;
+            max-width: 100%;
+        }
+        .page-container .content .form-section form .element .input{
+            border-bottom: 1px solid #CDFDF3
+        }
+        .page-container .content .form-section form .element input{
+            border: none;
+        }
+        .page-container footer .brands{
+            width: 100%;
+        }
+    }
+    .page-container .content .image-section::-webkit-scrollbar,
+    .page-container footer .brands::-webkit-scrollbar {
+        display: none;
+    }
+    .page-container .content .image-section,
+    .page-container footer .brands {
+        scrollbar-width: none;
+    }
+    .page-container .content .image-section,
+    .page-container footer .brands {
+        -webkit-overflow-scrolling: touch;
     }
 </style>

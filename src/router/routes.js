@@ -5,7 +5,7 @@ const routes = [
       component: () => import('../components/ss-register/SsRegister.vue'),
     },
     {
-      path: '/signIn',
+      path: '/',
       name : 'signIn',
       component: () => import('../pages/auth/SsLogin.vue'),
     },
@@ -13,6 +13,16 @@ const routes = [
       path: '/companies',
       name : 'companies',
       component: () => import('../pages/auth/SsCompanies.vue'),
+    },
+    {
+      path: '/persons',
+      name : 'persons',
+      component: () => import('../pages/auth/SsPersons.vue'),
+    },
+    {
+      path: '/configProfile',
+      name : 'configProfile',
+      component: () => import('../pages/applicant/SsConfigProfile.vue'),
     },
     {
       path: '/signIn',

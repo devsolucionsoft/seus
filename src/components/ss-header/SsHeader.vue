@@ -1,6 +1,8 @@
 <template>
     <header>
-        <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
+        <router-link to="/" class="element">
+            <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
+        </router-link>
     </header>
     <div class="content">
         
@@ -15,5 +17,13 @@
     }
     header img{
         max-width: 192px
+    }
+    @media(max-width: 700px){
+        header{
+        padding: 16px !important;
+        }
+        header img{
+            max-width: 144px !important;
+        }
     }
 </style>

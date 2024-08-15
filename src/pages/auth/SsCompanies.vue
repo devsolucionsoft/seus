@@ -2,7 +2,7 @@
     <SsHeader></SsHeader>
     <section>
       <div class="title">
-        PERSONAS
+        EMPRESAS
       </div>
       <div class="content">
         <div class="startCarrer">
@@ -35,26 +35,30 @@
             </div>
             <div class="element document-row">
               <div class="select-wrapper">
-                <select id="documentType" v-model="documentType" required>
-                  <option value="" disabled selected>Tipo de Documento</option>
-                  <option value="CC">Cédula de Ciudadanía</option>
-                  <option value="TI">Tarjeta de Identidad</option>
-                  <option value="CE">Cédula de Extranjería</option>
-                </select>
-                <div class="custom-arrow">
-                  <img src="@/assets/icons/down-arrow.svg" alt="Custom Arrow">
+                <div class="contentElement">
+                  <select id="documentType" v-model="documentType" required>
+                    <option value="" disabled selected>Tipo de Documento</option>
+                    <option value="CC">Cédula de Ciudadanía</option>
+                    <option value="TI">Tarjeta de Identidad</option>
+                    <option value="CE">Cédula de Extranjería</option>
+                  </select>
+                  <div class="custom-arrow">
+                    <img src="@/assets/icons/down-arrow.svg" alt="Custom Arrow">
+                  </div>
                 </div>
+                <span v-if="documentTypeError" class="error-message">{{ documentTypeError }}</span>
               </div>
               <div class="input-wrapper">
                 <img src="@/assets/icons/fingerprint.svg" alt="ID Card Icon" class="input-icon">
                 <input type="text" id="documentNumber" v-model="documentNumber" required placeholder="Número de Documento">
+                <span v-if="documentNumberError" class="error-message">{{ documentNumberError }}</span>
               </div>
             </div>
             <div class="element">
               <div class="input-wrapper">
                 <img src="@/assets/icons/lock.svg" alt="Lock Icon" class="input-icon">
                 <input :type="showPassword ? 'text' : 'password'" id="password" v-model="password" required @input="checkPasswordStrength" placeholder="Contraseña">
-                <img @click="togglePasswordVisibility('password')" style="cursor: pointer;" src="@/assets/icons/hidden-eye.svg" alt="Eye Icon" class="eye-icon">
+                <img @click="togglePasswordVisibility('showPassword')" style="cursor: pointer;" src="@/assets/icons/hidden-eye.svg" alt="Eye Icon" class="eye-icon">
               </div>
               <div class="password-strength-bar">
                 <div class="strength-bar weak"></div>
@@ -68,7 +72,7 @@
               <div class="input-wrapper">
                 <img src="@/assets/icons/lock.svg" alt="Lock Icon" class="input-icon">
                 <input :type="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" v-model="confirmPassword" required placeholder="Confirmar contraseña">
-                <img @click="togglePasswordVisibility('confirmPassword')" style="cursor: pointer;" src="@/assets/icons/hidden-eye.svg" alt="Eye Icon" class="eye-icon">
+                <img @click="togglePasswordVisibility('showConfirmPassword')" style="cursor: pointer;" src="@/assets/icons/hidden-eye.svg" alt="Eye Icon" class="eye-icon">
               </div>
               <span v-if="confirmPasswordError" class="error-message">{{ confirmPasswordError }}</span>
             </div>
@@ -87,21 +91,25 @@
 
           <div v-if="termsModalVisible" class="modal">
             <div class="modal-content">
-              <span class="close" @click="hideTermsModal">&times;</span>
-              <h2>Política de Tratamiento de Datos</h2>
-              <p>Aquí va el contenido de la política de tratamiento de datos...</p>
+              <div class="modal-header">
+                <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
+                <span class="close" @click="hideTermsModal">&times;</span>
+              </div>
+              <div class="content">
+                <h5>Términos y Condiciones</h5>
+                <p>
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. <br><br>
+
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. <br><br>
+                  
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
+                </p>
+                <button>Acepto términos y condiciones</button>
+              </div>
             </div>
           </div>
-          
         </div>
-        <div class="opportunityMarket">
-          <div class="contentSection">
-
-          </div>
-          <div class="buttonsSection">
-
-          </div>
-        </div>
+        <SsOpportunityMarket/>
       </div>
     </section>
     <SsFooter></SsFooter>
@@ -111,12 +119,14 @@
 <script>
   import SsHeader from '@/components/ss-header/SsHeader.vue';
   import SsFooter from '@/components/ss-footer/SsFooter.vue';
+  import SsOpportunityMarket from '@/components/ss-opportunityMarket/SsOpportunityMarket.vue';
 
   export default {
     name: 'Companies',
     components: {
       SsHeader,
-      SsFooter
+      SsFooter,
+      SsOpportunityMarket,
     },
     data() {
       return {
@@ -129,6 +139,7 @@
         confirmPassword: '',
         acceptTerms: false,
         showPassword: false,
+        showConfirmPassword: false,
         namesError: '',
         lastNamesError: '',
         emailError: '',
@@ -233,8 +244,8 @@
         }
         return strength;
       },
-      togglePasswordVisibility() {
-        this.showPassword = !this.showPassword;
+      togglePasswordVisibility(field) {
+        this[field] = !this[field];
       },
       resetErrors() {
         this.namesError = '';
@@ -251,23 +262,51 @@
       },
       showTermsModal() {
         this.termsModalVisible = true;
+        document.body.classList.add('modal-open');
       },
       hideTermsModal() {
         this.termsModalVisible = false;
+        document.body.classList.remove('modal-open');
       }
     },
+    watch: {
+      names(value) {
+        if (value) this.namesError = '';
+      },
+      lastNames(value) {
+        if (value) this.lastNamesError = '';
+      },
+      email(value) {
+        if (value && this.isValidEmail(value)) this.emailError = '';
+      },
+      documentType(value) {
+        if (value) this.documentTypeError = '';
+      },
+      documentNumber(value) {
+        if (value) this.documentNumberError = '';
+      },
+      password(value) {
+        if (value && value.length >= 6) this.passwordError = '';
+      },
+      confirmPassword(value) {
+        if (value && value === this.password) this.confirmPasswordError = '';
+      },
+      acceptTerms(value) {
+        if (value) this.acceptTermsError = '';
+      }
+    }
   };
 </script>
 
-<style>
+<style scoped>
     section{
       position: relative;
       background-image: url('../../assets/images/bgLogin.jpeg');
       background-position: center;
       background-size: cover;
-      min-height: 100vh;
       padding-top: 77px;
-      z-index: 2;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+      min-height: 100vh;
     }
     
     section > .title{
@@ -285,7 +324,8 @@
       display: flex;
       flex-direction: row;
       gap: 72px;
-      padding: 0 96px 0 140px ;
+      padding: 0 96px 0 140px;
+      max-height: 200vh
     }
 
     section .content .startCarrer{
@@ -394,11 +434,13 @@
       line-height: 18px;
       text-align: left;
       color: #4A0E54;
+      cursor: pointer;
     }
 
     section .content .startCarrer form .element .input-wrapper{
       position: relative;
       height: fit-content;
+      max-height: 47px;
     }
 
     section .content .startCarrer form .element .input-wrapper .input-icon{
@@ -467,6 +509,7 @@
       background-color: #F2F2F2;
       border: 1px solid #E6E6E6;
       border-radius: 6px;
+      max-height: 47px;
     }
 
     section .content .startCarrer form .element .select-wrapper .custom-arrow{
@@ -570,26 +613,96 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
+      z-index: 3;
     }
 
     .modal-content {
       background-color: #fff;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      width: 80%;
-      max-width: 600px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 443px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-height: 694px;
     }
 
-    .close {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
+    .modal-content .modal-header{
+      background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 22px 30px;
+      align-items: center;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .modal-content .modal-header img{
+      max-width: 147px;
+      width: 100%;
+    }
+
+    .modal-content .modal-header .close {
+      cursor: pointer;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      border: 1px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content .content{
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      padding: 34px 40px;
+      overflow-y: auto;
+      height: 100%
+    }
+    
+    .modal-content .content h5{
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 26.82px;
+      letter-spacing: -0.02em;
+      text-align: center;
+      color: #023D6A;
+      margin: 0;
+    }
+
+    .modal-content .content p{
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 14.63px;
+      letter-spacing: -0.02em;
+      text-align: left;
+      color: black;
+      margin: 0;
+    }
+
+    .modal-content .content button{
+      max-width: 303px;
+      padding: 12px 24px;
+      border-radius: 28px;
+      border: none;
+      background-color: #0DC6DE;
+      color: #CDFDF3;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 19.5px;
+      text-align: center;
+      justify-content: space-between;
       cursor: pointer;
     }
 
     section .content .startCarrer form .document-row {
       display: flex;
-      gap: 32px; /* Ajustar el espacio entre los elementos */
+      gap: 32px;
     }
     
     section .content .startCarrer form .document-row .select-wrapper,
@@ -597,4 +710,76 @@
       flex: 1;
     }
 
+    .contentElement{
+      max-height: 47px;
+      position: relative;
+    }
+
+    
+    @media(max-width: 1394px){
+      section .content{
+          padding: 0 50px;
+      }
+    }
+
+    @media(max-width: 1267px){
+      section .content{
+        flex-direction: column;
+        align-items: center;
+        max-height: none;
+        gap: 0
+      }
+      
+      section .content .startCarrer{
+        border-bottom: 1px solid #023D6A;
+        border-radius: 0;
+        padding-bottom: 24px;
+        max-width: none;
+      }
+
+      section > .title{
+        padding: 0px 
+      }
+    }
+    @media(max-width: 700px){
+      section{
+        padding: 10px 16px 0 16px;
+      }
+      section > .title{
+        font-size: 56px;
+        max-width: none;
+        width: 100%;
+        text-align: center;
+      }
+      section .content{
+        padding: 0;
+      }
+      section .content .startCarrer form button{
+        max-width: 100%;
+        width: 100%;
+      }
+      section .content .startCarrer form .document-row{
+        flex-direction: column;
+        gap: 24px;
+      }
+      section .content .startCarrer form .element .input-wrapper{
+        max-height: none;
+      }  
+      section .content .startCarrer form .element input{
+        max-height: 47px;
+      }
+      section .content .startCarrer form .document-row .input-wrapper img{
+        top: 45% !important;
+      }
+      .modal-content .content{
+        padding: 16px;
+      }
+      .modal-content{
+        max-height: 100%;
+        height: 100%;
+      }
+    }
+    .modal-open {
+      overflow: hidden;
+    }
   </style>

@@ -1,14 +1,7 @@
 <template>
     <footer>
         <div class="brands">
-            <img src="@/assets/brands/cocacolag.png" alt="Coca Cola">
-            <img src="@/assets/brands/bancolombiag.png" alt="Bancolombia">
-            <img src="@/assets/brands/nutresag.png" alt="Nutresa">
-            <img src="@/assets/brands/velezg.png" alt="Velez">
-            <img src="@/assets/brands/cocacolag.png" alt="Coca Cola">
-            <img src="@/assets/brands/bancolombiag.png" alt="Bancolombia">
-            <img src="@/assets/brands/nutresag.png" alt="Nutresa">
-            <img src="@/assets/brands/velezg.png" alt="Velez">
+            <img v-for="(img, index) in images" :key="index" :src="img.url" :alt="img.alt">
         </div>
         <div class="socialFooter">
             <div class="poweredby">
@@ -23,6 +16,22 @@
     </footer>
 </template>
 
+<script setup>
+import { ref } from 'vue';
+import cocacola from '@/assets/brands/cocacola.png';
+import bancolombia from '@/assets/brands/bancolombia.png';
+import nutresa from '@/assets/brands/nutresa.png';
+import velez from '@/assets/brands/velez.png';
+
+const images = ref([
+    {url: cocacola, alt: 'Coca Cola'},
+    {url: bancolombia, alt: 'Bancolombia'},
+    {url: nutresa, alt: 'Nutresa'},
+    {url: velez, alt: 'Velez'},
+])
+
+</script>
+
 <style scoped>
     footer{
         display: flex;
@@ -30,12 +39,17 @@
         gap: 0;
     }
     footer .brands{
-        background-color: #EFEFEF;
+        background-color: #C6CBD2;
         display: flex;
-        flex-wrap: wrap;
         gap: 40px;
         align-items: center;
         justify-content: center;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
     }
     footer .brands img{
         max-width: 72px;
@@ -69,5 +83,20 @@
         display: flex;
         flex-direction: row;
         gap: 23px;
+    }
+    @media(max-width: 700px){
+        footer .socialFooter{
+            padding: 18px 0;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+        footer .brands{
+            gap: 30px;
+            justify-content: start;
+        }
+    }
+    footer .brands::-webkit-scrollbar{
+        display: none;
     }
 </style>
