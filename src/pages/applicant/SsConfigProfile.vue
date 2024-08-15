@@ -2,6 +2,7 @@
     <div class="content">
         <SsHeader></SsHeader>
         <div>
+            <SsBannerProfile></SsBannerProfile>
           <component :is="isMobile ? 'MobileComponent' : 'DesktopComponent'" />
         </div>
         <SsFooter></SsFooter>
@@ -13,13 +14,15 @@
     import DesktopComponent from '@/components/ss-aplicant/SsDesktopComponent.vue';
     import SsHeader from '@/components/ss-header/SsHeader.vue';
     import SsFooter from '@/components/ss-footer/SsFooter.vue';
+    import SsBannerProfile from '@/components/ss-aplicant/SsBannerProfile.vue';
 
     export default {
     components: {
         MobileComponent,
         DesktopComponent,
         SsHeader,
-        SsFooter
+        SsFooter,
+        SsBannerProfile,
     },
     data() {
         return {
