@@ -14,6 +14,7 @@
         border-radius: 0 0 20px 20px;
         background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
         padding: 41px 0 36px 196px;
+        z-index: 2;
     }
     header img{
         max-width: 192px
