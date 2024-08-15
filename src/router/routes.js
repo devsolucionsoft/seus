@@ -24,11 +24,6 @@ const routes = [
       name : 'configProfile',
       component: () => import('../pages/applicant/SsConfigProfile.vue'),
     },
-    {
-      path: '/signIn',
-      name : 'signIn',
-      component: () => import('../pages/auth/Login.vue'),
-    },
   ]
   
   export default routes
