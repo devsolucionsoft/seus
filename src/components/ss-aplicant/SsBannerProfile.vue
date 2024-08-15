@@ -14,6 +14,7 @@
             <img :src="profileImage" alt="Perfil">
             <div class="gradient-overlay"></div>
             <div class="upload-overlay">
+              <img :src="cameraIcon" alt="Camera Image">
               <span>Sube una imagen de perfil</span>
             </div>
           </div>
@@ -28,6 +29,7 @@
       return {
         backgroundImageBanner: require('@/assets/images/bgProfileImageBanner.webp'),
         profileImage: require('@/assets/images/bgProfileImage.webp'),
+        cameraIcon: require('@/assets/icons/camera.svg'),
       };
     },
     methods: {
@@ -67,6 +69,7 @@
 
   .banner-image
     position: relative
+    display: flex
 
     img.background
       width: 100%
@@ -106,9 +109,11 @@
           color: #333
 
   .profile-section
-    margin-top: -50px
+    margin-top: -80px
     display: flex
-    justify-content: center
+    align-items: center
+    justify-content: flex-start
+    margin-left: 4%
 
     .profile-image
       position: relative
@@ -138,16 +143,21 @@
         bottom: 0
         left: 0
         right: 0
-        background: rgba(0, 0, 0, 0.5)
-        color: #fff
-        font-size: 14px
-        padding: 10px
-        text-align: center
-        opacity: 0
-        transition: opacity 0.3s
+        display: flex
+        align-items: center
+        justify-content: center
+        flex-direction: column
+        gap: 16px
 
-      &:hover .upload-overlay
-        opacity: 1
-
+        img
+          max-width: 36px
+          max-height: 33px
+        span
+          font-size: 12px
+          font-weight: 500
+          line-height: 18px
+          text-align: center
+          color: #47586E
+          max-width: 80%
 </style>
   
