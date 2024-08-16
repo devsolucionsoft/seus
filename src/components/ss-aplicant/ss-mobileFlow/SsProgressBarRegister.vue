@@ -57,6 +57,7 @@
     position: relative
     padding: 0 26px
     gap: 26px
+    flex-wrap: wrap
 
     .step
       display: flex
