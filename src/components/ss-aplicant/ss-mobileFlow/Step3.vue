@@ -5,7 +5,7 @@
         <img src="@/assets/icons/plusCircle.svg" alt="+">
         <p>Añadir Formación</p>
       </div>
-      <div v-for="(formation, index) in orderedFormations" :key="index" class="formation-item">
+      <div v-for="(formation, index) in formations" :key="index" class="formation-item">
         <div class="header-element">
           <p v-if="isMostRecent(formation)">Último estudio realizado</p>
           <div class="actions">
@@ -32,7 +32,7 @@
             <img src="@/assets/icons/calendar.svg" alt="Calendar">
             <span>Fecha de certificación</span>
           </div>
-          <span>{{ formation.startDate }} - {{ formation.endDate }}</span>
+          <span>{{ formatDate(formation.startDate) }} - {{ formatDate(formation.endDate) }}</span>
         </div>
       </div>
     </div>
@@ -95,11 +95,6 @@ export default {
       editIndex: null,
     };
   },
-  computed: {
-    orderedFormations() {
-      return this.formations.slice().reverse();
-    },
-  },
   methods: {
     openForm() {
       this.showForm = true;
@@ -143,6 +138,14 @@ export default {
     isMostRecent(formation) {
       return this.formations.every(f => new Date(f.endDate) <= new Date(formation.endDate));
     },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const day = date.getDate().toString().padStart(2, '0');
+      let month = date.toLocaleString('es-ES', { month: 'long' });
+      month = month.charAt(0).toUpperCase() + month.slice(1);
+      const year = date.getFullYear();
+      return `${day} ${month} ${year}`;
+    },
   },
   watch:{
     showForm(val) {
@@ -169,11 +172,11 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
       height: 260px;
       flex-direction: column;
       gap: 12px;
       padding: 20px;
+      border-radius: 12px;
   
       img {
         width: 24px;
@@ -184,6 +187,7 @@ export default {
         font-size: 16px;
         font-weight: 500;
         color: #023D6A;
+        margin: 0;
       }
   
       &.small-box {
