@@ -1,7 +1,8 @@
 <template>
     <input
       :type="type"
-      v-model="modelValue"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
       :placeholder="placeholder"
       class="form-input"
     />
@@ -19,11 +20,6 @@
       },
     },
     emits: ['update:modelValue'],
-    watch: {
-      modelValue(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
   };
 </script>
   

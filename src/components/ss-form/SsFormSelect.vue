@@ -1,5 +1,8 @@
 <template>
-    <select v-model="modelValue" class="form-select">
+    <select 
+      :value="modelValue"
+      @change="$emit('update:modelValue', $event.target.value)" 
+      class="form-select">
       <option disabled value="">{{ placeholder }}</option>
       <option v-for="(option, index) in options" :key="index" :value="option">
         {{ option }}
@@ -16,10 +19,5 @@
       options: Array,
     },
     emits: ['update:modelValue'],
-    watch: {
-      modelValue(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
   };
 </script>

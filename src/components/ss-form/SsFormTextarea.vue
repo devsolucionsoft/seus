@@ -1,11 +1,12 @@
 <template>
-    <textarea
-      v-model="modelValue"
-      :placeholder="placeholder"
-      class="form-textarea"
-    ></textarea>
+  <textarea
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
+    :placeholder="placeholder"
+    class="form-textarea"
+  ></textarea>
 </template>
-  
+
 <script>
   export default {
     name: 'FormTextarea',
@@ -14,11 +15,5 @@
       placeholder: String,
     },
     emits: ['update:modelValue'],
-    watch: {
-      modelValue(value) {
-        this.$emit('update:modelValue', value);
-      },
-    },
   };
 </script>
-  
