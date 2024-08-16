@@ -68,7 +68,6 @@
 .body
   display: flex
   flex-direction: column
-  min-height: 100vh
   .stepsNavigation
     background: #270538
     padding: 16px

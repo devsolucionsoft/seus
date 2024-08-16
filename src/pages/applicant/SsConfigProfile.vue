@@ -45,7 +45,7 @@
 
 <style lang="sass" scoped>
 .content
-    min-height: 100vh
+    height: fit-content
     justify-content: space-between
     display: flex
     flex-direction: column
