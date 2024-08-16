@@ -2,7 +2,8 @@
     <select 
       :value="modelValue"
       @change="$emit('update:modelValue', $event.target.value)" 
-      class="form-select">
+      class="form-select"
+    >
       <option disabled value="">{{ placeholder }}</option>
       <option v-for="(option, index) in options" :key="index" :value="option">
         {{ option }}
@@ -15,8 +16,14 @@
     name: 'FormSelect',
     props: {
       modelValue: String,
-      placeholder: String,
-      options: Array,
+      placeholder: {
+        type: String,
+        default: 'Selecciona',
+      },
+      options: {
+        type: Array,
+        required: true,
+      },
     },
     emits: ['update:modelValue'],
   };
