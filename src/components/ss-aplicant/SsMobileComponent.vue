@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <SsProgressBarRegister :step="step" :steps="5" :labels="['Empleo', 'Datos Personales', 'Formación', 'Experiencia', 'Revision']" />
+    <SsProgressBarRegister :step="step" :steps="6" :labels="['Empleo', 'Datos Personales', 'Formación', 'Experiencia', 'Revision']" />
     <component :is="currentStepComponent" />
     <div v-if="showStepsNavigation" class="stepsNavigation">
       <button v-if="step > 1" class="prevStep" @click="prevStep">Anterior</button>
@@ -26,7 +26,7 @@
     data() {
       return {
         step: 1,
-        maxSteps: 5,
+        maxSteps: 6,
       };
     },
     computed: {

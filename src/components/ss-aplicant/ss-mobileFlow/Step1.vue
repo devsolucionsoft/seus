@@ -61,12 +61,17 @@
       this.saveToLocalStorage();
     },
     saveToLocalStorage() {
-      localStorage.setItem('step1', JSON.stringify(this.selectedOptions));
+      localStorage.setItem('step1Selected', JSON.stringify(this.selectedOptions));
+      localStorage.setItem('step1Options', JSON.stringify(this.options));
     },
     loadFromLocalStorage() {
-      const savedData = localStorage.getItem('step1');
-      if (savedData) {
-        this.selectedOptions = JSON.parse(savedData);
+      const savedSelectedOptions = localStorage.getItem('step1Selected');
+      const savedOptions = localStorage.getItem('step1Options');
+      if (savedSelectedOptions) {
+        this.selectedOptions = JSON.parse(savedSelectedOptions);
+      }
+      if (savedOptions) {
+        this.options = JSON.parse(savedOptions);
       }
     },
   },
