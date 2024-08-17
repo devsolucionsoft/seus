@@ -53,23 +53,26 @@ export default {
         { label: '¿Cuál es tu talento profesional?', name: 'professionalTalent', type: 'SsFormInput', placeholder: 'Escríbe aquí...' },
         { label: 'Qué ideas, proyectos o actividades has implementado que quieras contar. / Si no tienes experiencia ¿qué ideas tienes para implementar?', name: 'ideas', type: 'SsFormTextarea', placeholder: 'Escríbelas aquí...' },
       ],
-      formData: JSON.parse(localStorage.getItem('step2')) ||{
-        salaryRange: '',
-        professionalLevel: '',
-        fullName: '',
-        profession: '',
-        specialization: '',
-        documentNumber: '',
-        city: '',
-        willingToRelocate: false,
-        linkedin: '', 
-        email: '',
-        phoneNumber: '',
-        addedValue: '',
-        happiness: '',
-        professionalTalent: '',
-        ideas: '',
-      },
+      formData: (() => {
+        const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+        return stepsData.step2 || {
+          salaryRange: '',
+          professionalLevel: '',
+          fullName: '',
+          profession: '',
+          specialization: '',
+          documentNumber: '',
+          city: '',
+          willingToRelocate: false,
+          linkedin: '', 
+          email: '',
+          phoneNumber: '',
+          addedValue: '',
+          happiness: '',
+          professionalTalent: '',
+          ideas: '',
+        };
+      })(),
     };
   },
   methods: {
@@ -80,7 +83,9 @@ export default {
       this.saveToLocalStorage();
     },
     saveToLocalStorage() {
-      localStorage.setItem('step2', JSON.stringify(this.formData));
+      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+      stepsData.step2 = this.formData;
+      localStorage.setItem('stepsData', JSON.stringify(stepsData));
     },
     updateSwitchLabel() {
       const switchElement = document.querySelector('.switch .slider');

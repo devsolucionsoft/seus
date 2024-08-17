@@ -11,6 +11,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+*{
+  box-sizing: border-box;
+}
+
 button{
   font-family: 'Montserrat', sans-serif;
 }

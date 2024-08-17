@@ -61,17 +61,18 @@
       this.saveToLocalStorage();
     },
     saveToLocalStorage() {
-      localStorage.setItem('step1Selected', JSON.stringify(this.selectedOptions));
-      localStorage.setItem('step1Options', JSON.stringify(this.options));
+      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+      stepsData.step1 = {
+        selectedOptions: this.selectedOptions,
+        options: this.options
+      };
+      localStorage.setItem('stepsData', JSON.stringify(stepsData));
     },
     loadFromLocalStorage() {
-      const savedSelectedOptions = localStorage.getItem('step1Selected');
-      const savedOptions = localStorage.getItem('step1Options');
-      if (savedSelectedOptions) {
-        this.selectedOptions = JSON.parse(savedSelectedOptions);
-      }
-      if (savedOptions) {
-        this.options = JSON.parse(savedOptions);
+      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+      if (stepsData.step1) {
+        this.selectedOptions = stepsData.step1.selectedOptions || [];
+        this.options = stepsData.step1.options || [];
       }
     },
   },
@@ -79,7 +80,6 @@
     this.loadFromLocalStorage();
   }
 };
-
 </script>
   
 
