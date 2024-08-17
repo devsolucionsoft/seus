@@ -32,11 +32,11 @@
 <style lang="sass" scoped>
 select
   appearance: none
-  background-image: url("../../assets/icons/downArrow.svg")
-  background-repeat: no-repeat
-  background-position: calc(100% - 11px) center
-  background-size: 16px 16px
-  padding-right: 35px 
+  background-image: url("../../assets/icons/downArrow.svg") !important
+  background-repeat: no-repeat !important
+  background-position: calc(100% - 11px) center !important
+  background-size: 16px 16px !important
+  padding-right: 35px  !important
   padding: 16px 20px
   border: 1px solid #E4E4E499
   border-radius: 5px
