@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       showForm: false,
-      formations: [],
+      formations: JSON.parse(localStorage.getItem('step3Formations')) || [],
       newFormation: {
         title: '',
         institution: '',
@@ -112,6 +112,7 @@ export default {
       }
       this.resetForm();
       this.showForm = false;
+      this.saveToLocalStorage();
     },
     resetForm() {
       this.newFormation = {
@@ -134,6 +135,10 @@ export default {
     },
     deleteFormation(index) {
       this.formations.splice(index, 1);
+      this.saveToLocalStorage();
+    },
+    saveToLocalStorage() {
+      localStorage.setItem('step3Formations', JSON.stringify(this.formations));
     },
     isMostRecent(formation) {
       return this.formations.every(f => new Date(f.endDate) <= new Date(formation.endDate));
@@ -154,6 +159,12 @@ export default {
       } else {
         document.body.style.overflow = '';
       }
+    },
+    formations: {
+      handler() {
+        this.saveToLocalStorage();
+      },
+      deep: true
     }
   }
 };

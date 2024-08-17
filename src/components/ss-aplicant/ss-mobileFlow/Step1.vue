@@ -58,7 +58,20 @@
       } else {
         this.selectedOptions.splice(position, 1);
       }
-    }
+      this.saveToLocalStorage();
+    },
+    saveToLocalStorage() {
+      localStorage.setItem('step1', JSON.stringify(this.selectedOptions));
+    },
+    loadFromLocalStorage() {
+      const savedData = localStorage.getItem('step1');
+      if (savedData) {
+        this.selectedOptions = JSON.parse(savedData);
+      }
+    },
+  },
+  created() {
+    this.loadFromLocalStorage();
   }
 };
 

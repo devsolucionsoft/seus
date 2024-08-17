@@ -26,7 +26,7 @@ import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
 import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
 
 export default {
-  name: 'Step2',
+  name: 'Step5',
   components: {
     SsFormSelect,
     SsFormTextarea,
@@ -37,7 +37,7 @@ export default {
         { label: 'Elige las 5 competencias que más te caracterizan', name: 'profiency', type: 'SsFormSelect', options: ['Junior', 'Mid', 'Senior'] },
         { label: 'Datos complementarios', name: 'aditionalinfo', type: 'SsFormTextarea', placeholder: 'Añade información complementaria útil para reclutadores', optional: true },
       ],
-      formData: {
+      formData: JSON.parse(localStorage.getItem('step5FormData')) || {
         profiency: '',
         aditionalinfo: '',
       },
@@ -46,6 +46,18 @@ export default {
   methods: {
     submitForm() {
       console.log(this.formData);
+      this.saveToLocalStorage();
+    },
+    saveToLocalStorage() {
+      localStorage.setItem('step5FormData', JSON.stringify(this.formData));
+    },
+  },
+  watch: {
+    formData: {
+      handler() {
+        this.saveToLocalStorage();
+      },
+      deep: true,
     },
   },
 };

@@ -1,11 +1,11 @@
 <template>
   <div class="step4">
     <div class="container" v-if="!showForm">
-      <div :class="['add-formation-box', { 'small-box': formations.length > 0 }]" @click="openForm">
+      <div :class="['add-formation-box', { 'small-box': experiences.length > 0 }]" @click="openForm">
         <img src="@/assets/icons/plusCircle.svg" alt="+">
         <p>Añadir Experiencia</p>
       </div>
-      <div v-for="(formation, index) in formations" :key="index" class="formation-item">
+      <div v-for="(formation, index) in experiences" :key="index" class="formation-item">
         <div class="header-element">
           <p v-if="formation.currentWork">Trabaja aquí actualmente</p>
           <div class="actions">
@@ -101,8 +101,6 @@
             />
           </div>
         </div>
-
-
         <p class="description">{{ finalNote }}</p>
         <button class="submit" type="submit">
           <img src="@/assets/icons/mailBox.svg" alt="">
@@ -128,7 +126,7 @@ export default {
   data() {
     return {
       showForm: false,
-      formations: [],
+      experiences: JSON.parse(localStorage.getItem('step4Experiences')) || [],
       finalNote: 'Si tienes fotos de tu experiencia laboral compártela con nosotros (fotos con el equipo de trabajo, en eventos realizados, dando una charla, recibiendo un premio) recuerda que el mal uso de este espacio puede generar que tu perfil no sea aprobado. Si no tienes fotos que generen valor, deja este espacio en blanco.',
       newFormation: {
         title: '',
@@ -164,14 +162,15 @@ export default {
       };
 
       if (this.editIndex !== null) {
-        this.formations.splice(this.editIndex, 1, formationData);
+        this.experiences.splice(this.editIndex, 1, formationData);
         this.editIndex = null;
       } else {
-        this.formations.push(formationData);
+        this.experiences.push(formationData);
       }
 
       this.resetForm();
       this.showForm = false;
+      this.saveToLocalStorage();
     },
     resetForm() {
       this.newFormation = {
@@ -180,10 +179,11 @@ export default {
         startDate: '',
         endDate: '',
         attachments: [],
+        currentWork: false,
       };
     },
     editFormation(index) {
-      this.newFormation = { ...this.formations[index] };
+      this.newFormation = { ...this.experiences[index] };
       this.editIndex = index;
       this.showForm = true;
     },
@@ -194,7 +194,8 @@ export default {
       }
     },
     deleteFormation(index) {
-      this.formations.splice(index, 1);
+      this.experiences.splice(index, 1);
+      this.saveToLocalStorage();
     },
     formatDate(dateString) {
       const date = new Date(dateString);
@@ -223,8 +224,17 @@ export default {
         reader.readAsDataURL(files[i]);
       }
     },
+    saveToLocalStorage() {
+      localStorage.setItem('step4Experiences', JSON.stringify(this.experiences));
+    },
   },
   watch:{
+    experiences: {
+      handler() {
+        this.saveToLocalStorage();
+      },
+      deep: true,
+    },
     showForm(val) {
       if (val) {
         document.body.style.overflow = 'hidden';
@@ -232,6 +242,9 @@ export default {
         document.body.style.overflow = '';
       }
     }
+  },
+  mounted() {
+    this.experiences = JSON.parse(localStorage.getItem('step4Experiences')) || [];
   }
 };
 </script>
