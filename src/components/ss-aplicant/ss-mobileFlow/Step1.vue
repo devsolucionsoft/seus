@@ -54,9 +54,9 @@
     toggleSelection(index) {
       const position = this.selectedOptions.indexOf(index);
       if (position === -1) {
-        this.selectedOptions.push(index); // Agrega la opción si no está seleccionada
+        this.selectedOptions.push(index);
       } else {
-        this.selectedOptions.splice(position, 1); // La quita si ya estaba seleccionada
+        this.selectedOptions.splice(position, 1);
       }
     }
   }

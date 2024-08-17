@@ -199,6 +199,7 @@ export default {
         flex-direction: row;
         width: fit-content;
         border-radius: 28px;
+        background-color: transparent;
   
         img {
           width: 18px;
@@ -230,7 +231,12 @@ export default {
           padding: 1px 12px;
           background-color: #023D6A;
           border-radius: 30px;
-          color: white;
+          color: #EDEEF1;
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 20px;
+          text-align: left;
+
         }
         .actions{
           display: flex;
