@@ -24,7 +24,6 @@
         <span>Datos Personales</span>
         <button @click="goToStep(2)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
       </div>
-
       <div class="group" v-for="(item, index) in personalInfoItems" :key="index" :class="item.class">
         <div class="group-info-element">
           <div class="title">
@@ -46,6 +45,49 @@
       </div>
     </div>
 
+    <div v-if="step3Data.formations.length > 0" class="formations card information-cards">
+      <div class="header-section">
+        <span>Formación académica</span>
+        <button @click="goToStep(3)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
+      </div>
+      <div class="formation-container">
+        <div v-for="(formation, index) in step3Data.formations" :key="index" class="formation-item">
+  
+          <div class="header-element">
+            <p v-if="isMostRecent(index)">Último estudio realizado</p>
+            <div class="actions">
+              <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
+              <button @click="confirmDelete(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
+            </div>
+          </div>
+          <div class="formation-level element">
+            <div class="up">
+              <img src="@/assets/icons/hat.svg" alt="Hat">
+              <span>Nivel de formación</span>
+            </div>
+            <span>{{ formation.title }}</span>
+          </div>
+          <div class="formation-place element">
+            <div class="up">
+              <img src="@/assets/icons/build.svg" alt="Build">
+              <span>Institución</span>
+            </div>
+            <span>{{ formation.institution }}</span>
+          </div>
+          <div class="formation-dates element">
+            <div class="up">
+              <img src="@/assets/icons/calendar.svg" alt="Calendar">
+              <span>Fecha de certificación</span>
+            </div>
+            <span>{{ formatDate(formation.startDate) }} - {{ formatDate(formation.endDate) }}</span>
+          </div>
+      </div>
+
+      </div>
+    </div>
+
+
+
   </div>
 </template>
 
@@ -59,9 +101,11 @@ export default {
   },
   data() {
     return {
-      step1Data: {},
-      step2Data: {},
-      step3Data: {},
+      step1Data: null,
+      step2Data: null,
+      step3Data: {
+        formations: []
+      },
       personalInfoItems: [
         { title: 'Nivel profesional', value: '', icon: require('@/assets/icons/reviewIcons/suitcase.svg'), name: 'professionalLevel' },
         { title: 'Rango Salarial', value: '', icon: require('@/assets/icons/reviewIcons/wallet.svg'), name: 'salaryRange', class: 'dashed-box' },
@@ -101,8 +145,21 @@ export default {
       const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
       this.step1Data = stepsData.step1 || {};
       this.step2Data = stepsData.step2 || {};
-      this.step3Data = stepsData.step3 || {};
+      this.step3Data = stepsData.step3 || { formations: [] };
       this.updatePersonalInfoItems();
+    },  
+    confirmDeleteFormation(index) {
+      if (confirm("¿Estás seguro de que deseas eliminar esta formación?")) {
+        this.deleteFormation(index);
+      }
+    },
+    deleteFormation(index) {
+      this.step3Data.formations.splice(index, 1);
+      this.updateLocalStorage();
+    },
+    editFormation(index) {
+      this.$emit('edit-step', 3);
+      localStorage.setItem('editFormationIndex', index);
     },
     updatePersonalInfoItems() {
       this.personalInfoItems.forEach(item => {
@@ -111,8 +168,30 @@ export default {
         }
       });
     },
+    updateLocalStorage() {
+      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+      stepsData.step3 = this.step3Data;
+      localStorage.setItem('stepsData', JSON.stringify(stepsData));
+    },
     goToStep(stepNumber) {
       this.$emit('edit-step', stepNumber);
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const day = date.getDate().toString().padStart(2, '0');
+      let month = date.toLocaleString('es-ES', { month: 'long' });
+      month = month.charAt(0).toUpperCase() + month.slice(1);
+      const year = date.getFullYear();
+      return `${day} ${month} ${year}`;
+    },
+    isMostRecent(itemIndex) {
+      if (this.step3Data.formations.length === 0) return false;
+
+      const latestIndex = this.step3Data.formations.reduce((latest, formation, index) => {
+        return new Date(formation.endDate) > new Date(this.step3Data.formations[latest].endDate) ? index : latest;
+      }, 0);
+
+      return itemIndex === latestIndex;
     }
   },
   created() {
@@ -143,6 +222,10 @@ export default {
     &.personal-info
       box-shadow: 0px 4px 10px 0px #00000026
       background-color: white
+    &.formations
+      background-color: #C6CBD2
+      box-shadow: 0px 4px 10px 0px #00000026
+
 
   .header-section
     display: flex
@@ -270,4 +353,82 @@ export default {
       .group-info-element
         flex-direction: row      
         justify-content: space-between
+  .information-cards
+    .formation-container
+      border-bottom: 1px dashed #9E9E9E
+      padding-bottom: 24px
+
+      &:last-child
+        border-bottom: none
+        padding-bottom: none
+      
+      .formation-item 
+        padding: 20px
+        border-radius: 12px
+        background-color: #EDEEF1
+        display: flex
+        flex-direction: column
+        gap: 12px
+
+        .header-element
+          display: flex
+          flex-direction: row
+          align-items: center
+          justify-content: space-between
+
+          p
+            padding: 1px 12px
+            background-color: #023D6A
+            border-radius: 30px
+            color: #EDEEF1
+            font-size: 12px
+            font-weight: 500
+            line-height: 20px
+            text-align: left
+
+          
+          .actions
+            display: flex
+            flex-direction: row
+            gap: 12px
+            align-items: center
+            justify-content: center
+
+            button
+              appearance: none
+              background: none
+              border: none
+              padding: 0
+              margin: 0
+              font: inherit
+              color: inherit
+              text-align: inherit
+              cursor: pointer
+              outline: none
+            
+          
+        
+        .element
+          display: flex
+          flex-direction: column
+          gap: 12px
+          .up
+            display: flex
+            align-items: center
+            gap: 7px
+            span
+              font-size: 14px
+              font-weight: 500
+              line-height: 20px
+              text-align: left
+              color: #47586E
+            
+          
+          span
+            font-size: 16px
+            font-weight: 500
+            line-height: 20px
+            text-align: left
+            color: #023D6A
+      
 </style>

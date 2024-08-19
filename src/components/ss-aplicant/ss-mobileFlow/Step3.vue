@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       showForm: false,
-      formations: JSON.parse(localStorage.getItem('step3Formations')) || [],
+      formations: [],
       newFormation: {
         title: '',
         institution: '',
@@ -138,7 +138,9 @@ export default {
       this.saveToLocalStorage();
     },
     saveToLocalStorage() {
-      localStorage.setItem('step3Formations', JSON.stringify(this.formations));
+      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+      stepsData.step3 = { formations: this.formations };
+      localStorage.setItem('stepsData', JSON.stringify(stepsData));
     },
     isMostRecent(formation) {
       return this.formations.every(f => new Date(f.endDate) <= new Date(formation.endDate));
@@ -151,6 +153,19 @@ export default {
       const year = date.getFullYear();
       return `${day} ${month} ${year}`;
     },
+    loadFromLocalStorage() {
+      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+      if (stepsData.step3 && stepsData.step3.formations) {
+        this.formations = stepsData.step3.formations;
+      }
+      const editIndex = localStorage.getItem('editFormationIndex');
+      if (editIndex !== null) {
+        this.editIndex = parseInt(editIndex, 10);
+        this.newFormation = { ...this.formations[this.editIndex] };
+        this.showForm = true;
+        localStorage.removeItem('editFormationIndex');
+      }
+    }
   },
   watch:{
     showForm(val) {
@@ -166,6 +181,9 @@ export default {
       },
       deep: true
     }
+  },
+  mounted() {
+    this.loadFromLocalStorage();
   }
 };
 </script>
