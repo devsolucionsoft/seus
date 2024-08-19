@@ -1,4 +1,11 @@
   <template>
+    <div class="welcome">
+      <div class="text">
+        <h2>{{ headerText  }}</h2>
+        <button><img src="@/assets/icons/dots.svg" alt="..."></button>
+      </div>
+      <div class="lineTitle"></div>
+    </div>
     <div class="body">
       <SsProgressBarRegister 
       :step="step" 
@@ -13,66 +20,69 @@
     </div>
   </template>
 
-  <script>
-    import Step1 from '@/components/ss-aplicant/ss-mobileFlow/Step1.vue';
-    import Step2 from '@/components/ss-aplicant/ss-mobileFlow/Step2.vue';
-    import Step3 from '@/components/ss-aplicant/ss-mobileFlow/Step3.vue';
-    import Step4 from '@/components/ss-aplicant/ss-mobileFlow/Step4.vue';
-    import Step5 from '@/components/ss-aplicant/ss-mobileFlow/Step5.vue';
-    import StepPreview from '@/components/ss-aplicant/ss-mobileFlow/StepPreview.vue';
-    import StepSuccess from '@/components/ss-aplicant/ss-mobileFlow/StepSuccess.vue';  
-    import SsProgressBarRegister from '@/components/ss-aplicant/ss-mobileFlow/SsProgressBarRegister.vue';
+<script>
+  import Step1 from '@/components/ss-aplicant/ss-mobileFlow/Step1.vue';
+  import Step2 from '@/components/ss-aplicant/ss-mobileFlow/Step2.vue';
+  import Step3 from '@/components/ss-aplicant/ss-mobileFlow/Step3.vue';
+  import Step4 from '@/components/ss-aplicant/ss-mobileFlow/Step4.vue';
+  import Step5 from '@/components/ss-aplicant/ss-mobileFlow/Step5.vue';
+  import StepPreview from '@/components/ss-aplicant/ss-mobileFlow/StepPreview.vue';
+  import StepSuccess from '@/components/ss-aplicant/ss-mobileFlow/StepSuccess.vue';  
+  import SsProgressBarRegister from '@/components/ss-aplicant/ss-mobileFlow/SsProgressBarRegister.vue';
 
-    export default {
-      components: {
-        SsProgressBarRegister
-      },
-      data() {
-        return {
-          step: 1,
-          maxSteps: 5,
-          editingSection: null,
-        };
-      },
-      computed: {
-        currentStepComponent() {
-          switch (this.step) {
-            case 1: return Step1;
-            case 2: return Step2;
-            case 3: return Step3;
-            case 4: return Step4;
-            case 5: return Step5;
-            case 6: return StepPreview;
-            case 7: return StepSuccess;
-            default: return Step1;
-          }
-        },
-        showStepsNavigation() {
-          return this.step <= this.maxSteps;
-        },
-        nextButtonText() {
-          return this.step === this.maxSteps ? 'Previsualiza tu perfil' : 'Siguiente';
+  export default {
+    components: {
+      SsProgressBarRegister
+    },
+    data() {
+      return {
+        step: 1,
+        maxSteps: 5,
+        editingSection: null,
+      };
+    },
+    computed: {
+      currentStepComponent() {
+        switch (this.step) {
+          case 1: return Step1;
+          case 2: return Step2;
+          case 3: return Step3;
+          case 4: return Step4;
+          case 5: return Step5;
+          case 6: return StepPreview;
+          case 7: return StepSuccess;
+          default: return Step1;
         }
       },
-      methods: {
-        nextStep() {
-          if (this.step < this.maxSteps) {
-            this.step++;
-          } else if (this.step === this.maxSteps) {
-            this.step = 6;
-          }
-        },
-        prevStep() {
-          if (this.step > 1) {
-            this.step--;
-          }
-        },
-        changeStep(stepNumber) {
-          this.step = stepNumber;
-        },
+      showStepsNavigation() {
+        return this.step <= this.maxSteps;
       },
-    };
-    </script>
+      nextButtonText() {
+        return this.step === this.maxSteps ? 'Previsualiza tu perfil' : 'Siguiente';
+      },
+      headerText() {
+        return this.step === 6 ? 'Previsualización de perfil' : 'Bienvenido Francisco';
+      }
+    },
+    methods: {
+      nextStep() {
+        if (this.step < this.maxSteps) {
+          this.step++;
+        } else if (this.step === this.maxSteps) {
+          this.step = 6;
+        }
+      },
+      prevStep() {
+        if (this.step > 1) {
+          this.step--;
+        }
+      },
+      changeStep(stepNumber) {
+        this.step = stepNumber;
+      },
+    },
+  };
+</script>
     
   <style scoped lang="sass">
   .body
@@ -105,5 +115,39 @@
             margin-right: auto
       button:disabled
           background-color: #ccc
+  .welcome
+    display: flex
+    flex-direction: column
+    gap: 15px
+    padding: 16px
+    .text
+      display: flex
+      flex-direction: row
+      justify-content: space-between
+      align-items: center
+      gap: 16px
+      h2
+        font-size: 20px
+        font-weight: 600
+        line-height: 26px
+        text-align: left
+        color: #023D6A
+      button
+        height: 32px
+        width: 32px
+        border-radius: 20px
+        border: 2px solid #333333
+        display: flex
+        align-items: center
+        justify-content: center
+        text-align: center
+    .lineTitle
+      max-width: 64px
+      width: 100%
+      border-radius: 7px
+      height: 8px
+      background-color: #761D74
+      border: none
+
   </style>
     

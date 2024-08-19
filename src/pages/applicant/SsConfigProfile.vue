@@ -3,7 +3,7 @@
         <SsHeader></SsHeader>
         <div>
             <SsBannerProfile></SsBannerProfile>
-          <component :is="isMobile ? 'MobileComponent' : 'DesktopComponent'" />
+            <component :is="isMobile ? 'MobileComponent' : 'DesktopComponent'" />
         </div>
         <SsFooter></SsFooter>
     </div>

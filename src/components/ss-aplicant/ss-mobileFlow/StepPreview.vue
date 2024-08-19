@@ -1,5 +1,11 @@
 <template>
   <div class="content">
+    <div class="send-section">
+      <span>Revisa tu información y luego envía tu perfil</span>
+      <router-link to="/successRegister" class="button">
+        Enviar perfil
+      </router-link>
+    </div>
 
     <div class="employment card">
       <div class="header-section">
@@ -273,7 +279,6 @@ export default {
       const latestIndex = this.step3Data.formations.reduce((latest, formation, index) => {
         return new Date(formation.endDate) > new Date(this.step3Data.formations[latest].endDate) ? index : latest;
       }, 0);
-
       return itemIndex === latestIndex;
     }
   },
@@ -292,6 +297,27 @@ export default {
   padding: 16px
   flex-direction: column
   gap: 16px
+  .send-section
+    display: flex
+    flex-direction: column
+    gap: 16px
+    width: 100%
+    span
+      font-size: 14px
+      font-weight: 400
+      line-height: 24px
+      text-align: left
+      color: black
+    .button
+      padding: 14px 24px
+      background-color: #761D74
+      border-radius: 28px
+      color: #F8D2EA
+      font-size: 16px
+      font-weight: 600
+      line-height: 19.5px
+      text-align: center
+      text-decoration: none  
   .card
     display: flex
     flex-direction: column

@@ -17,6 +17,16 @@
 
 button{
   font-family: 'Montserrat', sans-serif;
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  outline: none;
 }
 
 body {

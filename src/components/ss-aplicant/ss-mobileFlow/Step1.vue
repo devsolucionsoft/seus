@@ -118,6 +118,7 @@
         align-items: center
         text-align: center
         padding: 11px 24px
+        gap: 10px
 
         .image-container
           background: #761D74

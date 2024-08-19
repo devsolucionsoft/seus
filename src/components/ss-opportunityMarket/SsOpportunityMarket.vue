@@ -290,6 +290,9 @@
     background-color: #D9D9D9;
     border: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media(max-width: 1267px){
