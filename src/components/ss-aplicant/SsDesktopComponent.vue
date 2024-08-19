@@ -18,17 +18,49 @@
         </div>
         <p class="description">{{ finalNote }}</p>
     </section>
+
+    <div class="form">
+        <form @submit.prevent="submitForm">
+            <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.name === 'linkedin' ? 'linkedin' : '']">
+                <label :for="field.name">{{ field.label }}</label>
+                <component
+                    :is="field.type"
+                    v-model="formData[field.name]"
+                    :placeholder="field.placeholder"
+                    :options="field.options"
+                    :type="field.inputType"
+                    :id="field.name"
+                    :label="field.label"
+                    :class="{'switch-label': field.type === 'SsFormToggle'}"
+                    @change="handleInputChange(field.name)"
+                />
+                <img v-if="field.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
+            </div>
+        </form>
+    </div>
+
 </template>
 
 <script>
+    import SsFormInput from '@/components/ss-form/SsFormInput.vue';
+    import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
+    import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
+    import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
     import optionMixin from '@/mixins/optionMixin.js';
+    import formMixin from '@/mixins/formMixin.js';
     export default {
-        mixins: [optionMixin],
+        mixins: [optionMixin, formMixin],
         name: 'SsDesktopComponent.vue',
         data() {
             return {
                 finalNote: 'Elegir una cultura específica no te descarta de ningún proceso.',
             };
+        },
+        components:{
+            SsFormInput,
+            SsFormSelect,
+            SsFormTextarea,
+            SsFormToggle,
         },
     };
 </script>
@@ -105,4 +137,43 @@
     line-height: 24px
     text-align: center
     color: #191F27
+
+.form
+    padding: 52px 197px
+    margin: auto
+    border-radius: 12px
+    form
+        display: grid
+        grid-template-columns: repeat(6, 1fr)
+        gap: 33px
+
+    .form-group
+        display: flex
+        flex-direction: column
+        gap: 14px
+
+        &:nth-child(1), &:nth-child(2), &:nth-child(13), &:nth-child(14)
+            grid-column: span 3
+        
+        &:nth-child(3), &:nth-child(4), &:nth-child(5), &:nth-child(6), &:nth-child(7), &:nth-child(8), &:nth-child(9), &:nth-child(10), &:nth-child(11)
+            grid-column: span 2
+
+        &:nth-child(12), &:nth-child(15)
+            grid-column: span 6
+
+        label
+            font-size: 14px
+            font-weight: 500
+            color: #023d6a
+
+        &.linkedin
+            position: relative
+            .linkedin-icon
+                position: absolute
+                bottom: 0
+                right: 11px
+                transform: translateY(-50%)
+                width: 28px
+                height: 28px
+
 </style>

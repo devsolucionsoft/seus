@@ -25,7 +25,7 @@
         finalNote: 'Elegir una cultura específica no te descarta de ningún proceso.',
       };
     },
-};
+  };
 </script>
   
 

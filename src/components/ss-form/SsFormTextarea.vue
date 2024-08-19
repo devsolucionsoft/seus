@@ -31,6 +31,7 @@ textarea
   line-height: 18px
   text-align: left
   color: #023D6A
+  width: 100%
   &::placeholder
     font-family: 'Montserrat', sans-serif
     font-size: 13px
