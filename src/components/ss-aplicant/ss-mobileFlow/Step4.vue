@@ -12,7 +12,7 @@
             <button @click="editExperience(index)">
               <img src="@/assets/icons/whiteEdit.svg" alt="Edit">
             </button>
-            <button @click="confirmDelete(index)">
+            <button @click="confirmDeleteExperience(index)">
               <img src="@/assets/icons/whiteDelete.svg" alt="Edit">
             </button>
           </div>
@@ -54,7 +54,7 @@
             'form-group',
             { formToggle: field.type === 'SsFormToggle' }
           ]"
-          v-for="(field, index) in formFields"
+          v-for="(field, index) in experiencesFormFields"
           :key="index"
         >
           <label :for="field.name">{{ field.label }}</label>
@@ -101,7 +101,7 @@
             />
           </div>
         </div>
-        <p class="description">{{ finalNote }}</p>
+        <p class="description">{{ experiencesFinalNote }}</p>
         <button class="submit" type="submit">
           <img src="@/assets/icons/mailBox.svg" alt="">
           <span>Guardar</span>
@@ -113,129 +113,17 @@
 
 <script>
 import SsFormInput from '@/components/ss-form/SsFormInput.vue';
-import SsFormTextArea from '@/components/ss-form/SsFormTextarea.vue';
+import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
 import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
+import experiencesMixin from '@/mixins/experiencesMixin.js';
 
 export default {
   name: 'Step4',
+  mixins: [experiencesMixin], 
   components: {
     SsFormInput,
-    SsFormTextArea,
+    SsFormTextarea,
     SsFormToggle,
-  },
-  data() {
-    return {
-      showForm: false,
-      experiences: [],
-      newExperience: {
-        title: '',
-        institution: '',
-        startDate: '',
-        endDate: '',
-        attachments: [],
-        currentWork: false,
-      },
-      finalNote: 'Si tienes fotos de tu experiencia laboral compártela con nosotros (fotos con el equipo de trabajo, en eventos realizados, dando una charla, recibiendo un premio) recuerda que el mal uso de este espacio puede generar que tu perfil no sea aprobado. Si no tienes fotos que generen valor, deja este espacio en blanco.',
-      formFields: [
-        { label: 'Cargo', name: 'position', placeholder: 'Ingresala aquí...', type: 'SsFormInput', required: true },
-        { label: 'Empresa', name: 'company', placeholder: 'Ingresala aquí...', type: 'SsFormInput', required: true },
-        { label: 'Fecha de inicio', name: 'startDate', placeholder: '', type: 'SsFormInput', inputType: 'date', required: true },
-        { label: 'Fecha de terminación', name: 'endDate', placeholder: '', type: 'SsFormInput', inputType: 'date', required: true },
-        { label: 'Menciona 3 principales logros', name: 'achievements', placeholder: 'Escribelos aquí...', type: 'SsFormTextArea', required: true },
-        { label: 'Trabaja aquí actualmente', name: 'currentWork', type: 'SsFormToggle' },
-      ],
-      editIndex: null,
-    };
-  },
-  methods: {
-    openForm() {
-      this.showForm = true;
-    },
-    cancelForm() {
-      this.resetForm();
-      this.showForm = false;
-    },
-    saveExperience() {
-        if (this.editIndex !== null) {
-          this.experiences.splice(this.editIndex, 1, { ...this.newExperience });
-          this.editIndex = null;
-        } else {
-          this.experiences.push({ ...this.newExperience });
-        }
-        this.resetForm();
-        this.showForm = false;
-        this.saveToLocalStorage();
-    },
-    resetForm() {
-      this.newExperience = {
-        title: '',
-        institution: '',
-        startDate: '',
-        endDate: '',
-        attachments: [],
-        currentWork: false,
-      };
-    },
-    editExperience(index) {
-      this.newExperience = { ...this.experiences[index] };
-      this.editIndex = index;
-      this.showForm = true;
-    },
-    confirmDelete(index) {
-      const confirmed = window.confirm('¿Estás seguro de que deseas eliminar esta formación?');
-      if (confirmed) {
-        this.deleteExperience(index);
-      }
-    },
-    deleteExperience(index) {
-      this.experiences.splice(index, 1);
-      this.saveToLocalStorage();
-    },
-    saveToLocalStorage() {
-      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-      stepsData.step4 = { experiences: this.experiences };
-      localStorage.setItem('stepsData', JSON.stringify(stepsData));
-    },
-    loadFromLocalStorage() {
-      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-      if (stepsData.step4 && stepsData.step4.experiences) {
-        this.experiences = stepsData.step4.experiences;
-      }
-      const editIndex = localStorage.getItem('editExperienceIndex');
-      if (editIndex !== null) {
-        this.editIndex = parseInt(editIndex, 10);
-        this.newExperience = { ...this.experiences[this.editIndex] };
-        this.showForm = true;
-        localStorage.removeItem('editExperienceIndex');
-      }
-    },
-    formatDate(dateString) {
-      const date = new Date(dateString);
-      const day = date.getDate().toString().padStart(2, '0');
-      let month = date.toLocaleString('es-ES', { month: 'long' });
-      month = month.charAt(0).toUpperCase() + month.slice(1);
-      const year = date.getFullYear();
-      return `${day} ${month} ${year}`;
-    },
-    handleFileUpload(event) {
-      const files = event.target.files;
-
-      if (this.newExperience.attachments.length >= 10) {
-        alert('Has alcanzado el límite de 10 archivos.');
-        return;
-      }
-
-      const availableSlots = 10 - this.newExperience.attachments.length;
-      const filesToAdd = Math.min(files.length, availableSlots);
-
-      for (let i = 0; i < filesToAdd; i++) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.newExperience.attachments.push(e.target.result);
-        };
-        reader.readAsDataURL(files[i]);
-      }
-    },
   },
   watch:{
     experiences: {

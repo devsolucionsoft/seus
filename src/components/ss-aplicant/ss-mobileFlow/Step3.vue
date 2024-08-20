@@ -10,7 +10,7 @@
           <p v-if="isMostRecent(formation)">Último estudio realizado</p>
           <div class="actions">
             <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
-            <button @click="confirmDelete(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
+            <button @click="confirmDeleteFormation(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
           </div>
         </div>
         <div class="formation-level element">

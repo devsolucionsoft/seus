@@ -51,7 +51,7 @@ export default {
         this.editIndex = index;
         this.showForm = true;
       },
-      confirmDelete(index) {
+      confirmDeleteFormation(index) {
         const confirmed = window.confirm('¿Estás seguro de que deseas eliminar esta formación?');
         if (confirmed) {
           this.deleteFormation(index);
