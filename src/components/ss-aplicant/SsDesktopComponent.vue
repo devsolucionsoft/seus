@@ -19,7 +19,7 @@
         <p class="description">{{ finalNote }}</p>
     </section>
 
-    <div class="form">
+    <section class="form">
         <form @submit.prevent="submitForm">
             <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.name === 'linkedin' ? 'linkedin' : '']">
                 <label :for="field.name">{{ field.label }}</label>
@@ -37,7 +37,69 @@
                 <img v-if="field.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
             </div>
         </form>
-    </div>
+    </section>
+
+    <section class="formations">
+        <div v-for="(formation, index) in formations" :key="index" class="formation-item">
+            <div class="header-element">
+                <p v-if="isMostRecent(formation)">Último estudio realizado</p>
+                <div class="actions">
+                <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
+                <button @click="confirmDelete(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
+                </div>
+            </div>
+            <div class="formation-level element">
+                <div class="up">
+                <img src="@/assets/icons/hat.svg" alt="Hat">
+                <span>Nivel de formación</span>
+                </div>
+                <span>{{ formation.title }}</span>
+            </div>
+            <div class="formation-place element">
+                <div class="up">
+                <img src="@/assets/icons/build.svg" alt="Build">
+                <span>Institución</span>
+                </div>
+                <span>{{ formation.institution }}</span>
+            </div>
+            <div class="formation-dates element">
+                <div class="up">
+                <img src="@/assets/icons/calendar.svg" alt="Calendar">
+                <span>Fecha de certificación</span>
+                </div>
+                <span>{{ formatDate(formation.startDate) }} - {{ formatDate(formation.endDate) }}</span>
+            </div>
+        </div>
+
+        <div class="form-modal">
+            <div class="title">
+                <h3>Añadir Formación</h3>
+                <button type="button" @click="cancelForm">
+                <img src="@/assets/icons/closeX.svg" alt="x">
+                </button>
+            </div>
+            <form @submit.prevent="saveFormation">
+                <div class="form-group" v-for="(field, index) in formFields" :key="index">
+                <label :for="field.name">{{ field.label }}</label>
+                <component
+                    :is="field.type"
+                    :key="index"
+                    v-model="newFormation[field.name]"
+                    :label="field.label"
+                    :placeholder="field.placeholder"
+                    :type="field.inputType"
+                    :inputType="field.inpuType"
+                    :required="field.required"
+                    :id="field.name"
+                />
+                </div>
+                <button class="submit" type="submit">
+                <img src="@/assets/icons/mailBox.svg" alt="">
+                <span>Guardar</span>
+                </button>
+            </form>
+        </div>
+    </section>
 
 </template>
 
@@ -48,8 +110,9 @@
     import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
     import optionMixin from '@/mixins/optionMixin.js';
     import formMixin from '@/mixins/formMixin.js';
+    import formationsMixin from '@/mixins/formationsMixin.js';
     export default {
-        mixins: [optionMixin, formMixin],
+        mixins: [optionMixin, formMixin, formationsMixin],
         name: 'SsDesktopComponent.vue',
         data() {
             return {
