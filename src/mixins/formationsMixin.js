@@ -10,9 +10,9 @@ export default {
           startDate: '',
           endDate: '',
         },
-        formFields: [
-          { label: 'Título académico', name: 'title', placeholder: 'Escribe aquí...', type: 'SsFormInput', required: true },
-          { label: 'Institución', name: 'institution', placeholder: 'Escribe aquí...', type: 'SsFormInput', required: true },
+        formationFormFields: [
+          { label: 'Título obtenido', name: 'title', placeholder: 'Ingresala aquí...', type: 'SsFormInput', required: true },
+          { label: 'Institución', name: 'institution', placeholder: 'Ingresala aquí...', type: 'SsFormInput', required: true },
           { label: 'Fecha de inicio', name: 'startDate', placeholder: '', type: 'SsFormInput', inputType: 'date', required: true },
           { label: 'Fecha de terminación', name: 'endDate', placeholder: '', type: 'SsFormInput', inputType: 'date', required: true },
         ],

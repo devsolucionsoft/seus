@@ -40,46 +40,12 @@
     </section>
 
     <section class="formations">
-        <div v-for="(formation, index) in formations" :key="index" class="formation-item">
-            <div class="header-element">
-                <p v-if="isMostRecent(formation)">Último estudio realizado</p>
-                <div class="actions">
-                <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
-                <button @click="confirmDelete(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
-                </div>
-            </div>
-            <div class="formation-level element">
-                <div class="up">
-                <img src="@/assets/icons/hat.svg" alt="Hat">
-                <span>Nivel de formación</span>
-                </div>
-                <span>{{ formation.title }}</span>
-            </div>
-            <div class="formation-place element">
-                <div class="up">
-                <img src="@/assets/icons/build.svg" alt="Build">
-                <span>Institución</span>
-                </div>
-                <span>{{ formation.institution }}</span>
-            </div>
-            <div class="formation-dates element">
-                <div class="up">
-                <img src="@/assets/icons/calendar.svg" alt="Calendar">
-                <span>Fecha de certificación</span>
-                </div>
-                <span>{{ formatDate(formation.startDate) }} - {{ formatDate(formation.endDate) }}</span>
-            </div>
-        </div>
-
         <div class="form-modal">
             <div class="title">
-                <h3>Añadir Formación</h3>
-                <button type="button" @click="cancelForm">
-                <img src="@/assets/icons/closeX.svg" alt="x">
-                </button>
+                <h3>Formación académica</h3>
             </div>
             <form @submit.prevent="saveFormation">
-                <div class="form-group" v-for="(field, index) in formFields" :key="index">
+                <div class="form-group" v-for="(field, index) in formationFormFields" :key="index">
                 <label :for="field.name">{{ field.label }}</label>
                 <component
                     :is="field.type"
@@ -93,12 +59,58 @@
                     :id="field.name"
                 />
                 </div>
-                <button class="submit" type="submit">
-                <img src="@/assets/icons/mailBox.svg" alt="">
-                <span>Guardar</span>
-                </button>
+                <div class="button-container">
+                    <button class="blue" type="submit">
+                        <img src="@/assets/icons/mailBox.svg" alt="">
+                        <span>Guardar</span>
+                    </button>
+
+                    <button class="transparent">
+                        <img src="@/assets/icons/plus.svg" alt="">
+                        <span>Añadir</span>
+                    </button>
+
+                </div>
             </form>
         </div>
+
+        <div v-for="(formation, index) in formations" :key="index" class="formation-item">
+            <div class="header-element element">
+                <p v-if="isMostRecent(formation)">Último estudio realizado</p>
+            </div>
+            <div class="element">
+                <div class="up">
+                    <span>Titulo obtenido</span>
+                </div>
+                <span>{{ formation.title }}</span>
+            </div>
+            <div class="element">
+                <div class="up">
+                    <span>Institución</span>
+                </div>
+                <span>{{ formation.institution }}</span>
+            </div>
+            <div class="element">
+                <div class="up">
+                    <span>Fecha de certificación</span>
+                </div>
+                <span>{{ formatDate(formation.startDate) }} - {{ formatDate(formation.endDate) }}</span>
+            </div>
+
+            <div class="button-container element">
+                <button @click="editFormation(index)" class="blue" type="submit">
+                    <img src="@/assets/icons/edit2.svg" alt="Edit">
+                    <span>Editar</span>
+                </button>
+
+                <button @click="confirmDelete(index)" class="transparent" type="submit">
+                    <img src="@/assets/icons/plus.svg" alt="">
+                    <span>Eliminar</span>
+                </button>
+
+            </div>
+        </div>
+        
     </section>
 
 </template>
@@ -239,4 +251,111 @@
                 width: 28px
                 height: 28px
 
+.formations
+    padding: 40px 197px
+    background-color: #C6CBD2
+    display: flex
+    flex-direction: column
+    gap: 34px
+    .form-modal
+        display: flex
+        flex-direction: column
+        gap: 34px
+        .title
+            h3
+                font-size: 24px
+                font-weight: 500
+                line-height: 29.26px
+                text-align: left
+                color: #023D6A
+        form
+            display: grid
+            grid-template-columns: repeat(6, 1fr)
+            gap: 32px
+            align-items: center
+            justify-content: space-between
+            .form-group
+                display: flex
+                flex-direction: column
+                gap: 15px
+
+                label
+                    font-size: 14px
+                    font-weight: 500
+                    line-height: 20px
+                    text-align: left
+                    color: #023D6A
+                    white-space: nowrap
+
+                &:nth-child(1), &:nth-child(2)
+                    grid-column: span 2
+
+                &:nth-child(3), &:nth-child(4)
+                    grid-column: span 1
+            
+
+    .formation-item
+        border-top: 1px dashed white
+        padding-top: 32px
+        display: grid
+        grid-template-columns: repeat(6, 1fr)
+        gap: 32px
+        align-items: center
+        justify-content: space-between
+        .header-element
+            display: flex
+            flex-direction: row
+            align-items: center
+            justify-content: space-between
+            p
+                padding: 1px 12px
+                background-color: #023D6A
+                border-radius: 30px
+                color: #EDEEF1
+                font-size: 12px
+                font-weight: 500
+                line-height: 20px
+                text-align: left
+        .element
+            display: flex
+            flex-direction: column
+            gap: 15px
+            .up
+                span
+                    font-size: 14px
+                    font-weight: 500
+                    line-height: 20px
+                    text-align: left
+                    color: #023D6A
+                    white-space: nowrap
+
+            &:nth-child(1), &:nth-child(5)
+                grid-column: span 6
+            &:nth-child(2), &:nth-child(3),&:nth-child(4)
+                grid-column: span 2
+        .header-element
+            display: flex
+            width: fit-content
+
+.button-container
+    display: flex
+    flex-direction: row !important
+    gap: 24px
+    justify-content: flex-end
+    grid-column: span 6            
+    button
+        max-width: 140px
+        display: flex
+        flex-direction: row
+        align-items: center
+        justify-content: center
+        gap: 10px
+        padding: 12px 27px
+        border-radius: 28px
+        &.blue
+            background-color: #0DC6DE
+            border: 1px solid #0DC6DE
+        &.transparent
+            border: 1px solid #47586E
+            background-color: transparent
 </style>

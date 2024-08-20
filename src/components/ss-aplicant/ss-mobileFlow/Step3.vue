@@ -45,7 +45,7 @@
         </button>
       </div>
       <form @submit.prevent="saveFormation">
-        <div class="form-group" v-for="(field, index) in formFields" :key="index">
+        <div class="form-group" v-for="(field, index) in formationFormFields" :key="index">
           <label :for="field.name">{{ field.label }}</label>
           <component
             :is="field.type"
