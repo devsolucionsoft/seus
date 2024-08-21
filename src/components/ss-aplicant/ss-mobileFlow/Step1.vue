@@ -16,52 +16,16 @@
 </template>
   
 <script>
+  import optionMixin from '@/mixins/optionMixin.js';
   export default {
+    mixins: [optionMixin],
     name: 'Step1',
     data() {
       return {
-        selectedOptions: [],
         finalNote: 'Elegir una cultura específica no te descarta de ningún proceso.',
-        options: [
-          {
-            title: 'Tipo de empleo que buscas:',
-            items: [
-              { label: 'Áreas humanas', image: require('@/assets/icons/selectIcons/human-resources.svg') },
-              { label: 'Áreas Financieras', image: require('@/assets/icons/selectIcons/finance.svg') },
-              { label: 'Área Comercial', image: require('@/assets/icons/selectIcons/commercial.svg') },
-            ]
-          },
-          {
-            title: 'Opciones de jornadas:',
-            items: [
-              { label: 'Presencial', image: require('@/assets/icons/selectIcons/presential.svg') },
-              { label: 'Remoto', image: require('@/assets/icons/selectIcons/remote.svg') },
-              { label: 'Híbrido', image: require('@/assets/icons/selectIcons/hybrid.svg') }
-            ]
-          },
-          {
-            title: 'Qué tipos de culturas te gustan más:',
-            items: [
-              { label: 'Emocionales', image: require('@/assets/icons/selectIcons/emotional.svg') },
-              { label: 'Conocimiento', image: require('@/assets/icons/selectIcons/knowledge.svg') },
-              { label: 'Remoto', image: require('@/assets/icons/selectIcons/hybrid.svg') }
-            ]
-          }
-        ]
       };
     },
-  methods: {
-    toggleSelection(index) {
-      const position = this.selectedOptions.indexOf(index);
-      if (position === -1) {
-        this.selectedOptions.push(index); // Agrega la opción si no está seleccionada
-      } else {
-        this.selectedOptions.splice(position, 1); // La quita si ya estaba seleccionada
-      }
-    }
-  }
-};
-
+  };
 </script>
   
 
@@ -100,6 +64,7 @@
         align-items: center
         text-align: center
         padding: 11px 24px
+        gap: 10px
 
         .image-container
           background: #761D74

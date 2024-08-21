@@ -53,8 +53,9 @@ const images = ref([
     }
     footer .brands img{
         max-width: 72px;
-        max-height: 60px;
+        max-height: 47px;
         padding: 18px;
+        box-sizing: content-box;
     }
     footer .socialFooter{
         display: flex;

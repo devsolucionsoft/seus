@@ -19,7 +19,7 @@
     header img{
         max-width: 192px
     }
-    @media(max-width: 700px){
+    @media(max-width: 768px){
         header{
         padding: 16px !important;
         }

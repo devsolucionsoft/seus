@@ -1,13 +1,24 @@
-<template>
-  <div class="body">
-    <SsProgressBarRegister :step="step" :steps="5" :labels="['Empleo', 'Datos Personales', 'Formación', 'Experiencia', 'Revision']" />
-    <component :is="currentStepComponent" />
-    <div v-if="showStepsNavigation" class="stepsNavigation">
-      <button v-if="step > 1" class="prevStep" @click="prevStep">Anterior</button>
-      <button v-if="step <= maxSteps" class="nextStep" @click="nextStep">{{ nextButtonText }}</button>
+  <template>
+    <div class="welcome">
+      <div class="text">
+        <h2>{{ headerText  }}</h2>
+        <button><img src="@/assets/icons/dots.svg" alt="..."></button>
+      </div>
+      <div class="lineTitle"></div>
     </div>
-  </div>
-</template>
+    <div class="body">
+      <SsProgressBarRegister 
+      :step="step" 
+      :steps="5" 
+      :labels="['Empleo', 'Datos Personales', 'Formación', 'Experiencia', 'Revision']" 
+      />
+      <component :is="currentStepComponent" @edit-step="changeStep"/>
+      <div v-if="showStepsNavigation" class="stepsNavigation">
+        <button v-if="step > 1" class="prevStep" @click="prevStep">Anterior</button>
+        <button v-if="step <= maxSteps" class="nextStep" @click="nextStep">{{ nextButtonText }}</button>
+      </div>
+    </div>
+  </template>
 
 <script>
   import Step1 from '@/components/ss-aplicant/ss-mobileFlow/Step1.vue';
@@ -27,6 +38,7 @@
       return {
         step: 1,
         maxSteps: 5,
+        editingSection: null,
       };
     },
     computed: {
@@ -47,12 +59,17 @@
       },
       nextButtonText() {
         return this.step === this.maxSteps ? 'Previsualiza tu perfil' : 'Siguiente';
+      },
+      headerText() {
+        return this.step === 6 ? 'Previsualización de perfil' : 'Bienvenido Francisco';
       }
     },
     methods: {
       nextStep() {
         if (this.step < this.maxSteps) {
           this.step++;
+        } else if (this.step === this.maxSteps) {
+          this.step = 6;
         }
       },
       prevStep() {
@@ -60,41 +77,77 @@
           this.step--;
         }
       },
+      changeStep(stepNumber) {
+        this.step = stepNumber;
+      },
     },
   };
-  </script>
-  
-<style scoped lang="sass">
-.body
-  display: flex
-  flex-direction: column
-  min-height: 100vh
-  .stepsNavigation
-    background: #270538
-    padding: 16px
-    justify-content: flex-end
+</script>
+    
+  <style scoped lang="sass">
+  .body
     display: flex
-    flex-direction: row
-    margin-top: auto
-    button
-        border: none
-        padding: 12px 24px
-        border-radius: 28px
-        cursor: pointer
-        font-size: 14px
+    flex-direction: column
+    .stepsNavigation
+      background: #270538
+      padding: 16px
+      justify-content: flex-end
+      display: flex
+      flex-direction: row
+      margin-top: auto
+      button
+          border: none
+          padding: 12px 24px
+          border-radius: 28px
+          cursor: pointer
+          font-size: 14px
+          font-weight: 600
+          line-height: 17.07px
+          text-align: center
+          color: white
+          &.nextStep
+            background-color: #761D74
+            border: 1px solid #761d74
+            justify-self: flex-end
+          &.prevStep
+            background-color: transparent
+            border: 1px solid white
+            margin-right: auto
+      button:disabled
+          background-color: #ccc
+  .welcome
+    display: flex
+    flex-direction: column
+    gap: 15px
+    padding: 16px
+    .text
+      display: flex
+      flex-direction: row
+      justify-content: space-between
+      align-items: center
+      gap: 16px
+      h2
+        font-size: 20px
         font-weight: 600
-        line-height: 17.07px
+        line-height: 26px
+        text-align: left
+        color: #023D6A
+      button
+        height: 32px
+        width: 32px
+        border-radius: 20px
+        border: 2px solid #333333
+        display: flex
+        align-items: center
+        justify-content: center
         text-align: center
-        color: white
-        &.nextStep
-          background-color: #761D74
-          border: 1px solid #761d74
-          justify-self: flex-end
-        &.prevStep
-          background-color: transparent
-          border: 1px solid white
-          margin-right: auto
-    button:disabled
-        background-color: #ccc
-</style>
-  
+    .lineTitle
+      max-width: 64px
+      width: 100%
+      border-radius: 7px
+      height: 8px
+      background-color: #761D74
+      border: none
+
+  </style>
+    

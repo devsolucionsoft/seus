@@ -471,7 +471,7 @@
 
     section .content .startCarrer form .element input{
       padding: 15px 0px 15px 44px;
-      width: calc(100% - 44px);
+      width: 100%;
     }
 
     section .content .startCarrer form .element select{

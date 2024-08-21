@@ -3,7 +3,7 @@
         <SsHeader></SsHeader>
         <div>
             <SsBannerProfile></SsBannerProfile>
-          <component :is="isMobile ? 'MobileComponent' : 'DesktopComponent'" />
+            <component :is="isMobile ? 'MobileComponent' : 'DesktopComponent'" />
         </div>
         <SsFooter></SsFooter>
     </div>
@@ -45,7 +45,7 @@
 
 <style lang="sass" scoped>
 .content
-    min-height: 100vh
+    height: fit-content
     justify-content: space-between
     display: flex
     flex-direction: column

@@ -50,12 +50,12 @@
   gap: 16px
   align-items: center
   justify-content: center
+  padding: 0 16px
   .progress-bar
     display: flex
     align-items: flex-start
     justify-content: center
     position: relative
-    padding: 0 26px
     gap: 26px
     flex-wrap: wrap
 
