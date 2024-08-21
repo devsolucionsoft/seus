@@ -1,29 +1,239 @@
 <template>
-    <section class="interest-items">
-        <h2>Configura esta sección para un perfil más detallado.</h2>
-        <div v-for="(option, index) in options" :key="index" class="option-group">
-            <h3>{{ option.title }}</h3>
-            <div class="options">
-                <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
-                <div 
-                    class="image-container" 
-                    :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" 
-                    @click="toggleSelection(`${index}-${idx}`)"
-                >
-                    <img :src="item.image" :alt="item.label" />
-                </div>
-                <p>{{ item.label }}</p>
+    <div class="content">
+        <section class="interest-items">
+            <h2>Configura esta sección para un perfil más detallado.</h2>
+            <div v-for="(option, index) in options" :key="index" class="option-group">
+                <h3>{{ option.title }}</h3>
+                <div class="options">
+                    <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
+                    <div 
+                        class="image-container" 
+                        :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" 
+                        @click="toggleSelection(`${index}-${idx}`)"
+                    >
+                        <img :src="item.image" :alt="item.label" />
+                    </div>
+                    <p>{{ item.label }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <p class="description">{{ finalNote }}</p>
-    </section>
-
-    <section class="form">
-        <form @submit.prevent="submitForm">
-            <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.name === 'linkedin' ? 'linkedin' : '']">
-                <label :for="field.name">{{ field.label }}</label>
-                <component
+            <p class="description">{{ finalNote }}</p>
+        </section>
+    
+        <section class="form">
+            <form @submit.prevent="submitForm">
+                <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.name === 'linkedin' ? 'linkedin' : '']">
+                    <label :for="field.name">{{ field.label }}</label>
+                    <component
+                        :is="field.type"
+                        v-model="formData[field.name]"
+                        :placeholder="field.placeholder"
+                        :options="field.options"
+                        :type="field.inputType"
+                        :id="field.name"
+                        :label="field.label"
+                        :class="{'switch-label': field.type === 'SsFormToggle'}"
+                        @change="handleInputChange(field.name)"
+                    />
+                    <img v-if="field.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
+                </div>
+            </form>
+        </section>
+    
+        <section class="formations">
+            <div class="form-modal">
+                <div class="title">
+                    <h3>Formación académica</h3>
+                </div>
+                <form @submit.prevent="saveFormation">
+                    <div class="form-group" v-for="(field, index) in formationFormFields" :key="index">
+                    <label :for="field.name">{{ field.label }}</label>
+                    <component
+                        :is="field.type"
+                        :key="index"
+                        v-model="newFormation[field.name]"
+                        :label="field.label"
+                        :placeholder="field.placeholder"
+                        :type="field.inputType"
+                        :inputType="field.inpuType"
+                        :required="field.required"
+                        :id="field.name"
+                    />
+                    </div>
+                    <div class="button-container">
+                        <button class="blue" type="submit">
+                            <img src="@/assets/icons/mailBox.svg" alt="">
+                            <span>Guardar</span>
+                        </button>
+    
+                        <button class="transparent">
+                            <img src="@/assets/icons/plus.svg" alt="">
+                            <span>Añadir</span>
+                        </button>
+    
+                    </div>
+                </form>
+            </div>
+    
+            <div v-for="(formation, index) in formations" :key="index" class="formation-item">
+                <div class="header-element element">
+                    <p v-if="isMostRecent(formation)">Último estudio realizado</p>
+                </div>
+                <div class="element">
+                    <div class="up">
+                        <span>Titulo obtenido</span>
+                    </div>
+                    <span>{{ formation.title }}</span>
+                </div>
+                <div class="element">
+                    <div class="up">
+                        <span>Institución</span>
+                    </div>
+                    <span>{{ formation.institution }}</span>
+                </div>
+                <div class="element">
+                    <div class="up">
+                        <span>Fecha de certificación</span>
+                    </div>
+                    <span>{{ formatDate(formation.startDate) }} - {{ formatDate(formation.endDate) }}</span>
+                </div>
+    
+                <div class="button-container element">
+                    <button @click="editFormation(index)" class="blue" type="submit">
+                        <img src="@/assets/icons/edit2.svg" alt="Edit">
+                        <span>Editar</span>
+                    </button>
+    
+                    <button @click="confirmDeleteFormation(index)" class="transparent" type="submit">
+                        <img src="@/assets/icons/plus.svg" alt="">
+                        <span>Eliminar</span>
+                    </button>
+    
+                </div>
+            </div>
+        </section>
+    
+        <section class="experiences">
+            <div class="form-modal">
+                <div class="title">
+                    <h3>Experiencia laboral</h3>
+                </div>
+    
+                <form @submit.prevent="saveExperience">
+                    <div
+                    :class="[
+                        'form-group',
+                        { formToggle: field.type === 'SsFormToggle' }
+                    ]"
+                    v-for="(field, index) in experiencesFormFields"
+                    :key="index"
+                    >
+                    <label :for="field.name">{{ field.label }}</label>
+                    <component
+                        :is="field.type"
+                        :key="index"
+                        v-model="newExperience[field.name]"
+                        :label="field.label"
+                        :placeholder="field.placeholder"
+                        :type="field.inputType"
+                        :inputType="field.inpuType"
+                        :required="field.required"
+                        :id="field.name"
+                    />
+                    </div>
+    
+    
+                    <div class="form-group attachments-form-group">
+                        <label class="attachments" for="attachments">
+                            <div class="addMedia">
+                                <img src="@/assets/icons/clip.svg" alt="Clip">
+                                <span>
+                                    Añadir certificación, fotos o premios
+                                </span>
+                                <span class="optional">
+                                    Opcional
+                                </span>
+                            </div>
+                        </label>
+                        <input
+                            type="file"
+                            id="attachments"
+                            @change="handleFileUpload"
+                            multiple
+                            accept="image/*"
+                        />
+                        <div class="previews">
+                            <img
+                            v-for="(attachment, index) in newExperience.attachments"
+                            :key="index"
+                            :src="attachment"
+                            class="preview-image"
+                            alt="Vista previa"
+                            />
+                        </div>
+                        <p class="description">{{ experiencesFinalNote }}</p>
+                    </div>
+                    
+                    <div class="button-container">
+                        <button class="blue" type="submit">
+                            <img src="@/assets/icons/mailBox.svg" alt="">
+                            <span>Guardar</span>
+                        </button>
+    
+                        <button class="white">
+                            <img src="@/assets/icons/plus.svg" alt="">
+                            <span>Añadir</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+    
+            <div v-for="(experience, index) in experiences" :key="index" class="experience-item">
+                <div class="header-element element">
+                    <p v-if="experience.currentWork">Trabaja aquí actualmente</p>
+                </div>
+    
+                <div class="element">
+                    <div class="up">
+                        <span>Cargo</span>
+                    </div>
+                    <span>{{ experience.position }}</span>
+                </div>
+    
+                <div class="element">
+                    <div class="up">
+                        <span>Empresa</span>
+                    </div>
+                    <span>{{ experience.company }}</span>
+                </div>
+                <div class="element">
+                    <div class="up">
+                        <span>Tiempo de duración</span>
+                    </div>
+                    <span>{{ formatDate(experience.startDate) }} - {{ formatDate(experience.endDate) }}</span>
+                </div>
+    
+                <div class="button-container element">
+                    <button class="blue" @click="editExperience(index)">
+                        <img src="@/assets/icons/whiteEdit.svg" alt="Edit">
+                        <span>Editar</span>
+                    </button>
+                    <button class="white" @click="confirmDeleteExperience(index)">
+                        <img src="@/assets/icons/whiteDelete.svg" alt="Edit">
+                        <span>Eliminar</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    
+        <section class="additional-info">
+            <form @submit.prevent="submitForm">
+                <div v-for="(field, index) in additionalInfoFormFields" :key="index" class="form-group">
+                    <label :for="field.name">
+                        {{ field.label }}
+                        <span v-if="field.optional" class="optional-badge">Opcional</span>
+                    </label>
+                    <component
                     :is="field.type"
                     v-model="formData[field.name]"
                     :placeholder="field.placeholder"
@@ -31,204 +241,19 @@
                     :type="field.inputType"
                     :id="field.name"
                     :label="field.label"
-                    :class="{'switch-label': field.type === 'SsFormToggle'}"
                     @change="handleInputChange(field.name)"
-                />
-                <img v-if="field.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
-            </div>
-        </form>
-    </section>
-
-    <section class="formations">
-        <div class="form-modal">
-            <div class="title">
-                <h3>Formación académica</h3>
-            </div>
-            <form @submit.prevent="saveFormation">
-                <div class="form-group" v-for="(field, index) in formationFormFields" :key="index">
-                <label :for="field.name">{{ field.label }}</label>
-                <component
-                    :is="field.type"
-                    :key="index"
-                    v-model="newFormation[field.name]"
-                    :label="field.label"
-                    :placeholder="field.placeholder"
-                    :type="field.inputType"
-                    :inputType="field.inpuType"
-                    :required="field.required"
-                    :id="field.name"
-                />
-                </div>
-                <div class="button-container">
-                    <button class="blue" type="submit">
-                        <img src="@/assets/icons/mailBox.svg" alt="">
-                        <span>Guardar</span>
-                    </button>
-
-                    <button class="transparent">
-                        <img src="@/assets/icons/plus.svg" alt="">
-                        <span>Añadir</span>
-                    </button>
-
-                </div>
-            </form>
-        </div>
-
-        <div v-for="(formation, index) in formations" :key="index" class="formation-item">
-            <div class="header-element element">
-                <p v-if="isMostRecent(formation)">Último estudio realizado</p>
-            </div>
-            <div class="element">
-                <div class="up">
-                    <span>Titulo obtenido</span>
-                </div>
-                <span>{{ formation.title }}</span>
-            </div>
-            <div class="element">
-                <div class="up">
-                    <span>Institución</span>
-                </div>
-                <span>{{ formation.institution }}</span>
-            </div>
-            <div class="element">
-                <div class="up">
-                    <span>Fecha de certificación</span>
-                </div>
-                <span>{{ formatDate(formation.startDate) }} - {{ formatDate(formation.endDate) }}</span>
-            </div>
-
-            <div class="button-container element">
-                <button @click="editFormation(index)" class="blue" type="submit">
-                    <img src="@/assets/icons/edit2.svg" alt="Edit">
-                    <span>Editar</span>
-                </button>
-
-                <button @click="confirmDeleteFormation(index)" class="transparent" type="submit">
-                    <img src="@/assets/icons/plus.svg" alt="">
-                    <span>Eliminar</span>
-                </button>
-
-            </div>
-        </div>
-    </section>
-
-    <section class="experiences">
-
-        <div class="form-modal">
-            <div class="title">
-                <h3>Experiencia laboral</h3>
-            </div>
-
-            <form @submit.prevent="saveExperience">
-                <div
-                :class="[
-                    'form-group',
-                    { formToggle: field.type === 'SsFormToggle' }
-                ]"
-                v-for="(field, index) in experiencesFormFields"
-                :key="index"
-                >
-                <label :for="field.name">{{ field.label }}</label>
-                <component
-                    :is="field.type"
-                    :key="index"
-                    v-model="newExperience[field.name]"
-                    :label="field.label"
-                    :placeholder="field.placeholder"
-                    :type="field.inputType"
-                    :inputType="field.inpuType"
-                    :required="field.required"
-                    :id="field.name"
-                />
-                </div>
-
-
-                <div class="form-group attachments-form-group">
-                    <label class="attachments" for="attachments">
-                        <div class="addMedia">
-                            <img src="@/assets/icons/clip.svg" alt="Clip">
-                            <span>
-                                Añadir certificación, fotos o premios
-                            </span>
-                            <span class="optional">
-                                Opcional
-                            </span>
-                        </div>
-                    </label>
-                    <input
-                        type="file"
-                        id="attachments"
-                        @change="handleFileUpload"
-                        multiple
-                        accept="image/*"
                     />
-                    <div class="previews">
-                        <img
-                        v-for="(attachment, index) in newExperience.attachments"
-                        :key="index"
-                        :src="attachment"
-                        class="preview-image"
-                        alt="Vista previa"
-                        />
-                    </div>
-                    <p class="description">{{ experiencesFinalNote }}</p>
-                </div>
-                
-                <div class="button-container">
-                    <button class="blue" type="submit">
-                        <img src="@/assets/icons/mailBox.svg" alt="">
-                        <span>Guardar</span>
-                    </button>
-
-                    <button class="white">
-                        <img src="@/assets/icons/plus.svg" alt="">
-                        <span>Añadir</span>
-                    </button>
                 </div>
             </form>
-        </div>
-
-        <div v-for="(experience, index) in experiences" :key="index" class="experience-item">
-            <div class="header-element element">
-                <p v-if="experience.currentWork">Trabaja aquí actualmente</p>
-            </div>
-
-            <div class="element">
-                <div class="up">
-                    <span>Cargo</span>
-                </div>
-                <span>{{ experience.position }}</span>
-            </div>
-
-            <div class="element">
-                <div class="up">
-                    <span>Empresa</span>
-                </div>
-                <span>{{ experience.company }}</span>
-            </div>
-            <div class="element">
-                <div class="up">
-                    <span>Tiempo de duración</span>
-                </div>
-                <span>{{ formatDate(experience.startDate) }} - {{ formatDate(experience.endDate) }}</span>
-            </div>
-
-            <div class="button-container element">
-                <button class="blue" @click="editExperience(index)">
-                    <img src="@/assets/icons/whiteEdit.svg" alt="Edit">
-                    <span>Editar</span>
-                </button>
-                <button class="white" @click="confirmDeleteExperience(index)">
-                    <img src="@/assets/icons/whiteDelete.svg" alt="Edit">
-                    <span>Eliminar</span>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <section class="additional-info">
-        
-    </section>
+        </section>
+    
+        <section class="sendProfile">
+            <button class="sendProfileButton">
+                <img src="@/assets/icons/whiteMailBox.svg" alt="Icon">
+                <span>Guardar información</span>
+            </button>
+        </section>
+    </div>
 
 </template>
 
@@ -241,9 +266,10 @@
     import formMixin from '@/mixins/formMixin.js';
     import formationsMixin from '@/mixins/formationsMixin.js';
     import experiencesMixin from '@/mixins/experiencesMixin.js';
+    import additionalInfoMixin from '../../mixins/additionalInfoMixin';
 
     export default {
-        mixins: [optionMixin, formMixin, formationsMixin, experiencesMixin],
+        mixins: [optionMixin, formMixin, formationsMixin, experiencesMixin, additionalInfoMixin],
         name: 'SsDesktopComponent.vue',
         data() {
             return {
@@ -260,6 +286,13 @@
 </script>
   
 <style scoped lang="sass">
+
+.content
+    display: flex
+    flex-direction: column
+    gap: 0
+    align-content: center
+    justify-items: center
 .interest-items
   padding: 40px 196px
   display: flex
@@ -333,13 +366,18 @@
     color: #191F27
 
 .form
+    position: relative
     padding: 52px 197px
-    margin: auto
-    border-radius: 12px
+    background-image: url('../../assets/images/bgWhiteSection.svg')
+    background-size: cover
+    background-position: center
+    background-repeat: no-repeat
     form
         display: grid
         grid-template-columns: repeat(6, 1fr)
         gap: 33px
+        @media (max-width: 1024px) and (min-width: 768px)
+            grid-template-columns: repeat(4, 1fr)
 
     .form-group
         display: flex
@@ -348,12 +386,18 @@
 
         &:nth-child(1), &:nth-child(2), &:nth-child(13), &:nth-child(14)
             grid-column: span 3
+            @media (max-width: 1024px) and (min-width: 768px)
+                grid-column: span 2
         
         &:nth-child(3), &:nth-child(4), &:nth-child(5), &:nth-child(6), &:nth-child(7), &:nth-child(8), &:nth-child(9), &:nth-child(10), &:nth-child(11)
             grid-column: span 2
+            @media (max-width: 1024px) and (min-width: 768px)
+                grid-column: span 2
 
         &:nth-child(12), &:nth-child(15)
             grid-column: span 6
+            @media (max-width: 1024px) and (min-width: 768px)
+                grid-column: span 4
 
         label
             font-size: 14px
@@ -544,6 +588,7 @@
                             flex-direction: row
                             align-content: center
                             gap: 8px
+                            cursor: pointer
                     .previews 
                         display: flex
                         gap: 5px
@@ -609,5 +654,59 @@
         .header-element
             display: flex
             width: fit-content
-
+.additional-info
+    padding: 40px 197px
+    background-color: white
+    form
+        display: flex
+        flex-direction: column
+        gap: 35px
+        .form-group
+            display: flex
+            flex-direction: column
+            gap: 15px
+            &:nth-child(2)
+                order: -1
+            label
+                display: flex
+                flex-direction: row
+                gap: 7px
+                align-items: center
+                font-size: 14px
+                font-weight: 500
+                line-height: 20px
+                text-align: left
+                color: #023D6A
+                span
+                    padding: 4px 10px
+                    color: white
+                    font-size: 12px
+                    font-weight: 500
+                    line-height: 14.63px
+                    text-align: center
+                    color: white
+                    border-radius: 25px
+                    background-color: #06759F66
+.sendProfile
+    padding: 23px 197px 67px 197px
+    background-color: white
+    display: flex
+    align-items: center
+    justify-content: center
+    .sendProfileButton
+        padding: 14px 24px
+        align-self: center
+        width: fit-content
+        align-items: center
+        gap: 10px
+        justify-content: center
+        display: flex
+        border-radius: 50px
+        background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
+        span
+            font-size: 16px
+            font-weight: 500
+            line-height: 19.5px
+            text-align: center
+            color: #F8D2EA
 </style>

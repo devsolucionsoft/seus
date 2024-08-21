@@ -55,7 +55,7 @@ const images = ref([
         max-width: 72px;
         max-height: 47px;
         padding: 18px;
-        
+        box-sizing: content-box;
     }
     footer .socialFooter{
         display: flex;
@@ -95,9 +95,6 @@ const images = ref([
         footer .brands{
             gap: 30px;
             justify-content: start;
-        }
-        footer .brands img{
-            box-sizing: content-box;
         }
     }
     footer .brands::-webkit-scrollbar{

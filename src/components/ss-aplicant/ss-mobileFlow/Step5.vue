@@ -1,7 +1,7 @@
 <template>
   <div class="step5">
     <form @submit.prevent="submitForm">
-      <div v-for="(field, index) in formFields" :key="index" class="form-group">
+      <div v-for="(field, index) in additionalInfoFormFields" :key="index" class="form-group">
         <label :for="field.name">
           {{ field.label }}
           <span v-if="field.optional" class="optional-badge">Opcional</span>
@@ -24,33 +24,14 @@
 <script>
 import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
 import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
+import additionalInfoMixin from '../../../mixins/additionalInfoMixin';
 
 export default {
   name: 'Step5',
+  mixins: [additionalInfoMixin],
   components: {
     SsFormSelect,
     SsFormTextarea,
-  },
-  data() {
-    return {
-      formFields: [
-        { label: 'Elige las 5 competencias que más te caracterizan', name: 'profiency', type: 'SsFormSelect', options: ['Junior', 'Mid', 'Senior'] },
-        { label: 'Datos complementarios', name: 'aditionalinfo', type: 'SsFormTextarea', placeholder: 'Añade información complementaria útil para reclutadores', optional: true },
-      ],
-      formData: JSON.parse(localStorage.getItem('step5FormData')) || {
-        profiency: '',
-        aditionalinfo: '',
-      },
-    };
-  },
-  methods: {
-    submitForm() {
-      console.log(this.formData);
-      this.saveToLocalStorage();
-    },
-    saveToLocalStorage() {
-      localStorage.setItem('step5FormData', JSON.stringify(this.formData));
-    },
   },
   watch: {
     formData: {

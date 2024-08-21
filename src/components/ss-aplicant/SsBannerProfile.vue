@@ -101,7 +101,7 @@
       max-height: 112px
       object-fit: cover
       object-position: top
-      @media(min-width: 1200px)
+      @media(min-width: 768px)
         max-height: 237px
 
     .edit-btn
@@ -116,7 +116,7 @@
       cursor: pointer
       border-radius: 50px
       gap: 12px
-      @media(min-width: 1200px)
+      @media(min-width: 768px)
         top: 47px
         right: 184px
 
@@ -150,7 +150,10 @@
     background-size: cover
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)
 
-    @media(min-width: 1200px)
+    @media (min-width: 768px) and (max-width: 1200px)
+      flex-direction: column
+
+    @media(min-width: 768px)
       margin-top: -124px
       margin-left: 196px
       width: 100%
@@ -167,7 +170,7 @@
       border-radius: 50%
       overflow: hidden
       cursor: pointer
-      @media(min-width: 1200px)
+      @media(min-width: 768px)
         width: 255px
         height: 255px 
 
@@ -196,13 +199,13 @@
         justify-content: center
         flex-direction: column
         gap: 16px
-        @media(min-width: 1200px)
+        @media(min-width: 768px)
           top: 30%
           gap: 12px
         img
           max-width: 36px
           max-height: 33px
-          @media(min-width: 1200px)
+          @media(min-width: 768px)
             max-width: 64px
             max-height: 59px
         span
@@ -212,7 +215,7 @@
           text-align: center
           color: #47586E
           max-width: 80%
-          @media(min-width: 1200px)
+          @media(min-width: 768px)
             font-size: 16px
             line-height: 24px
     .basic-info
@@ -222,6 +225,9 @@
       align-items: start
       gap: 23px
       width: 70%
+
+      @media (min-width: 768px) and (max-width: 1200px)
+        margin-top: 0px
 
       .text
         display: flex
@@ -250,6 +256,8 @@
         width: 100%
         justify-content: space-between
         padding-right: 67px
+        @media (min-width: 768px) and (max-width: 1200px)
+          flex-direction: column
         .element
           display: flex
           flex-direction: column
@@ -281,7 +289,7 @@
         color: #290A29
         align-self: flex-end
 
-      @media(min-width: 1200px)
+      @media(min-width: 768px)
         display: flex
 
 
