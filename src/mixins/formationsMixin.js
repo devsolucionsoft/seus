@@ -63,7 +63,7 @@ export default {
       },
       saveToLocalStorage() {
         const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-        stepsData.formations = this.formations;
+        stepsData.step3 = { formations: this.formations };
         localStorage.setItem('stepsData', JSON.stringify(stepsData));
       },
       isMostRecent(formation) {
@@ -79,8 +79,15 @@ export default {
       },
       loadFromLocalStorage() {
         const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-        if (stepsData.formations) {
-          this.formations = stepsData.formations;
+        if (stepsData.step3 && stepsData.step3.formations) {
+            this.formations = stepsData.step3.formations;
+        }
+        const editIndex = localStorage.getItem('editFormationIndex');
+        if (editIndex !== null) {
+            this.editIndex = parseInt(editIndex, 10);
+            this.newFormation = { ...this.formations[this.editIndex] };
+            this.showForm = true;
+            localStorage.removeItem('editFormationIndex');
         }
       },
     },

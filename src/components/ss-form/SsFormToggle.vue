@@ -5,6 +5,7 @@
         type="checkbox"
         :checked="modelValue"
         @change="$emit('update:modelValue', $event.target.checked)"
+        :disabled="!isEditable"
       />
       <span class="slider"></span>
     </label>
@@ -17,6 +18,10 @@ export default {
   name: 'FormToggle',
   props: {
     modelValue: Boolean,
+    isEditable: {
+      type: Boolean,
+      default: true,
+    },
   },
   emits: ['update:modelValue'],
 };

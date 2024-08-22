@@ -35,6 +35,7 @@
   display: flex
   flex-direction: column
   gap: 16px
+  width: 100%
 
   .option-group
     display: flex

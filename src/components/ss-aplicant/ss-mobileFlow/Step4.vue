@@ -140,15 +140,13 @@ export default {
       }
     }
   },
-  mounted() {
-    this.loadFromLocalStorage();
-  }
 };
 </script>
 
 <style lang="scss" scoped>
 .step4 {
   padding: 16px;
+  width: 100%;
   .container{
     display: flex;
     flex-direction: column;

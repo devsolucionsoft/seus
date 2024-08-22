@@ -1,11 +1,15 @@
 <template>
-  <div class="content">
-    <div class="send-section">
-      <span>Revisa tu información y luego envía tu perfil</span>
-      <router-link to="/successRegister" class="button">
-        Enviar perfil
-      </router-link>
+  <div v-if="!isEditing" class="content">
+    <div class="welcome">
+      <div class="text">
+        <div class="info">
+          <h2>Francisco José Benavides</h2>
+          <span>Ingeniero Químico</span>
+        </div>
+        <button><img src="@/assets/icons/dots.svg" alt="..."></button>
+      </div>
     </div>
+
 
     <div v-if="filteredSections.length > 0" class="employment card">
       <div class="header-section">
@@ -25,7 +29,7 @@
       </div>
     </div>
 
-    <div class="personal-info card" v-if="step2Data">
+    <div class="personal-info card" v-if="personalInfoItems">
       <div class="header-section">
         <span>Datos Personales</span>
         <button @click="goToStep(2)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
@@ -91,13 +95,13 @@
       </div>
     </div>
 
-    <div v-if="experiences.length > 0" class="experiences card information-cards">
+    <div v-if="step4Data.experiences.length > 0" class="experiences card information-cards">
       <div class="header-section">
         <span>Experiencia Laboral</span>
         <button @click="goToStep(4)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
       </div>
       <div class="experience-container">
-        <div v-for="(experience, index) in experiences" :key="index" class="experience-item">
+        <div v-for="(experience, index) in step4Data.experiences" :key="index" class="experience-item">
           <div class="header-element">
             <p v-if="experience.currentWork">Trabaja aquí actualmente</p>
             <div class="actions">
@@ -159,14 +163,18 @@
         </ol>
       </div>
     </div>
-
-
-
-
+  </div>
+  <div class="edit" v-if="isEditing">
+      <component :is="currentStepComponent" @edit-step="goToStep" />
+      <button @click="saveChanges">Guardar</button>
   </div>
 </template>
 
 <script>
+import Step1 from '@/components/ss-aplicant/ss-mobileFlow/Step1.vue';
+import Step2 from '@/components/ss-aplicant/ss-mobileFlow/Step2.vue';
+import Step3 from '@/components/ss-aplicant/ss-mobileFlow/Step3.vue';
+import Step4 from '@/components/ss-aplicant/ss-mobileFlow/Step4.vue';
 import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
 import showInformationsMixin from '@/mixins/showInformationsMixin';
 import formationsMixin from '@/mixins/formationsMixin.js';
@@ -174,10 +182,42 @@ import experiencesMixin from '@/mixins/experiencesMixin.js';
 
 
 export default {
-  name: 'StepPreview',
+  name: 'ProfilePerson',
   mixins: [showInformationsMixin, formationsMixin, experiencesMixin],
   components: {
     SsFormToggle,
+  },
+  data() {
+    return {
+      step: null,
+      isEditing: false,
+    };
+  },
+  computed: {
+    currentStepComponent() {
+      switch (this.step) {
+        case 1:
+        return Step1;
+        case 2:
+          return Step2;
+        case 3:
+          return Step3;
+        case 4:
+          return Step4;
+        default:
+          return null;
+      }
+    },
+  },
+  methods: {
+    goToStep(stepNumber) {
+      this.step = stepNumber;
+      this.isEditing = true;
+    },
+    saveChanges() {
+      this.isEditing = false;
+      this.loadData();
+    },
   },
 };
 </script>
@@ -191,6 +231,43 @@ export default {
   padding: 16px
   flex-direction: column
   gap: 16px
+  .welcome
+    display: flex
+    flex-direction: column
+    gap: 15px
+    padding: 16px
+    width: 100%
+    .text
+      display: flex
+      flex-direction: row
+      justify-content: space-between
+      align-items: center
+      gap: 16px
+      .info
+        display: flex
+        flex-direction: column
+        h2
+          font-size: 20px
+          font-weight: 600
+          line-height: 26px
+          text-align: left
+          color: #023D6A
+        span
+          font-size: 16px
+          font-weight: 400
+          line-height: 24px
+          text-align: left
+          color: #023D6A
+
+      button
+        height: 32px
+        width: 32px
+        border-radius: 20px
+        border: 2px solid #333333
+        display: flex
+        align-items: center
+        justify-content: center
+        text-align: center
   .send-section
     display: flex
     flex-direction: column
@@ -582,4 +659,21 @@ export default {
           line-height: 20px
           text-align: left
           color: #EDEEF1
+.edit
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: column
+  padding: 24px 0
+  button
+    padding: 12px 24px
+    border-radius: 28px
+    color: #F8D2EA
+    font-size: 14px
+    font-weight: 600
+    line-height: 17.07px
+    text-align: center
+    background-color: #761D74
+
+
 </style>

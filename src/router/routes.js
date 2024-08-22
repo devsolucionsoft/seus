@@ -29,6 +29,11 @@ const routes = [
       name : 'successRegister',
       component: () => import('../pages/applicant/SsSuccessRegister.vue'),
     },
+    {
+      path: '/profile',
+      name : 'profile',
+      component: () => import('../pages/applicant/SsProfile.vue'),
+    },
   ]
   
   export default routes

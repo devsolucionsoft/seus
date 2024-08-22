@@ -43,6 +43,7 @@
 <style lang="sass" scoped>
 .step2
   padding: 16px
+  width: 100%
   form
     display: flex
     flex-direction: column

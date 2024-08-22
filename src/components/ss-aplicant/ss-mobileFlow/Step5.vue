@@ -47,6 +47,7 @@ export default {
 <style lang="sass">
 .step5
   padding: 16px
+  width: 100%
   form
     display: flex
     flex-direction: column

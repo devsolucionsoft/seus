@@ -8,9 +8,9 @@
     </div>
     <div class="body">
       <SsProgressBarRegister 
-      :step="step" 
-      :steps="5" 
-      :labels="['Empleo', 'Datos Personales', 'Formación', 'Experiencia', 'Revision']" 
+        :step="step" 
+        :steps="5" 
+        :labels="['Empleo', 'Datos Personales', 'Formación', 'Experiencia', 'Revision']" 
       />
       <component :is="currentStepComponent" @edit-step="changeStep"/>
       <div v-if="showStepsNavigation" class="stepsNavigation">

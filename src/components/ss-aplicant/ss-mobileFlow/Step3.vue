@@ -79,6 +79,12 @@ export default {
     SsFormInput,
   },
   watch:{
+    formations: {
+      handler() {
+        this.saveToLocalStorage();
+      },
+      deep: true
+    },
     showForm(val) {
       if (val) {
         document.body.style.overflow = 'hidden';
@@ -86,12 +92,6 @@ export default {
         document.body.style.overflow = '';
       }
     },
-    formations: {
-      handler() {
-        this.saveToLocalStorage();
-      },
-      deep: true
-    }
   },
 };
 </script>
@@ -99,6 +99,7 @@ export default {
 <style lang="scss" scoped>
 .step3 {
   padding: 16px;
+  width: 100%;
   .container{
     display: flex;
     flex-direction: column;
