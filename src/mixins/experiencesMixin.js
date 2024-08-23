@@ -75,7 +75,7 @@ export default {
             stepsData.step3 = { formations: this.formations };
             localStorage.setItem('stepsData', JSON.stringify(stepsData));
         },
-        loadFromLocalStorage() {
+        loadExperiencesFromLocalStorage() {
             const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
             if (stepsData.step4 && stepsData.step4.experiences) {
                 this.experiences = stepsData.step4.experiences;
@@ -92,11 +92,14 @@ export default {
             }
         },
         formatDate(dateString) {
-            const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0');
-            let month = date.toLocaleString('es-ES', { month: 'long' });
+            const dateParts = dateString.split('-');
+            const date = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
+          
+            const day = date.getUTCDate().toString().padStart(2, '0');
+            let month = date.toLocaleString('es-ES', { month: 'long', timeZone: 'UTC' });
             month = month.charAt(0).toUpperCase() + month.slice(1);
-            const year = date.getFullYear();
+            const year = date.getUTCFullYear();
+          
             return `${day} ${month} ${year}`;
         },
         handleFileUpload(event) {
@@ -118,8 +121,13 @@ export default {
                 reader.readAsDataURL(files[i]);
             }
         },
+        hasAttachments() {
+            return this.experiences.some(experience =>
+                experience.attachments && experience.attachments.length > 0
+            );
+        },
     },
     mounted() {
-        this.loadFromLocalStorage();
+        this.loadExperiencesFromLocalStorage();
     }
 };

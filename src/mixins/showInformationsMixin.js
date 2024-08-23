@@ -48,6 +48,8 @@ export default {
             this.step2Data = stepsData.step2 || {};
             this.step3Data = stepsData.step3 || { formations: [] };
             this.step4Data = stepsData.step4 || { experiences: [] };
+            this.loadFormationsFromLocalStorage();
+            this.loadExperiencesFromLocalStorage();
             this.updatePersonalInfoItems();
         },  
         confirmDeleteExperience(index) {
@@ -59,8 +61,9 @@ export default {
             this.step4Data.experiences.splice(index, 1);
             this.updateLocalStorage();
         },
-        editExperience(index) {
+        editExperienceEmit(index) {
             this.$emit('edit-step', 4);
+            this.goToStep(4);
             localStorage.setItem('editExperienceIndex', index);
         },
         confirmDeleteFormation(index) {
@@ -72,8 +75,9 @@ export default {
             this.step3Data.formations.splice(index, 1);
             this.updateLocalStorage();
         },
-        editFormation(index) {
+        editFormationEmit(index) {
             this.$emit('edit-step', 3);
+            this.goToStep(3);
             localStorage.setItem('editFormationIndex', index);
         },
         updatePersonalInfoItems() {
@@ -92,14 +96,6 @@ export default {
         goToStep(stepNumber) {
             this.$emit('edit-step', stepNumber);
         },
-        formatDate(dateString) {
-            const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0');
-            let month = date.toLocaleString('es-ES', { month: 'long' });
-            month = month.charAt(0).toUpperCase() + month.slice(1);
-            const year = date.getFullYear();
-            return `${day} ${month} ${year}`;
-        },
         isMostRecent(itemIndex) {
             if (this.step3Data.formations.length === 0) return false;
 
@@ -108,11 +104,6 @@ export default {
             }, 0);
             return itemIndex === latestIndex;
         },
-        hasAttachments() {
-            return this.step4Data.experiences.some(experience =>
-                experience.attachments && experience.attachments.length > 0
-            );
-        }
     },
     created() {
         this.loadData();

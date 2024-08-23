@@ -402,7 +402,7 @@
     .checkbox-label .custom-checkmark {
       position: absolute;
       left: 0;
-      top: 25%;
+      top: 0;
       width: 24px;
       height: 24px;
       display: flex;

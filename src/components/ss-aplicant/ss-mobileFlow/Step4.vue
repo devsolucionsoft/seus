@@ -43,7 +43,7 @@
 
     <div v-else class="form-modal">
       <div class="title">
-        <h3>Añadir Formación</h3>
+        <h3>Añadir Experiencia</h3>
         <button type="button" @click="cancelForm">
           <img src="@/assets/icons/closeX.svg" alt="x">
         </button>

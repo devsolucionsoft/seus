@@ -66,7 +66,7 @@
           <div class="header-element">
             <p v-if="isMostRecent(index)">Último estudio realizado</p>
             <div class="actions">
-              <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
+              <button @click="editFormationEmit(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
               <button @click="confirmDeleteFormation(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
             </div>
           </div>
@@ -95,17 +95,17 @@
       </div>
     </div>
 
-    <div v-if="step4Data.experiences.length > 0" class="experiences card information-cards">
+    <div v-if="experiences.length > 0" class="experiences card information-cards">
       <div class="header-section">
         <span>Experiencia Laboral</span>
         <button @click="goToStep(4)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
       </div>
       <div class="experience-container">
-        <div v-for="(experience, index) in step4Data.experiences" :key="index" class="experience-item">
+        <div v-for="(experience, index) in experiences" :key="index" class="experience-item">
           <div class="header-element">
             <p v-if="experience.currentWork">Trabaja aquí actualmente</p>
             <div class="actions">
-              <button @click="editExperience(index)"><img src="@/assets/icons/whiteEdit.svg" alt="Edit"></button>
+              <button @click="editExperienceEmit(index)"><img src="@/assets/icons/whiteEdit.svg" alt="Edit"></button>
               <button @click="confirmDeleteExperience(index)"><img src="@/assets/icons/whiteDelete.svg" alt="Delete"></button>
             </div>
           </div>
@@ -134,14 +134,14 @@
       </div>
     </div>
 
-    <div v-if="step4Data.experiences && hasAttachments" class="card thropies">
+    <div v-if="hasAttachments()" class="card thropies">
       <div class="header-section">
         <img src="@/assets/icons/cameraOutline.svg" alt="">
         <span>Fotos o premios</span>
       </div>
       
       <div class="attachments-section">
-        <div class="attachments-container" v-for="(experience, index) in step4Data.experiences" :key="index">
+        <div class="attachments-container" v-for="(experience, index) in experiences" :key="index">
           <div v-for="(attachment, attachmentIndex) in experience.attachments" :key="attachmentIndex" class="attachment-item">
             <img class="image" :src="attachment" :alt="'Attachment ' + (attachmentIndex + 1)" />
             <div class="icon-container">
@@ -165,7 +165,7 @@
     </div>
   </div>
   <div class="edit" v-if="isEditing">
-      <component :is="currentStepComponent" @edit-step="goToStep" />
+      <component :is="currentStepComponent" @edit-step="changeStep" />
       <button @click="saveChanges">Guardar</button>
   </div>
 </template>
@@ -217,6 +217,7 @@ export default {
     saveChanges() {
       this.isEditing = false;
       this.loadData();
+      this.$forceUpdate();
     },
   },
 };
