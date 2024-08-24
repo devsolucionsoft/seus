@@ -217,7 +217,6 @@ export default {
     saveChanges() {
       this.isEditing = false;
       this.loadData();
-      this.$forceUpdate();
     },
   },
 };

@@ -66,8 +66,13 @@ export default {
         stepsData.step3 = { formations: this.formations };
         localStorage.setItem('stepsData', JSON.stringify(stepsData));
       },
-      isMostRecent(formation) {
-        return this.formations.every(f => new Date(f.endDate) <= new Date(formation.endDate));
+      isMostRecent(itemIndex) {
+        if (this.formations.length === 0) return false;
+
+        const latestIndex = this.formations.reduce((latest, formation, index) => {
+            return new Date(formation.endDate) > new Date(this.formations[latest].endDate) ? index : latest;
+        }, 0);
+        return itemIndex === latestIndex;
       },
       formatDate(dateString) {
         const dateParts = dateString.split('-');

@@ -7,7 +7,7 @@
       </div>
       <div v-for="(formation, index) in formations" :key="index" class="formation-item">
         <div class="header-element">
-          <p v-if="isMostRecent(formation)">Último estudio realizado</p>
+          <p v-if="isMostRecent(index)">Último estudio realizado</p>
           <div class="actions">
             <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
             <button @click="confirmDeleteFormation(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>

@@ -65,12 +65,6 @@
                             <img src="@/assets/icons/mailBox.svg" alt="">
                             <span>Guardar</span>
                         </button>
-    
-                        <button class="transparent">
-                            <img src="@/assets/icons/plus.svg" alt="">
-                            <span>Añadir</span>
-                        </button>
-    
                     </div>
                 </form>
             </div>
@@ -105,7 +99,7 @@
                     </button>
     
                     <button @click="confirmDeleteFormation(index)" class="transparent" type="submit">
-                        <img src="@/assets/icons/plus.svg" alt="">
+                        <img src="@/assets/icons/delete.svg" alt="">
                         <span>Eliminar</span>
                     </button>
     

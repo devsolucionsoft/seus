@@ -96,14 +96,6 @@ export default {
         goToStep(stepNumber) {
             this.$emit('edit-step', stepNumber);
         },
-        isMostRecent(itemIndex) {
-            if (this.step3Data.formations.length === 0) return false;
-
-            const latestIndex = this.step3Data.formations.reduce((latest, formation, index) => {
-                return new Date(formation.endDate) > new Date(this.step3Data.formations[latest].endDate) ? index : latest;
-            }, 0);
-            return itemIndex === latestIndex;
-        },
     },
     created() {
         this.loadData();

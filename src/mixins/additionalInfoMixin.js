@@ -13,7 +13,6 @@ export default {
     },
     methods: {
       submitForm() {
-        console.log(this.formData);
         this.saveToLocalStorage();
       },
       saveToLocalStorage() {
