@@ -4,7 +4,7 @@
       <h3>{{ option.title }}</h3>
       <div class="options">
         <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
-          <div class="image-container" :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" @click="toggleSelection(`${index}-${idx}`)">
+          <div class="image-container" :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" @click="toggleSelection1(`${index}-${idx}`)">
             <img :src="item.image" :alt="item.label" />
           </div>
           <p>{{ item.label }}</p>

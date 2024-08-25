@@ -3,7 +3,7 @@ export default {
         return {
         isEditing: false,
         step1Data: null,
-        step2Data: null,
+        step3Data: null,
         personalInfoItems: [
             { title: 'Razón social', value: '', name: 'companyName', class: 'green-items' },
             { title: 'Nit', value: '', name: 'nit', class: 'green-items' },
@@ -77,8 +77,6 @@ export default {
         },
         updateLocalStorage() {
             const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-            stepsData.step3 = this.step3Data;
-            stepsData.step4 = this.step4Data; 
             localStorage.setItem('stepsData', JSON.stringify(stepsData));
         },
         goToStep(stepNumber) {

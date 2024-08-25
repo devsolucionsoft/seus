@@ -98,6 +98,10 @@
       </div>
     </div>
   </div>
+  <div class="edit" v-if="isEditing">
+      <component :is="currentStepComponent" @edit-step="changeStep" />
+      <button @click="saveChanges">Guardar</button>
+  </div>
 </template>
 
 <script>
