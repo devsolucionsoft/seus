@@ -274,6 +274,7 @@
             line-height: 19.5px
             text-align: left
             align-items: center
+            color: #023D6A
           .document-container
             display: flex
             flex-direction: row

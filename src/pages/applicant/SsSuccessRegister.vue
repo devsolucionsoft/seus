@@ -1,19 +1,25 @@
 <template>
     <div class="content">
-        <SsHeader></SsHeader>
-        <div class="body">
-            <img src="@/assets/icons/starSuccess.svg" alt="Success">
-            <span>
-                Buen trabajo Francisco, tu perfil está listo
-            </span>
-            <router-link to="/profile" class="button purple">
-                Ver perfil
-            </router-link>
-            <router-link to="/offers" class="button white">
-                Ver ofertas
-            </router-link>
-        </div>
-        <SsFooter></SsFooter>
+      <SsHeader></SsHeader>
+      <div class="body">
+        <img src="@/assets/icons/starSuccess.svg" alt="Success">
+        <span>
+          Buen trabajo Francisco, tu perfil está listo
+        </span>
+        <router-link
+          :to="profileLink"
+          class="button purple"
+        >
+          {{ profileText }}
+        </router-link>
+        <router-link
+          :to="secondaryLink"
+          class="button white"
+        >
+          {{ secondaryText }}
+        </router-link>
+      </div>
+      <SsFooter></SsFooter>
     </div>
 </template>
 
@@ -22,9 +28,29 @@ import SsHeader from '@/components/ss-header/SsHeader.vue';
 import SsFooter from '@/components/ss-footer/SsFooter.vue';
 
 export default {
-    components: {
-        SsHeader,
-        SsFooter,
+  components: {
+    SsHeader,
+    SsFooter,
+  },
+  props: {
+    userType: {
+      type: String,
+      required: true,
+    },
+  },
+  computed: {
+        profileText() {
+            return this.userType === 'recruiter' ? 'Crear Ofertas' : 'Ver perfil';
+        },
+        profileLink() {
+            return this.userType === 'recruiter' ? '/createOffer' : '/profile';
+        },
+        secondaryText() {
+            return this.userType === 'recruiter' ? 'Ver perfil' : 'Ver ofertas';
+        },
+        secondaryLink() {
+            return this.userType === 'recruiter' ? '/profile' : '/offers';
+        },
     },
 };
 </script>

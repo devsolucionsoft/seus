@@ -3,6 +3,8 @@
 export default {
     data() {
         return {
+            isImageModalVisible: false,
+            selectedImage: null,
             showForm: false,
             experiences: [],
             newExperience: {
@@ -125,6 +127,16 @@ export default {
             return this.experiences.some(experience =>
                 experience.attachments && experience.attachments.length > 0
             );
+        },
+        showImage(image) {
+            this.selectedImage = image;
+            this.isImageModalVisible = true;
+            document.body.style.overflow = 'hidden'; // Deshabilitar scroll
+        },
+        closeImageModal() {
+            this.isImageModalVisible = false;
+            this.selectedImage = null;
+            document.body.style.overflow = ''; // Restaurar scroll
         },
     },
     mounted() {
