@@ -1,6 +1,5 @@
 <template>
     <div class="content">
-  
       <div v-if="filteredSections.length > 0" class="employment">
         <div v-for="(section, sectionIndex) in filteredSections" :key="sectionIndex" class="option-group">
           <h3>{{ section.title }}</h3>

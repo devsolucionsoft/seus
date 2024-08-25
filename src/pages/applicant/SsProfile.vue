@@ -3,23 +3,27 @@
         <SsHeader></SsHeader>
         <div>
             <SsBannerProfile></SsBannerProfile>
-            <component :is="isMobile ? 'MobileComponent' : 'DesktopComponent'" />
+            <component :is="computedComponent" />
         </div>
         <SsFooter></SsFooter>
     </div>
 </template>
   
 <script>
-    import MobileComponent from '@/components/ss-aplicant/SsMobileProfileComponent.vue';
-    import DesktopComponent from '@/components/ss-aplicant/SsDesktopProfileComponent.vue';
+    import MobileComponentPerson from '@/components/ss-aplicant/SsMobileProfileComponent.vue';
+    import DesktopComponentPerson  from '@/components/ss-aplicant/SsDesktopProfileComponent.vue';
+    import MobileComponentRecruiter from '@/components/ss-recruiter/SsMobileProfileComponent.vue';
+    import DesktopComponentRecruiter from '@/components/ss-recruiter/SsDesktopProfileComponent.vue';
     import SsHeader from '@/components/ss-header/SsHeader.vue';
     import SsFooter from '@/components/ss-footer/SsFooter.vue';
     import SsBannerProfile from '@/components/ss-aplicant/SsBannerProfile.vue';
 
     export default {
     components: {
-        MobileComponent,
-        DesktopComponent,
+        MobileComponentPerson,
+        DesktopComponentPerson,
+        MobileComponentRecruiter,
+        DesktopComponentRecruiter,
         SsHeader,
         SsFooter,
         SsBannerProfile,
@@ -28,6 +32,20 @@
         return {
         isMobile: window.innerWidth <= 768,
         };
+    },
+    computed: {
+        computedComponent() {
+            const userType = this.$route.query.userType || 'person';
+            if (this.isMobile) {
+                return userType === 'recruiter'
+                ? 'MobileComponentRecruiter'
+                : 'MobileComponentPerson';
+            } else {
+                return userType === 'recruiter'
+                ? 'DesktopComponentRecruiter'
+                : 'DesktopComponentPerson';
+            }
+        },
     },
     mounted() {
         window.addEventListener('resize', this.handleResize);

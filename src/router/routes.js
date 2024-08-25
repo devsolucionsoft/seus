@@ -39,6 +39,12 @@ const routes = [
       path: '/profile',
       name : 'profile',
       component: () => import('../pages/applicant/SsProfile.vue'),
+      props: route => ({ userType: route.query.userType || 'person' }),
+    },
+    {
+      path: '/create-offer',
+      name: 'createOffer',
+      component: () => import('../pages/recruiter/SsCreateOffer.vue'),
     },
   ]
   

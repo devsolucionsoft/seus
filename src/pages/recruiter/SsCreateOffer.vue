@@ -1,0 +1,3 @@
+<template>
+    Create offer
+</template>
