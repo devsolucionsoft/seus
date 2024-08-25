@@ -215,17 +215,21 @@
                 width: 28px
                 height: 28px
     &.first
-        form
-            grid-template-columns: repeat(3, 1fr)
+        @media (min-width: 1100px)
+            form
+                grid-template-columns: repeat(3, 1fr)
     &.second
         background-color: #023D6A
         form
-            grid-template-columns: repeat(3, 1fr)
-        .form-group
             label
                 color: #E7F9FC
-            &:nth-child(4)
-                grid-column: span 4
+
+        @media (min-width: 1100px)
+            form
+                grid-template-columns: repeat(3, 1fr)
+            .form-group
+                &:nth-child(4)
+                    grid-column: span 4
 
 
 .button-container
@@ -256,7 +260,7 @@
 
 
 .sendProfile
-    padding: 23px 197px 67px 197px
+    padding: 44px 197px
     background-color: white
     display: flex
     align-items: center
