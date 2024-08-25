@@ -42,6 +42,12 @@
               </div>
             </div>
             <button>Cambiar contraseña</button>
+            <div class="offertButton" v-if="$route.query.userType === 'recruiter'">
+              <router-link :to="{ name: 'createOffer' }" class="button">
+                <img src="@/assets/icons/upload.svg" alt="upload" />
+                <span>Crear oferta de empleo</span>
+              </router-link>
+            </div>
           </div>
         </div>
     </section>
@@ -225,6 +231,35 @@
       align-items: start
       gap: 23px
       width: 70%
+      position: relative
+
+      .offertButton
+        width: 100%
+        right: 0
+        top: 0
+        max-width: 270px
+        align-self: center
+        @media(min-width: 1430px)
+          position: absolute
+        a
+          display: flex
+          flex-direction: row
+          align-items: center
+          justify-content: center
+          gap: 10px
+          background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
+          border-radius: 50px
+          padding: 14px
+          width: 100%
+          text-decoration: none
+
+          span
+            text-decoration: none
+            font-size: 16px
+            font-weight: 500
+            line-height: 19.5px
+            text-align: center
+            color: #CDFDF3
 
       @media (min-width: 768px) and (max-width: 1200px)
         margin-top: 0px
