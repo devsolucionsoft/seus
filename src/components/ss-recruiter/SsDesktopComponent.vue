@@ -218,8 +218,14 @@
         form
             grid-template-columns: repeat(3, 1fr)
     &.second
+        background-color: #023D6A
         form
             grid-template-columns: repeat(3, 1fr)
+        .form-group
+            label
+                color: #E7F9FC
+            &:nth-child(4)
+                grid-column: span 4
 
 
 .button-container
