@@ -185,6 +185,7 @@ export default {
         gap: 19px;
         color: #CDFDF3;
         text-decoration: none;
+        z-index: 3;
     }
     .page-container .container .form-section form .element span{
         font-size: 12px;
