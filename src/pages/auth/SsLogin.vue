@@ -153,7 +153,10 @@ export default {
         padding: 0;
         font-family: 'Inter';
         position: relative;
-        overflow: hidden
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .page-container::before {
@@ -165,7 +168,7 @@ export default {
         height: 100%;
         background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
         opacity: 0.3;
-        z-index: 2;
+        z-index: -1;
     }
 
     .page-container nav{
@@ -319,7 +322,7 @@ export default {
         flex-direction: column;
         align-items: start;
         justify-content: start;
-        padding: 0 2% 32px 2%;
+        padding: 0 2% 10px 2%;
         justify-self: flex-end;
     }
     .page-container footer .brands{
