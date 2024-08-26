@@ -18,12 +18,16 @@
 
 <script setup>
 import { ref } from 'vue';
-import cocacola from '@/assets/brands/cocacola.png';
-import bancolombia from '@/assets/brands/bancolombia.png';
-import nutresa from '@/assets/brands/nutresa.png';
-import velez from '@/assets/brands/velez.png';
+import cocacola from '@/assets/brands/cocacolag.png';
+import bancolombia from '@/assets/brands/bancolombiag.png';
+import nutresa from '@/assets/brands/nutresag.png';
+import velez from '@/assets/brands/velezg.png';
 
 const images = ref([
+    {url: cocacola, alt: 'Coca Cola'},
+    {url: bancolombia, alt: 'Bancolombia'},
+    {url: nutresa, alt: 'Nutresa'},
+    {url: velez, alt: 'Velez'},
     {url: cocacola, alt: 'Coca Cola'},
     {url: bancolombia, alt: 'Bancolombia'},
     {url: nutresa, alt: 'Nutresa'},
@@ -39,7 +43,7 @@ const images = ref([
         gap: 0;
     }
     footer .brands{
-        background-color: #C6CBD2;
+        background-color: #EFEFEF;
         display: flex;
         gap: 40px;
         align-items: center;
@@ -56,6 +60,7 @@ const images = ref([
         max-height: 47px;
         padding: 18px;
         box-sizing: content-box;
+        z-index: 3;
     }
     footer .socialFooter{
         display: flex;

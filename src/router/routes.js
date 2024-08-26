@@ -25,9 +25,26 @@ const routes = [
       component: () => import('../pages/applicant/SsConfigProfile.vue'),
     },
     {
+      path: '/configRecruiterProfile',
+      name : 'configRecruiterProfile',
+      component: () => import('../pages/recruiter/SsConfigRecruiterProfile.vue'),
+    },
+    {
       path: '/successRegister',
       name : 'successRegister',
       component: () => import('../pages/applicant/SsSuccessRegister.vue'),
+      props: route => ({ userType: route.query.userType }),
+    },
+    {
+      path: '/profile',
+      name : 'profile',
+      component: () => import('../pages/applicant/SsProfile.vue'),
+      props: route => ({ userType: route.query.userType || 'person' }),
+    },
+    {
+      path: '/create-offer',
+      name: 'createOffer',
+      component: () => import('../pages/recruiter/SsCreateOffer.vue'),
     },
   ]
   

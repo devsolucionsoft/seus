@@ -63,29 +63,44 @@ export default {
       },
       saveToLocalStorage() {
         const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-        stepsData.formations = this.formations;
+        stepsData.step3 = { formations: this.formations };
         localStorage.setItem('stepsData', JSON.stringify(stepsData));
       },
-      isMostRecent(formation) {
-        return this.formations.every(f => new Date(f.endDate) <= new Date(formation.endDate));
+      isMostRecent(itemIndex) {
+        if (this.formations.length === 0) return false;
+
+        const latestIndex = this.formations.reduce((latest, formation, index) => {
+            return new Date(formation.endDate) > new Date(this.formations[latest].endDate) ? index : latest;
+        }, 0);
+        return itemIndex === latestIndex;
       },
       formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = date.getDate().toString().padStart(2, '0');
-        let month = date.toLocaleString('es-ES', { month: 'long' });
+        const dateParts = dateString.split('-');
+        const date = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
+      
+        const day = date.getUTCDate().toString().padStart(2, '0');
+        let month = date.toLocaleString('es-ES', { month: 'long', timeZone: 'UTC' });
         month = month.charAt(0).toUpperCase() + month.slice(1);
-        const year = date.getFullYear();
+        const year = date.getUTCFullYear();
+      
         return `${day} ${month} ${year}`;
       },
-      loadFromLocalStorage() {
+      loadFormationsFromLocalStorage() {
         const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-        if (stepsData.formations) {
-          this.formations = stepsData.formations;
+        if (stepsData.step3 && stepsData.step3.formations) {
+            this.formations = stepsData.step3.formations;
+        }
+        const editIndex = localStorage.getItem('editFormationIndex');
+        if (editIndex !== null) {
+            this.editIndex = parseInt(editIndex, 10);
+            this.newFormation = { ...this.formations[this.editIndex] };
+            this.showForm = true;
+            localStorage.removeItem('editFormationIndex');
         }
       },
     },
     mounted() {
-      this.loadFromLocalStorage();
+      this.loadFormationsFromLocalStorage();
     },
   };
   

@@ -1,42 +1,38 @@
 <template>
-  <div class="step4">
+  <div class="step3">
     <div class="container" v-if="!showForm">
-      <div :class="['add-experience-box', { 'small-box': experiences.length > 0 }]" @click="openForm">
+      <div :class="['add-formation-box', { 'small-box': formations.length > 0 }]" @click="openForm">
         <img src="@/assets/icons/plusCircle.svg" alt="+">
-        <p>Añadir Experiencia</p>
+        <p>Añadir Formación</p>
       </div>
-      <div v-for="(experience, index) in experiences" :key="index" class="experience-item">
+      <div v-for="(formation, index) in formations" :key="index" class="formation-item">
         <div class="header-element">
-          <p v-if="experience.currentWork">Trabaja aquí actualmente</p>
+          <p v-if="isMostRecent(index)">Último estudio realizado</p>
           <div class="actions">
-            <button @click="editExperience(index)">
-              <img src="@/assets/icons/whiteEdit.svg" alt="Edit">
-            </button>
-            <button @click="confirmDeleteExperience(index)">
-              <img src="@/assets/icons/whiteDelete.svg" alt="Edit">
-            </button>
+            <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
+            <button @click="confirmDeleteFormation(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
           </div>
         </div>
-        <div class="experience-level element">
+        <div class="formation-level element">
           <div class="up">
-            <img src="@/assets/icons/frame.svg" alt="Hat">
-            <span>Cargo</span>
+            <img src="@/assets/icons/hat.svg" alt="Hat">
+            <span>Nivel de formación</span>
           </div>
-          <span>{{ experience.position }}</span>
+          <span>{{ formation.title }}</span>
         </div>
-        <div class="experience-place element">
+        <div class="formation-place element">
           <div class="up">
-            <img src="@/assets/icons/blueBuild.svg" alt="Build">
-            <span>Empresa</span>
+            <img src="@/assets/icons/build.svg" alt="Build">
+            <span>Institución</span>
           </div>
-          <span>{{ experience.company }}</span>
+          <span>{{ formation.institution }}</span>
         </div>
-        <div class="experience-dates element">
+        <div class="formation-dates element">
           <div class="up">
-            <img src="@/assets/icons/blueCalendar.svg" alt="Calendar">
-            <span>Tiempo de duración</span>
+            <img src="@/assets/icons/calendar.svg" alt="Calendar">
+            <span>Fecha de certificación</span>
           </div>
-          <span>{{ formatDate(experience.startDate) }} - {{ formatDate(experience.endDate) }}</span>
+          <span>{{ formatDate(formation.startDate) }} - {{ formatDate(formation.endDate) }}</span>
         </div>
       </div>
     </div>
@@ -48,20 +44,13 @@
           <img src="@/assets/icons/closeX.svg" alt="x">
         </button>
       </div>
-      <form @submit.prevent="saveExperience">
-        <div
-          :class="[
-            'form-group',
-            { formToggle: field.type === 'SsFormToggle' }
-          ]"
-          v-for="(field, index) in experiencesFormFields"
-          :key="index"
-        >
+      <form @submit.prevent="saveFormation">
+        <div class="form-group" v-for="(field, index) in formationFormFields" :key="index">
           <label :for="field.name">{{ field.label }}</label>
           <component
             :is="field.type"
             :key="index"
-            v-model="newExperience[field.name]"
+            v-model="newFormation[field.name]"
             :label="field.label"
             :placeholder="field.placeholder"
             :type="field.inputType"
@@ -70,38 +59,6 @@
             :id="field.name"
           />
         </div>
-
-
-        <div class="form-group attachments-form-group">
-          <label for="attachments">
-            <div class="addMedia">
-              <img src="@/assets/icons/clip.svg" alt="Clip">
-              <span>
-                Añadir certificación, fotos o premios
-              </span>
-            </div>
-            <span class="optional">
-              Opcional
-            </span>
-          </label>
-          <input
-            type="file"
-            id="attachments"
-            @change="handleFileUpload"
-            multiple
-            accept="image/*"
-          />
-          <div class="previews">
-            <img
-              v-for="(attachment, index) in newExperience.attachments"
-              :key="index"
-              :src="attachment"
-              class="preview-image"
-              alt="Vista previa"
-            />
-          </div>
-        </div>
-        <p class="description">{{ experiencesFinalNote }}</p>
         <button class="submit" type="submit">
           <img src="@/assets/icons/mailBox.svg" alt="">
           <span>Guardar</span>
@@ -113,24 +70,20 @@
 
 <script>
 import SsFormInput from '@/components/ss-form/SsFormInput.vue';
-import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
-import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
-import experiencesMixin from '@/mixins/experiencesMixin.js';
+import formationsMixin from '@/mixins/formationsMixin.js';
 
 export default {
-  name: 'Step4',
-  mixins: [experiencesMixin], 
+  name: 'Step3',
+  mixins: [formationsMixin], 
   components: {
     SsFormInput,
-    SsFormTextarea,
-    SsFormToggle,
   },
   watch:{
-    experiences: {
+    formations: {
       handler() {
         this.saveToLocalStorage();
       },
-      deep: true,
+      deep: true
     },
     showForm(val) {
       if (val) {
@@ -138,22 +91,20 @@ export default {
       } else {
         document.body.style.overflow = '';
       }
-    }
+    },
   },
-  mounted() {
-    this.loadFromLocalStorage();
-  }
 };
 </script>
 
 <style lang="scss" scoped>
-.step4 {
+.step3 {
   padding: 16px;
+  width: 100%;
   .container{
     display: flex;
     flex-direction: column;
     gap: 16px;
-    .add-experience-box {
+    .add-formation-box {
       background-color: #EDEEF1;
       cursor: pointer;
       display: flex;
@@ -200,10 +151,10 @@ export default {
       }
     }
   
-    .experience-item {
+    .formation-item {
       padding: 20px;
       border-radius: 12px;
-      background-color: #045480;
+      background-color: #EDEEF1;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -243,14 +194,6 @@ export default {
             text-align: inherit;
             cursor: pointer;
             outline: none;
-            height: 32px;
-            width: 32px;
-            color: #F1E8F1;
-            .delete{
-              height: 18px;
-              width: 16px;
-              color: #F1E8F1;
-            }
           }
         }
       }
@@ -267,7 +210,7 @@ export default {
             font-weight: 500;
             line-height: 20px;
             text-align: left;
-            color: #0DC6DE;
+            color: #47586E
           }
         }
         span{
@@ -275,7 +218,7 @@ export default {
           font-weight: 500;
           line-height: 20px;
           text-align: left;
-          color: #EDEEF1;
+          color: #023D6A;
         }
       }
     }
@@ -295,6 +238,7 @@ export default {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    z-index: 11;
 
     .title{
       display: flex;
@@ -334,50 +278,6 @@ export default {
           text-align: left;
           color: #023D6A;
         }
-        &.formToggle{
-          flex-direction: row;
-          justify-content: space-between;
-        }
-        .previews {
-          display: flex;
-          gap: 5px;
-          flex-wrap: wrap;
-          align-items: center;
-          justify-content: center;
-          .preview-image {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-          }
-        }
-        &.attachments-form-group{
-          label{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            .addMedia{
-              display: flex;
-              align-items: center;
-              gap: 13px;
-            }
-            .optional{
-              padding: 4px 10px;
-              border-radius: 25px;
-              background-color: #06759F66;
-              color: white;
-              font-size: 12px;
-              font-weight: 500;
-              line-height: 14.63px;
-              text-align: center;
-            }
-          }
-          input{
-            display: none;
-          }
-        }
       }
       .submit {
         padding: 9px 24px;
@@ -397,14 +297,6 @@ export default {
           line-height: 17.07px;
           text-align: center;
         }
-      }
-      .description{
-        font-size: 10px;
-        font-weight: 400;
-        line-height: 18px;
-        text-align: left;
-        color: #023D6A;
-        padding: 10px;
       }
     }   
   }

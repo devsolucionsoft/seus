@@ -1,18 +1,22 @@
 <template>
-  <div class="content">
-    <div class="send-section">
-      <span>Revisa tu información y luego envía tu perfil</span>
-      <router-link to="/successRegister" class="button">
-        Enviar perfil
-      </router-link>
+  <div v-if="!isEditing" class="content">
+    <div class="welcome">
+      <div class="text">
+        <div class="info">
+          <h2>Francisco José Benavides</h2>
+          <span>Ingeniero Químico</span>
+        </div>
+        <button><img src="@/assets/icons/dots.svg" alt="..."></button>
+      </div>
     </div>
 
-    <div class="employment card">
+
+    <div v-if="filteredSections.length > 0" class="employment card">
       <div class="header-section">
         <span>Empleo</span>
         <button @click="goToStep(1)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
       </div>
-      <div v-for="(section, sectionIndex) in filteredOptions" :key="sectionIndex" class="option-group">
+      <div v-for="(section, sectionIndex) in filteredSections" :key="sectionIndex" class="option-group">
         <h3>{{ section.title }}</h3>
         <div class="options">
           <div v-for="(item, itemIndex) in section.selectedItems" :key="itemIndex" class="selected-item">
@@ -25,7 +29,7 @@
       </div>
     </div>
 
-    <div class="personal-info card" v-if="step2Data">
+    <div class="personal-info card" v-if="personalInfoItems">
       <div class="header-section">
         <span>Datos Personales</span>
         <button @click="goToStep(2)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
@@ -41,28 +45,28 @@
           <p>
             <img v-if="item.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
             <template v-if="item.isToggle">
-              <SsFormToggle v-model="item.willingToRelocate" />
+              <SsFormToggle v-model="item.willingToRelocate" :isEditable="isEditing" />
             </template>
             <template v-else>
-              {{ item.value }}
+              {{ item.value !== null && item.value !== '' ? item.value : 'N/A' }}
             </template>
           </p>
         </div>
       </div>
     </div>
 
-    <div v-if="step3Data.formations.length > 0" class="formations card information-cards">
+    <div v-if="formations.length > 0" class="formations card information-cards">
       <div class="header-section">
         <span>Formación académica</span>
         <button @click="goToStep(3)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
       </div>
       <div class="formation-container">
-        <div v-for="(formation, index) in step3Data.formations" :key="index" class="formation-item">
+        <div v-for="(formation, index) in formations" :key="index" class="formation-item">
   
           <div class="header-element">
             <p v-if="isMostRecent(index)">Último estudio realizado</p>
             <div class="actions">
-              <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
+              <button @click="editFormationEmit(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
               <button @click="confirmDeleteFormation(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
             </div>
           </div>
@@ -91,17 +95,17 @@
       </div>
     </div>
 
-    <div v-if="step4Data.experiences.length > 0" class="experiences card information-cards">
+    <div v-if="experiences.length > 0" class="experiences card information-cards">
       <div class="header-section">
         <span>Experiencia Laboral</span>
         <button @click="goToStep(4)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
       </div>
       <div class="experience-container">
-        <div v-for="(experience, index) in step4Data.experiences" :key="index" class="experience-item">
+        <div v-for="(experience, index) in experiences" :key="index" class="experience-item">
           <div class="header-element">
             <p v-if="experience.currentWork">Trabaja aquí actualmente</p>
             <div class="actions">
-              <button @click="editExperience(index)"><img src="@/assets/icons/whiteEdit.svg" alt="Edit"></button>
+              <button @click="editExperienceEmit(index)"><img src="@/assets/icons/whiteEdit.svg" alt="Edit"></button>
               <button @click="confirmDeleteExperience(index)"><img src="@/assets/icons/whiteDelete.svg" alt="Delete"></button>
             </div>
           </div>
@@ -130,21 +134,25 @@
       </div>
     </div>
 
-    <div class="card thropies">
+    <div v-if="hasAttachments()" class="card thropies">
       <div class="header-section">
         <img src="@/assets/icons/cameraOutline.svg" alt="">
         <span>Fotos o premios</span>
       </div>
       
       <div class="attachments-section">
-        <div class="attachments-container" v-for="(experience, index) in step4Data.experiences" :key="index">
+        <div class="attachments-container" v-for="(experience, index) in experiences" :key="index">
           <div v-for="(attachment, attachmentIndex) in experience.attachments" :key="attachmentIndex" class="attachment-item">
             <img class="image" :src="attachment" :alt="'Attachment ' + (attachmentIndex + 1)" />
-            <div class="icon-container">
+            <button class="icon-container" @click="showImage(attachment)">
               <img src="@/assets/icons/magnifying.svg" alt="">
-            </div>
+            </button>
           </div>
         </div>
+      </div>
+
+      <div v-if="isImageModalVisible" class="image-modal" @click="closeImageModal">
+        <img :src="selectedImage" alt="Imagen ampliada" />
       </div>
       
       <div class="header-section">
@@ -159,132 +167,62 @@
         </ol>
       </div>
     </div>
-
-
-
-
+  </div>
+  <div class="edit" v-if="isEditing">
+      <component :is="currentStepComponent" @edit-step="changeStep" />
+      <button @click="saveChanges">Guardar</button>
   </div>
 </template>
 
 <script>
+import Step1 from '@/components/ss-aplicant/ss-mobilePersonFlow/Step1.vue';
+import Step2 from '@/components/ss-aplicant/ss-mobilePersonFlow/Step2.vue';
+import Step3 from '@/components/ss-aplicant/ss-mobilePersonFlow/Step3.vue';
+import Step4 from '@/components/ss-aplicant/ss-mobilePersonFlow/Step4.vue';
 import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
+import showInformationsMixin from '@/mixins/showInformationsMixin';
+import formationsMixin from '@/mixins/formationsMixin.js';
+import experiencesMixin from '@/mixins/experiencesMixin.js';
+
 
 export default {
-  name: 'StepPreview',
+  name: 'ProfilePerson',
+  mixins: [showInformationsMixin, formationsMixin, experiencesMixin],
   components: {
     SsFormToggle,
   },
   data() {
     return {
-      step1Data: null,
-      step2Data: null,
-      step3Data: { formations: [] },
-      step4Data: { experiences: [] },
-      personalInfoItems: [
-        { title: 'Nivel profesional', value: '', icon: require('@/assets/icons/reviewIcons/suitcase.svg'), name: 'professionalLevel' },
-        { title: 'Rango Salarial', value: '', icon: require('@/assets/icons/reviewIcons/wallet.svg'), name: 'salaryRange', class: 'dashed-box' },
-        { title: 'Nombre', value: '', icon: null, name: 'fullName', class: ' green-items' },
-        { title: 'Profesion', value: '', icon: null, name: 'profession', class: 'green-items' },
-        { title: 'Especialización', value: '', icon: null, name: 'specialization', class: 'green-items' },
-        { title: 'Número de documento', value: '', icon: null, name: 'documentNumber', class: 'green-items' },
-        { title: 'Ciudad donde busco', value: '', icon: null, name: 'city', class: 'green-items' },
-        { title: 'Abierto a nueva ubicación', value: '', icon: null, name: 'willingToRelocate', class: 'toggle-element', isToggle: true },
-        { title: 'Correo electrónico', value: '', icon: null, name: 'email', class: 'green-items' },
-        { title: 'Número de celular', value: '', icon: null, name: 'phoneNumber', class: 'green-items' },
-        { title: 'Red profesional', value: '', name: 'linkedin', class: 'green-items dashed-box', icon: null },
-        { title: 'Valor agregado personal', value: '', icon: require('@/assets/icons/reviewIcons/like.svg'), name: 'addedValue',},
-        { title: 'Lo que me hace feliz', value: '', icon: require('@/assets/icons/reviewIcons/heart.svg'), name: 'happiness',},
-        { title: 'Talento profesional', value: '', icon: require('@/assets/icons/reviewIcons/star.svg'), name: 'professionalTalent',},
-        { title: 'Ideas, proyectos o actividades a futuro', value: '', icon: require('@/assets/icons/reviewIcons/sun.svg'), name: 'ideas', },
-      ]
+      step: null,
+      isEditing: false,
     };
   },
   computed: {
-    filteredOptions() {
-      return (this.step1Data.options || []).map((section, sectionIndex) => {
-        return {
-          ...section,
-          selectedItems: section.items.filter((item, itemIndex) => 
-            this.step1Data.selectedOptions.includes(`${sectionIndex}-${itemIndex}`)
-          )
-        };
-      });
-    }
-  },
-  mounted() {
-    this.loadData();
+    currentStepComponent() {
+      switch (this.step) {
+        case 1:
+        return Step1;
+        case 2:
+          return Step2;
+        case 3:
+          return Step3;
+        case 4:
+          return Step4;
+        default:
+          return null;
+      }
+    },
   },
   methods: {
-    loadData() {
-      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-      this.step1Data = stepsData.step1 || {};
-      this.step2Data = stepsData.step2 || {};
-      this.step3Data = stepsData.step3 || { formations: [] };
-      this.step4Data = stepsData.step4 || { experiences: [] };
-      this.updatePersonalInfoItems();
-    },  
-    confirmDeleteExperience(index) {
-      if (confirm("¿Estás seguro de que deseas eliminar esta experiencia?")) {
-        this.deleteExperience(index);
-      }
-    },
-    deleteExperience(index) {
-      this.step4Data.experiences.splice(index, 1);
-      this.updateLocalStorage();
-    },
-    editExperience(index) {
-      this.$emit('edit-step', 4); // Cambia a step 4 para editar
-      localStorage.setItem('editExperienceIndex', index);
-    },
-    confirmDeleteFormation(index) {
-      if (confirm("¿Estás seguro de que deseas eliminar esta formación?")) {
-        this.deleteFormation(index);
-      }
-    },
-    deleteFormation(index) {
-      this.step3Data.formations.splice(index, 1);
-      this.updateLocalStorage();
-    },
-    editFormation(index) {
-      this.$emit('edit-step', 3);
-      localStorage.setItem('editFormationIndex', index);
-    },
-    updatePersonalInfoItems() {
-      this.personalInfoItems.forEach(item => {
-        if (item.name) {
-          item.value = this.step2Data[item.name] || '';
-        }
-      });
-    },
-    updateLocalStorage() {
-      const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-      stepsData.step3 = this.step3Data;
-      stepsData.step4 = this.step4Data; 
-      localStorage.setItem('stepsData', JSON.stringify(stepsData));
-    },
     goToStep(stepNumber) {
-      this.$emit('edit-step', stepNumber);
+      this.step = stepNumber;
+      this.isEditing = true;
     },
-    formatDate(dateString) {
-      const date = new Date(dateString);
-      const day = date.getDate().toString().padStart(2, '0');
-      let month = date.toLocaleString('es-ES', { month: 'long' });
-      month = month.charAt(0).toUpperCase() + month.slice(1);
-      const year = date.getFullYear();
-      return `${day} ${month} ${year}`;
+    saveChanges() {
+      this.isEditing = false;
+      this.loadData();
     },
-    isMostRecent(itemIndex) {
-      if (this.step3Data.formations.length === 0) return false;
-
-      const latestIndex = this.step3Data.formations.reduce((latest, formation, index) => {
-        return new Date(formation.endDate) > new Date(this.step3Data.formations[latest].endDate) ? index : latest;
-      }, 0);
-      return itemIndex === latestIndex;
-    }
   },
-  created() {
-    this.loadData();
-  }
 };
 </script>
 
@@ -297,6 +235,43 @@ export default {
   padding: 16px
   flex-direction: column
   gap: 16px
+  .welcome
+    display: flex
+    flex-direction: column
+    gap: 15px
+    padding: 16px
+    width: 100%
+    .text
+      display: flex
+      flex-direction: row
+      justify-content: space-between
+      align-items: center
+      gap: 16px
+      .info
+        display: flex
+        flex-direction: column
+        h2
+          font-size: 20px
+          font-weight: 600
+          line-height: 26px
+          text-align: left
+          color: #023D6A
+        span
+          font-size: 16px
+          font-weight: 400
+          line-height: 24px
+          text-align: left
+          color: #023D6A
+
+      button
+        height: 32px
+        width: 32px
+        border-radius: 20px
+        border: 2px solid #333333
+        display: flex
+        align-items: center
+        justify-content: center
+        text-align: center
   .send-section
     display: flex
     flex-direction: column
@@ -340,6 +315,23 @@ export default {
     &.thropies
       box-shadow: 0px 4px 10px 0px #00000026
       background-color: white    
+      .image-modal
+        position: fixed
+        top: 0
+        left: 0
+        width: 100vw
+        height: 100vh
+        background: rgba(0, 0, 0, 0.8)
+        display: flex
+        align-items: center
+        justify-content: center
+        z-index: 1000
+        cursor: pointer
+        img
+            max-width: 90%
+            max-height: 90%
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5)
+            border-radius: 8px
       .header-section
         justify-content: flex-start
         gap: 12px
@@ -427,7 +419,7 @@ export default {
 
       .options
         display: flex
-        justify-content: space-around
+        justify-content: flex-start
         width: 100%
         overflow-x: auto
         scrollbar-width: none
@@ -437,9 +429,10 @@ export default {
         .selected-item
           display: flex
           flex-direction: column
-          align-items: center
+          align-items: flex-start
           text-align: center
           padding: 11px 24px
+          gap: 10px
 
           .image-container
             background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
@@ -688,4 +681,22 @@ export default {
           line-height: 20px
           text-align: left
           color: #EDEEF1
+.edit
+  display: flex
+  align-items: center
+  justify-content: center
+  flex-direction: column
+  padding: 24px 0
+  min-height: 60vh
+  button
+    padding: 12px 24px
+    border-radius: 28px
+    color: #F8D2EA
+    font-size: 14px
+    font-weight: 600
+    line-height: 17.07px
+    text-align: center
+    background-color: #761D74
+
+
 </style>

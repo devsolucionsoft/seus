@@ -9,9 +9,8 @@
     <div class="body">
       <SsProgressBarRegister 
         :step="step" 
-        :steps="5"
-        class="hiddenLast"
-        :labels="['Empleo', 'Datos Personales', 'Formación', 'Experiencia', 'Revision']" 
+        :steps="4" 
+        :labels="['Cultura', 'Empresa', 'Arquetipos', 'Reclutador']" 
       />
       <component :is="currentStepComponent" @edit-step="changeStep"/>
       <div v-if="showStepsNavigation" class="stepsNavigation">
@@ -22,13 +21,12 @@
   </template>
 
 <script>
-  import Step1 from '@/components/ss-aplicant/ss-mobilePersonFlow/Step1.vue';
-  import Step2 from '@/components/ss-aplicant/ss-mobilePersonFlow/Step2.vue';
-  import Step3 from '@/components/ss-aplicant/ss-mobilePersonFlow/Step3.vue';
-  import Step4 from '@/components/ss-aplicant/ss-mobilePersonFlow/Step4.vue';
-  import Step5 from '@/components/ss-aplicant/ss-mobilePersonFlow/Step5.vue';
-  import StepPreview from '@/components/ss-aplicant/ss-mobilePersonFlow/StepPreview.vue';
-  import StepSuccess from '@/components/ss-aplicant/ss-mobilePersonFlow/StepSuccess.vue';  
+  import Step1 from '@/components/ss-recruiter/ss-mobileRecruiterFlow/Step1.vue';
+  import Step2 from '@/components/ss-recruiter/ss-mobileRecruiterFlow/Step2.vue';
+  import Step3 from '@/components/ss-recruiter/ss-mobileRecruiterFlow/Step3.vue';
+  import Step4 from '@/components/ss-recruiter/ss-mobileRecruiterFlow/Step4.vue';
+  import StepPreview from '@/components/ss-recruiter/ss-mobileRecruiterFlow/StepPreview.vue';
+  import StepSuccess from '@/components/ss-recruiter/ss-mobileRecruiterFlow/StepSuccess.vue';  
   import SsProgressBarRegister from '@/components/ss-aplicant/ss-mobilePersonFlow/SsProgressBarRegister.vue';
 
   export default {
@@ -38,7 +36,7 @@
     data() {
       return {
         step: 1,
-        maxSteps: 5,
+        maxSteps: 4,
         editingSection: null,
       };
     },
@@ -49,9 +47,8 @@
           case 2: return Step2;
           case 3: return Step3;
           case 4: return Step4;
-          case 5: return Step5;
-          case 6: return StepPreview;
-          case 7: return StepSuccess;
+          case 5: return StepPreview;
+          case 6: return StepSuccess;
           default: return Step1;
         }
       },
@@ -62,7 +59,7 @@
         return this.step === this.maxSteps ? 'Previsualiza tu perfil' : 'Siguiente';
       },
       headerText() {
-        return this.step === 6 ? 'Previsualización de perfil' : 'Bienvenido Francisco';
+        return this.step === 5 ? 'Previsualización de perfil' : 'Bienvenido Francisco';
       }
     },
     methods: {
@@ -70,7 +67,7 @@
         if (this.step < this.maxSteps) {
           this.step++;
         } else if (this.step === this.maxSteps) {
-          this.step = 6;
+          this.step = 5;
         }
       },
       prevStep() {
@@ -85,7 +82,7 @@
   };
 </script>
     
-<style scoped lang="sass">
+  <style scoped lang="sass">
   .body
     display: flex
     flex-direction: column
@@ -148,7 +145,7 @@
       border-radius: 7px
       height: 8px
       background-color: #761D74
-      border: none    
+      border: none
 
-</style>
+  </style>
     

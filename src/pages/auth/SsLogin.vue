@@ -9,7 +9,7 @@
                 <img src="@/assets/icons/persons.svg" alt="Persons Icon">Personas
             </router-link>
         </nav>
-        <div class="content">
+        <div class="container">
             <div class="form-section">
                 <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
                 <form  @submit.prevent="validateForm" novalidate>
@@ -148,10 +148,29 @@ export default {
 <style scoped>
     .page-container {
         background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
-        min-height: 100vh;
+        height: 100vh;
         margin: 0;
         padding: 0;
+        font-family: 'Inter';
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
+
+    .page-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
+        opacity: 0.3;
+        z-index: -1;
+    }
+
     .page-container nav{
         display: flex;
         flex-direction: row;
@@ -169,8 +188,9 @@ export default {
         gap: 19px;
         color: #CDFDF3;
         text-decoration: none;
+        z-index: 3;
     }
-    .page-container .content .form-section form .element span{
+    .page-container .container .form-section form .element span{
         font-size: 12px;
         font-weight: 400;
         line-height: 16.94px;
@@ -178,17 +198,17 @@ export default {
         color: orange;
         margin-top: 2px;
     }
-    .page-container .content {
+    .page-container .container {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
         padding: 94px 18px;
         overflow: hidden;
-        min-height: 100vh;
+        height: calc(100vh - 196px);
         box-sizing: border-box;
     }
-    .page-container .content .form-section {
+    .page-container .container .form-section {
         padding: 40px;
         border-radius: 10px;
         text-align: center;
@@ -200,11 +220,12 @@ export default {
         align-items: center;
         justify-content: center;
     }
-    .page-container .content .form-section .logo {
+    .page-container .container .form-section .logo {
         max-width: 473px;
         width: 100%;
+        z-index: 3;
     }
-    .page-container .content .form-section form {
+    .page-container .container .form-section form {
         display: flex;
         flex-direction: column;
         gap: 29px;
@@ -214,26 +235,26 @@ export default {
         justify-content: center;
     }
 
-    .page-container .content .form-section form .element{
+    .page-container .container .form-section form .element{
         display: flex;
         flex-direction: column;
         align-items: start;
         width: 100%;
     }
-    .page-container .content .form-section form .element .input{
+    .page-container .container .form-section form .element .input{
         display: flex;
         flex-direction: column;
         align-items: start;
         width: 100%;
     }
-    .page-container .content .form-section form .element label {
+    .page-container .container .form-section form .element label {
         font-size: 14px;
         font-weight: 400;
         line-height: 16.94px;
         text-align: left;
         color: white;
     }
-    .page-container .content .form-section form .element .inputElement{
+    .page-container .container .form-section form .element .inputElement{
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -241,7 +262,7 @@ export default {
         width: 100%;
     }
     
-    .page-container .content .form-section form .element input {
+    .page-container .container .form-section form .element input {
         padding: 19px 0 19px 12px;
         color: #CDFDF3;
         background-color: transparent;
@@ -251,11 +272,11 @@ export default {
         outline: none;
         box-shadow: none;
     }
-    .page-container .content .form-section form .element input::placeholder{
+    .page-container .container .form-section form .element input::placeholder{
         color: #CDFDF3;
     }
 
-    .page-container .content .form-section form button {
+    .page-container .container .form-section form button {
         background: #0DC6DE;
         color: #023D6A;
         padding: 12px 24px;
@@ -268,10 +289,10 @@ export default {
         text-align: center;
         max-width: 114px;
     }
-    .page-container .content .form-section form button:hover {
+    .page-container .container .form-section form button:hover {
         background: #0bb5c9;
     }
-    .page-container .content .image-section {
+    .page-container .container .image-section {
         display: flex;
         gap: 20px;
         width: 40%;
@@ -282,7 +303,7 @@ export default {
         scrollbar-width: thin;
         -webkit-overflow-scrolling: touch; 
     }
-    .page-container .content .image-section img {
+    .page-container .container .image-section img {
         position: relative;
         height: 555px;
         width: 128px;
@@ -292,7 +313,7 @@ export default {
         flex-shrink: 0;
     }
 
-    .page-container .content .image-section img.expand {
+    .page-container .container .image-section img.expand {
         width: 385px;
     }
 
@@ -301,7 +322,7 @@ export default {
         flex-direction: column;
         align-items: start;
         justify-content: start;
-        padding: 0 2%;
+        padding: 0 2% 10px 2%;
         justify-self: flex-end;
     }
     .page-container footer .brands{
@@ -318,6 +339,7 @@ export default {
     .page-container footer .brands img{
         max-height: 47px;
         flex-shrink: 0;
+        z-index: 3;
     }
     .page-container footer .poweredby p{
         font-size: 10px;
@@ -335,15 +357,18 @@ export default {
         color: white;
     }
     @media(max-width: 1020px){
-        .page-container .content{
-            flex-direction: column;
+        .page-container{
             height: auto;
         }
-        .page-container .content .image-section{
+        .page-container .container{
+            flex-direction: column;
+            height: 100%;
+        }
+        .page-container .container .image-section{
             width: 100%;
             align-self: flex-start;
         }
-        .page-container .content .image-section img{
+        .page-container .container .image-section img{
             width: 316px !important;
         }
         .page-container footer{
@@ -363,12 +388,12 @@ export default {
         }
     }
     @media(max-width: 700px){
-        .page-container .content .form-section{
+        .page-container .container .form-section{
             max-width: 100%;
             width: 100%;
         }
 
-        .page-container .content .form-section form{
+        .page-container .container .form-section form{
             padding: 0 18px;
         }
         
@@ -382,29 +407,29 @@ export default {
             font-size: 14px;
             line-height: 17px;
         }
-        .page-container .content .form-section form button{
+        .page-container .container .form-section form button{
             width: 100%;
             max-width: 100%;
         }
-        .page-container .content .form-section form .element .input{
+        .page-container .container .form-section form .element .input{
             border-bottom: 1px solid #CDFDF3
         }
-        .page-container .content .form-section form .element input{
+        .page-container .container .form-section form .element input{
             border: none;
         }
         .page-container footer .brands{
             width: 100%;
         }
     }
-    .page-container .content .image-section::-webkit-scrollbar,
+    .page-container .container .image-section::-webkit-scrollbar,
     .page-container footer .brands::-webkit-scrollbar {
         display: none;
     }
-    .page-container .content .image-section,
+    .page-container .container .image-section,
     .page-container footer .brands {
         scrollbar-width: none;
     }
-    .page-container .content .image-section,
+    .page-container .container .image-section,
     .page-container footer .brands {
         -webkit-overflow-scrolling: touch;
     }

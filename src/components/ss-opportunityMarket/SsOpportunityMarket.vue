@@ -313,7 +313,7 @@
         align-self: flex-start;
     }
     .opportunityMarket .upSection .opportunitysContainer{
-        padding: 48px 0 0 0;
+        padding: 48px 10px 0 10px;
         width: auto;
         max-width: 100%;
         align-items: center;
@@ -345,7 +345,7 @@
         gap: 30px;
     }
     .opportunityMarket .upSection .opportunitysContainer{
-        padding: 48px 0 0 0;
+        padding: 48px 10px 0 10px;
     }
 }
 .opportunityMarket .upSection .opportunitysContainer::-webkit-scrollbar{

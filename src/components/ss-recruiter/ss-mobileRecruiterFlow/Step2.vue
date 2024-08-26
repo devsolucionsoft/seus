@@ -25,7 +25,7 @@
   import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
   import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
   import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
-  import formMixin from '@/mixins/formMixin.js';
+  import formMixin from '@/mixins/recruiter/formMixin.js';
 
 
   export default {
@@ -43,10 +43,12 @@
 <style lang="sass" scoped>
 .step2
   padding: 16px
+  width: 100%
   form
     display: flex
     flex-direction: column
-    gap: 16px
+    gap: 34px
+    padding: 0 16px
     .form-group
       display: flex
       flex-direction: column

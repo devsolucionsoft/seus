@@ -65,7 +65,6 @@ export default {
     },
     created() {
       this.loadFromLocalStorage();
-      console.log('SsDesktopComponent mounted and data loaded.');
     }
   };
   

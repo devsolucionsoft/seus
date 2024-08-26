@@ -1,40 +1,35 @@
 <template>
-  <div class="step1">
-    <div v-for="(option, index) in options" :key="index" class="option-group">
+  <div class="step3">
+    <div v-for="(option, index) in options2" :key="index" class="option-group">
       <h3>{{ option.title }}</h3>
       <div class="options">
         <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
-          <div class="image-container" :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" @click="toggleSelection(`${index}-${idx}`)">
+          <div class="image-container" :class="{ selected: selectedOptions2.includes(`${index}-${idx}`) }" @click="toggleSelection2(`${index}-${idx}`)">
             <img :src="item.image" :alt="item.label" />
           </div>
           <p>{{ item.label }}</p>
         </div>
       </div>
     </div>
-    <p class="description">{{ finalNote }}</p>
   </div>
 </template>
   
 <script>
-  import optionMixin from '@/mixins/optionMixin.js';
+  import options2Mixin from '@/mixins/recruiter/options2Mixin.js';
   export default {
-    mixins: [optionMixin],
-    name: 'Step1',
-    data() {
-      return {
-        finalNote: 'Elegir una cultura específica no te descarta de ningún proceso.',
-      };
-    },
+    mixins: [options2Mixin],
+    name: 'Step3',
   };
 </script>
   
 
 <style scoped lang="sass">
-.step1
+.step3
   padding: 16px
   display: flex
   flex-direction: column
   gap: 16px
+  width: 100%
 
   .option-group
     display: flex
@@ -51,12 +46,12 @@
 
     .options
       display: flex
-      justify-content: space-around
       width: 100%
       overflow-x: auto
-      scrollbar-width: none
-      -webkit-overflow-scrolling: touch
-      gap: 0px
+      gap: 32px
+      flex-wrap: wrap
+      align-items: center
+      justify-content: center
 
       .option-item
         display: flex
@@ -67,7 +62,7 @@
         gap: 10px
 
         .image-container
-          background: #761D74
+          background: #023D6A
           height: 112px
           width: 112px
           border-radius: 100px
