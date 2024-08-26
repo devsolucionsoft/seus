@@ -301,11 +301,9 @@
 <style>
     section{
       position: relative;
-      background-image: url('../../assets/images/bgLogin.jpeg');
       background-position: center;
       background-size: cover;
       padding-top: 77px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
       min-height: 100vh;
     }
     
@@ -325,7 +323,9 @@
       flex-direction: row;
       gap: 72px;
       padding: 0 96px 0 140px;
-      max-height: 200vh
+      max-height: 200vh;
+      background-image: url('../../assets/images/bgLogin.jpeg');
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
     }
 
     section .content .startCarrer{
@@ -613,7 +613,7 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
-      z-index: 3;
+      z-index: 11;
     }
 
     .modal-content {
@@ -662,7 +662,8 @@
       justify-content: center;
       padding: 34px 40px;
       overflow-y: auto;
-      height: 100%
+      height: 100%;
+      border-radius:  0 0 12px 12px;
     }
     
     .modal-content .content h5{
@@ -745,7 +746,7 @@
       header{
         padding: 16px !important;
       }
-      header img{
+      header .logo{
         max-width: 144px !important;
       }
       section{

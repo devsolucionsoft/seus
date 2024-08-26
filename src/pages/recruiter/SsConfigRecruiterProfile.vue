@@ -2,7 +2,7 @@
     <div class="content">
         <SsHeader></SsHeader>
         <div>
-            <SsBannerProfile></SsBannerProfile>
+            <SsBannerProfile createOffer="true"></SsBannerProfile>
             <component :is="isMobile ? 'MobileComponent' : 'DesktopComponent'" />
         </div>
         <SsFooter></SsFooter>

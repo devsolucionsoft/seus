@@ -293,6 +293,7 @@ export default {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    z-index: 11;
 
     .title{
       display: flex;

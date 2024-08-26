@@ -222,12 +222,12 @@
             flex-direction: column
             width: 100%
             h3
-            font-size: 20px
-            font-weight: 600
-            line-height: 24px
-            text-align: center
-            color: #023D6A
-            margin: 0
+                font-size: 16px
+                font-weight: 600
+                line-height: 20px
+                text-align: center
+                color: #023D6A
+                margin: 0
   
             .options
                 flex-wrap: wrap
@@ -285,6 +285,7 @@
             grid-template-rows: repeat(7, 1fr)
             grid-column-gap: 0px
             grid-row-gap: 24px
+            background-color: white
             .group 
                 &:nth-child(1)
                     grid-area: 1 / 1 / 2 / 2

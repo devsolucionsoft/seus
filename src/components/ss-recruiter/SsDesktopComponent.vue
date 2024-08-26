@@ -188,10 +188,6 @@
 .form
     position: relative
     padding: 52px 197px
-    background-image: url('../../assets/images/bgWhiteSection.svg')
-    background-size: cover
-    background-position: center
-    background-repeat: no-repeat
     form
         display: grid
         gap: 33px

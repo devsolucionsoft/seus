@@ -76,19 +76,20 @@
         border-radius: 0 0 20px 20px
         background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
         padding: 41px 196px 36px 196px
-        z-index: 2
+        z-index: 10
         display: flex
         flex-direction: row
         justify-content: space-between
         align-items: center
         width: 100%
+        position: sticky
+        top: 0
         .logo
             max-width: 192px
-
         @media(max-width: 768px)
             padding: 16px !important
             .logo
-                max-width: 144px !important
+              max-width: 144px !important
         
         nav
             ul
@@ -224,12 +225,5 @@
                         border: none
                         font-size: 30px
                         cursor: pointer
-                        color: #cdfdf3
-                    
-
-                            
-                        
-
-        
-    
+                        color: #cdfdf3 
 </style>

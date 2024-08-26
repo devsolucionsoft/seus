@@ -1,6 +1,6 @@
 <template>
     <section class="banner-profile">
-        <div class="banner-image">
+        <div v-if="visibleSections.bannerImage" class="banner-image">
           <img :src="backgroundImageBanner" alt="Background" class="background">
           <button @click="changeBackground" class="edit-btn">
             <span>Editar</span>
@@ -9,7 +9,7 @@
             </div>
           </button>
         </div>
-        <div class="profile-section">
+        <div v-if="visibleSections.profileSection" class="profile-section">
           <div class="profile-image" @click="changeProfileImage">
             <img :src="profileImage" alt="Perfil">
             <div class="gradient-overlay"></div>
@@ -18,19 +18,20 @@
               <span>Sube una imagen de perfil</span>
             </div>
           </div>
-          <div class="basic-info">
+
+          <div v-if="visibleSections.basicInfo" class="basic-info">
             <div class="text">
               <span>Bienvenido <br><b>Francisco José Benavides</b></span>
-              <div class="lineText"></div>
+              <div class="lineText" :style="{ background: lineTextColor }"></div>
             </div>
-            <div class="info">
+            <div v-if="visibleSections.otherElements" class="info">
               <div class="element">
                 <span class="title">Email</span>
                 <span class="desc">FRJosé@gmail.com</span>
               </div>
               <div class="element">
                 <span class="title">Documento</span>
-                <div class="document-container desc">
+                <div class="document-container">
                   <span class="type">CC</span>
                   <span class="#">#</span>
                   <span class="desc">1022345789</span>
@@ -41,8 +42,8 @@
                 <span class="desc">***********</span>
               </div>
             </div>
-            <button>Cambiar contraseña</button>
-            <div class="offertButton" v-if="$route.query.userType === 'recruiter'">
+            <button v-if="visibleSections.otherElements">Cambiar contraseña</button>
+            <div class="offertButton" v-if="$route.query.userType === 'recruiter' && createOffer">
               <router-link :to="{ name: 'createOffer' }" class="button">
                 <img src="@/assets/icons/upload.svg" alt="upload" />
                 <span>Crear oferta de empleo</span>
@@ -56,12 +57,31 @@
   <script>
   export default {
     name: 'BannerProfile',
+    props: {
+      visibleSections: {
+        type: Object,
+        default: () => ({
+          bannerImage: true,
+          profileSection: true,
+          basicInfo: true,
+          otherElements: true,
+        }),
+      },
+      createOffer: {
+        type: Boolean,
+        default: false,
+      },
+    },
     data() {
       return {
         backgroundImageBanner: require('@/assets/images/bgProfileImageBanner.webp'),
         profileImage: require('@/assets/images/bgProfileImage.webp'),
         cameraIcon: require('@/assets/icons/camera.svg'),
+        lineTextColor: '#761D74',
       };
+    },
+    mounted(){
+      this.updateLineColor()
     },
     methods: {
       changeBackground() {
@@ -87,7 +107,16 @@
           }
         };
         fileInput.click();
-      }
+      },
+      updateLineColor() {
+        const queryParam = this.$route.query.userType;
+        if (queryParam === 'recruiter') {
+          this.lineTextColor = 'linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)';
+        }
+        else{
+          this.lineText = '761D74';
+        }
+      },
     }
   };
   </script>
@@ -151,10 +180,10 @@
     justify-content: flex-start
     margin-left: 4%
     gap: 33px
-    background-image: url('../../assets/images/bgLogin.jpeg')
+    //background-image: url('../../assets/images/bgLogin.jpeg')
     background-position: center right
     background-size: cover
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)
+    //background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)
 
     @media (min-width: 768px) and (max-width: 1200px)
       flex-direction: column
@@ -283,7 +312,6 @@
           width: 100%
           border-radius: 7px
           height: 8px
-          background-color: #761D74
           border: none
       .info
         display: flex
@@ -314,6 +342,12 @@
             display: flex
             flex-direction: row
             gap: 11px
+            font-size: 16px
+            font-weight: 500
+            line-height: 19.5px
+            text-align: left
+            color: black
+
       button
         padding: 9px 11px 
         background-color: #D5B9D4

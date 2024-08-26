@@ -419,7 +419,7 @@ export default {
 
       .options
         display: flex
-        justify-content: space-around
+        justify-content: flex-start
         width: 100%
         overflow-x: auto
         scrollbar-width: none
@@ -429,9 +429,10 @@ export default {
         .selected-item
           display: flex
           flex-direction: column
-          align-items: center
+          align-items: flex-start
           text-align: center
           padding: 11px 24px
+          gap: 10px
 
           .image-container
             background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
@@ -686,6 +687,7 @@ export default {
   justify-content: center
   flex-direction: column
   padding: 24px 0
+  min-height: 60vh
   button
     padding: 12px 24px
     border-radius: 28px

@@ -2,7 +2,7 @@
     <div class="content">
         <SsHeader></SsHeader>
         <div>
-            <SsBannerProfile></SsBannerProfile>
+            <SsBannerProfile :createOffer="true"></SsBannerProfile>
             <component :is="computedComponent" />
         </div>
         <SsFooter></SsFooter>

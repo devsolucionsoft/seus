@@ -148,10 +148,26 @@ export default {
 <style scoped>
     .page-container {
         background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
-        min-height: 100vh;
+        height: 100vh;
         margin: 0;
         padding: 0;
+        font-family: 'Inter';
+        position: relative;
+        overflow: hidden
     }
+
+    .page-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%);
+        opacity: 0.3;
+        z-index: 2;
+    }
+
     .page-container nav{
         display: flex;
         flex-direction: row;
@@ -185,7 +201,7 @@ export default {
         justify-content: space-between;
         padding: 94px 18px;
         overflow: hidden;
-        min-height: 100vh;
+        height: calc(100vh - 196px);
         box-sizing: border-box;
     }
     .page-container .content .form-section {
@@ -203,6 +219,7 @@ export default {
     .page-container .content .form-section .logo {
         max-width: 473px;
         width: 100%;
+        z-index: 3;
     }
     .page-container .content .form-section form {
         display: flex;
@@ -301,7 +318,7 @@ export default {
         flex-direction: column;
         align-items: start;
         justify-content: start;
-        padding: 0 2%;
+        padding: 0 2% 32px 2%;
         justify-self: flex-end;
     }
     .page-container footer .brands{
@@ -318,6 +335,7 @@ export default {
     .page-container footer .brands img{
         max-height: 47px;
         flex-shrink: 0;
+        z-index: 3;
     }
     .page-container footer .poweredby p{
         font-size: 10px;
@@ -335,9 +353,12 @@ export default {
         color: white;
     }
     @media(max-width: 1020px){
+        .page-container{
+            height: auto;
+        }
         .page-container .content{
             flex-direction: column;
-            height: auto;
+            height: 100%;
         }
         .page-container .content .image-section{
             width: 100%;
