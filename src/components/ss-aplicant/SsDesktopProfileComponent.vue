@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div class="container">
   
       <div v-if="filteredSections.length > 0" class="employment">
         <div v-for="(section, sectionIndex) in filteredSections" :key="sectionIndex" class="option-group">
@@ -201,7 +201,7 @@
   
   <style scoped lang="sass">
   
-.content
+.container
     display: flex
     align-items: center
     justify-content: center
