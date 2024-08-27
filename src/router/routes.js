@@ -51,6 +51,11 @@ const routes = [
       name: 'Offers',
       component: () => import('../pages/recruiter/SsOffers.vue'),
     },
+    {
+      path: '/offer',
+      name: 'Offer',
+      component: () => import('../pages/recruiter/SsOffer.vue'),
+    },
   ]
   
   export default routes
