@@ -25,6 +25,8 @@ export default {
                 { label: 'Trabaja aquí actualmente', name: 'currentWork', type: 'SsFormToggle' },
             ],
             editIndex: null,
+            deleteExperienceDialogVisible: false,
+            experienceToDeleteIndex: null,
         };
     },
     methods: {
@@ -61,10 +63,15 @@ export default {
             this.editIndex = index;
             this.showForm = true;
         },
-        confirmDeleteExperience(index) {
-            const confirmed = window.confirm('¿Estás seguro de que deseas eliminar esta formación?');
-            if (confirmed) {
-                this.deleteExperience(index);
+        openDeleteExperienceDialogVisible(index) {
+            this.experienceToDelete = index;
+            this.deleteExperienceDialogVisible = true;
+        },
+        confirmDeleteExperience() {
+            if (this.experienceToDelete !== null) {
+              this.deleteExperience(this.experienceToDelete);
+              this.experienceToDelete = null;
+              this.deleteExperienceDialogVisible = false;
             }
         },
         deleteExperience(index) {

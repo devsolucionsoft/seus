@@ -67,7 +67,7 @@
             <p v-if="isMostRecent(index)">Último estudio realizado</p>
             <div class="actions">
               <button @click="editFormationEmit(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
-              <button @click="confirmDeleteFormation(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
+              <button @click="openDeleteFormationDialogVisible(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
             </div>
           </div>
           <div class="formation-level element">
@@ -106,7 +106,7 @@
             <p v-if="experience.currentWork">Trabaja aquí actualmente</p>
             <div class="actions">
               <button @click="editExperienceEmit(index)"><img src="@/assets/icons/whiteEdit.svg" alt="Edit"></button>
-              <button @click="confirmDeleteExperience(index)"><img src="@/assets/icons/whiteDelete.svg" alt="Delete"></button>
+              <button @click="openDeleteExperienceDialogVisible(index)"><img src="@/assets/icons/whiteDelete.svg" alt="Delete"></button>
             </div>
           </div>
           <div class="experience-position element">
@@ -172,6 +172,36 @@
       <component :is="currentStepComponent" @edit-step="changeStep" />
       <button @click="saveChanges">Guardar</button>
   </div>
+
+  <el-dialog
+      v-model="deleteExperienceDialogVisible"
+      title="Confirmar eliminación"
+      width="400px"
+      center
+    >
+      <span>¿Estás seguro de que deseas eliminar esta experiencia?</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="deleteExperienceDialogVisible = false">Cancelar</el-button>
+          <el-button type="primary" @click="confirmDeleteExperience">Confirmar</el-button>
+        </div>
+      </template>
+  </el-dialog>
+
+  <el-dialog
+      v-model="deleteFormationDialogVisible"
+      title="Confirmar eliminación"
+      width="400px"
+      center
+    >
+      <span>¿Estás seguro de que deseas eliminar esta formación?</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="deleteFormationDialogVisible = false">Cancelar</el-button>
+          <el-button type="primary" @click="confirmDeleteFormation">Confirmar</el-button>
+        </div>
+      </template>
+  </el-dialog>
 </template>
 
 <script>
