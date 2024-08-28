@@ -61,6 +61,11 @@ const routes = [
       name: 'Candidates',
       component: () => import('../pages/recruiter/SsCandidates.vue'),
     },
+    {
+      path: '/candidate-details',
+      name: 'CandidateDetails',
+      component: () => import('../pages/recruiter/SsCandidateDetails.vue'),
+    },
   ]
   
   export default routes
