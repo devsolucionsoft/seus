@@ -87,6 +87,7 @@
                                 </ElSelect>
                             </div>
                         </div>
+                        <img class="dotsDesk" src="@/assets/icons/sixdots.svg" alt="...">
                     </div>
                 </template>
             </draggable>
@@ -97,7 +98,7 @@
                     <img src="@/assets/icons/prev.svg" @click="prevPage" alt="Prev">
                     <img src="@/assets/icons/next.svg" @click="nextPage" alt="Next">
                 </div>
-            </div>
+            </div>            
         </div>
     </div>
 </template>
@@ -294,6 +295,10 @@ export default {
                 flex-direction: column
                 gap: 16px
                 justify-content: center
+                .dotsDesk
+                    align-self: flex-start
+                    @media(max-width: 1200px)
+                        display: none
                 @media(min-width: 1200px)
                     flex-direction: row
                     justify-content: space-between
@@ -312,6 +317,10 @@ export default {
                             text-align: left
                             color: #023D6A
                             text-decoration: underline
+                        @media(min-width: 1200px)
+                            img
+                                display: none
+
                     .place
                         font-size: 14px
                         font-weight: 500

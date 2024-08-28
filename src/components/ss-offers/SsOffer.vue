@@ -2,23 +2,41 @@
     <div class="create-offer">
         <span class="main-title">Detalles del empleo</span>
 
+        <button @click="goBack" class="back-button">
+            <img src="@/assets/icons/backArrow.svg" alt="<">
+            <span>Volver</span>
+        </button>
+
         <div class="card">
             <div class="header-section">
                 <span>Cajero / Tiempo completo</span>
             </div>
-            <div class="group" v-for="(item, index) in personalInfoItems" :key="index" :class="item.class">
-                <div class="group-info-element">
-                <div class="title">
-                    <div v-if="item.icon">
-                    <img :src="item.icon" alt="Icon">
+            
+            <div class="group">
+                <div
+                  v-for="(groupItems, groupIndex) in groupedItems"
+                  :key="groupIndex"
+                  class="dashed-group"
+                >
+                  <div
+                    v-for="(item, index) in groupItems"
+                    :key="index"
+                    :class="item.class"
+                    class="group-info-element"
+                  >
+                      <div class="title">
+                        <div v-if="item.icon">
+                          <img :src="item.icon" alt="Icon">
+                        </div>
+                        <span>{{ item.title }}</span>
+                      </div>
+                      <p>
+                        {{ item.value !== null && item.value !== '' ? item.value : 'N/A' }}
+                      </p>
                     </div>
-                    <span>{{ item.title }}</span>
-                </div>
-                <p>
-                    {{ item.value !== null && item.value !== '' ? item.value : 'N/A' }}
-                </p>
                 </div>
             </div>
+
         </div>
 
 
@@ -38,6 +56,11 @@ import offer from '@/mixins/createOffer/offer.js';
 export default {
     mixins: [offer],
     name: 'createOffer',
+    methods: {
+        goBack() {
+        this.$router.go(-1);
+        }
+    }
 };
 </script>
   
@@ -49,6 +72,27 @@ export default {
     flex-direction: column
     gap: 24px
     @media(min-width: 1200px)
+        gap: 44px
+
+    .back-button
+        display: flex
+        align-items: center
+        justify-content: center
+        gap: 10px
+        padding: 12px 16px
+        border-radius: 28px
+        border: 1px solid #191F27
+        max-width: 116px
+        span
+            font-size: 16px
+            font-weight: 400
+            line-height: 19.5px
+            text-align: center
+            color: #191F27
+        @media(max-width: 1200px)
+            display: none
+        
+    @media(min-width: 1200px)
         padding: 40px 196px
     .main-title
         font-size: 24px
@@ -57,6 +101,8 @@ export default {
         text-align: center
         color: #023D6A
         align-self: center
+        @media(min-width: 1200px)
+            display: none
 
     .card
         display: flex
@@ -68,6 +114,8 @@ export default {
         width: 100%
         box-shadow: 0px 4px 10px 0px #00000026
         background-color: white
+        @media(min-width: 1200px)
+            padding: 50px 40px
         .header-section
             display: flex
             flex-direction: row
@@ -79,6 +127,12 @@ export default {
             line-height: 26px
             text-align: left
             color: #023D6A
+            @media(min-width: 1200px)
+                font-size: 24px
+                font-weight: 700
+                line-height: 29.26px
+                text-align: left
+                color: #023D6A
         button
             appearance: none
             background: none
@@ -148,49 +202,69 @@ export default {
         .group
             display: flex
             flex-direction: column
-            gap: 16px
-            .group-info-element
+            gap: 32px
+            .dashed-group
                 display: flex
                 flex-direction: column
                 gap: 12px
-                .title
-                    display: flex
-                    flex-direction: row
-                    align-items: center
-                    gap: 7px
-                span
-                    font-size: 14px
-                    font-weight: 500
-                    line-height: 20px
-                    text-align: left
-                    color: #47586E
-                p
-                    font-size: 16px
-                    font-weight: 500
-                    line-height: 24px
-                    text-align: left
-                    color: #023D6A
-                    display: flex
-                    flex-direction: row
-                    align-items: center
-                    gap: 10px
-            &.dashed-box
                 border-bottom: 1px dashed #9E9E9E
-                padding-bottom: 24px
-            &.green-items
+                padding-bottom: 32px
+                @media(min-width: 1200px)
+                    &:first-child
+                        display: grid
+                        grid-template-columns: repeat(3, 1fr)
+                        grid-template-rows: repeat(3, 1fr)
+                        .group-info-element
+                            &:nth-child(1)
+                                grid-column: span 3
+
+                    &:nth-child(2)
+                        display: grid
+                        grid-template-columns: repeat(2, 1fr)
+                        grid-template-rows: repeat(3, 1fr)
+
+                                
+                &:last-child
+                    border-bottom: none
                 .group-info-element
+                    display: flex
+                    flex-direction: column
+                    gap: 12px
                     .title
-                        span
-                            font-size: 12px
-                            font-weight: 500
-                            line-height: 20px
-                            text-align: left
-                            color: #05454E
-                            padding: 1px 12px
-                            background-color: #CDFDF3
-                            border-radius: 30px
+                        display: flex
+                        flex-direction: row
+                        align-items: center
+                        gap: 7px
+                    span
+                        font-size: 14px
+                        font-weight: 500
+                        line-height: 20px
+                        text-align: left
+                        color: #47586E
                     p
-                        margin-left: 12px
+                        font-size: 16px
+                        font-weight: 500
+                        line-height: 24px
+                        text-align: left
+                        color: #023D6A
+                        display: flex
+                        flex-direction: row
+                        align-items: center
+                        gap: 10px
+
+                    &.green-items
+                        .title
+                            span
+                                font-size: 12px
+                                font-weight: 500
+                                line-height: 20px
+                                text-align: left
+                                color: #05454E
+                                padding: 1px 12px
+                                background-color: #CDFDF3
+                                border-radius: 30px
+                        p
+                            margin-left: 12px
 
 .button
     display: flex
