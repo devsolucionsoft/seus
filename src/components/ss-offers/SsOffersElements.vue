@@ -6,8 +6,6 @@
                 <span>Crear oferta de empleo</span>
             </router-link>
         </div>
-  
-        
         <div class="container">
             <div class="up-section">
                 <div class="welcome">
