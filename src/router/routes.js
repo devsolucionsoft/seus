@@ -71,6 +71,16 @@ const routes = [
       name: 'HomeOffers',
       component: () => import('../pages/recruiter/SsHomeOffers.vue'),
     },
+    {
+      path: '/home-offers',
+      name: 'HomeOffers',
+      component: () => import('../pages/recruiter/SsHomeOffers.vue'),
+    },
+    {
+      path: '/opportunity-market',
+      name: 'OpportunityMarket',
+      component: () => import('../pages/applicant/SsOpportunityMarket.vue'),
+    },
   ]
   
   export default routes

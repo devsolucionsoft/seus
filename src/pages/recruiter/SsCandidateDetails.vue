@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <SsHeader/>
-        <SsBannerProfile :visibleSections="{ bannerImage: true, profileSection: true, basicInfo: true, otherElements: false }" createOffer="true"/>
+        <SsBannerProfile :visibleSections="{ bannerImage: true, profileSection: true, basicInfo: true, otherElements: false }" createOffer="true" hideOnSmallScreens="true"/>
         <SsCandidateDetails/>
         <SsFooter/>
     </div>

@@ -1,36 +1,13 @@
 <template>
     <div class="cont">
-        <div class="offertButton">
-            <div class="up">
-                <button @click="goBack" class="back-button mobile">
-                    <img src="@/assets/icons/backArrow.svg" alt="<">
-                    <span>Volver</span>
-                </button>
-                <router-link :to="{ name: 'createOffer' }" class="button">
-                    <img src="@/assets/icons/upload.svg" alt="upload">
-                    <span>Crear oferta de empleo</span>
-                </router-link>
-            </div>
-            <div class="options">
-                <div class="element">
-                    <span class="desc">Entrevistas</span>
-                    <img src="@/assets/icons/calendar.svg" alt="calendar">
-                </div>
-                <div class="element">
-                    <span class="desc">Mensaje</span>
-                    <img src="@/assets/icons/message.svg" alt="message">
-                </div>
-            </div>
-        </div>
   
         
         <div class="container">
             <div class="up-section">
-                <h2 class="main-title">MERCADO DE TALENTOS</h2>
+                <h2 class="main-title">MERCADO DE OPORTUNIDADES</h2>
                 <div class="postulated">
-                    <h3>Candidatos postulados</h3>
+                    <h3>Ofertas laborales</h3>
                     <div class="filters-container">
-                        <div class="title-filters" v-if="isSmallScreen">Filtra por cargos </div>
                         <el-select v-if="isSmallScreen" v-model="selectedRole" placeholder="Seleccione un cargo" class="custom-select">
                             <el-option
                                 v-for="item in roles"
@@ -94,45 +71,52 @@
                 </div>
             </div>
 
-            <div class="aplicants-container">
-                <span class="results">Mostrando {{ pagedItems[currentPage].length }} resultados de un total de 24</span>
-                <div class="aplicants-elements">
+            <div class="offers-container">
+                <span class="results">{{ pagedItems[currentPage].length }} resultados de alrededor de 141.746</span>
+                <div class="offer-elements">
                     <div 
-                        v-for="(candidate, index) in pagedItems[currentPage]" 
+                        v-for="(offer, index) in pagedItems[currentPage]" 
                         :key="index" 
                         class="card"
                     >
                         <div class="header">
                             <div class="img-container">
                                 <div class="inner-circle">
-                                    <img :src="candidate.img" alt="Person">
+                                    <img :src="offer.img" alt="Person">
                                 </div>
                             </div>
                             <div class="information">
-                                <div class="name">{{ candidate.name }}</div>
-                                <div class="position">{{ candidate.position }}</div>
-                                <div class="place">{{ candidate.place }}</div>
+                                <div class="name">{{ offer.name }}</div>
                             </div>
                         </div>
-                        <div class="desc">
-                            {{ candidate.description }}
+                        <div class="desc-offer">
+                            {{ offer.description }}
                         </div>
-                        <div class="labels">
-                            <div 
-                                v-for="(label, idx) in candidate.labels" 
-                                :key="idx" 
-                                class="label"
-                            >
-                                {{ label }}
+                        <div class="position">
+                            <div class="title">
+                                <div class="name">{{ offer.namePosition }}</div>
+                                <div class="channel">{{ offer.channel }}</div>
+                            </div>
+                            <div class="desc-position">
+                                {{ offer.descPosition }}
                             </div>
                         </div>
-                        <div class="salary">
-                            <div class="add-info">{{ candidate.addInfo }}</div>
-                            <div class="amount">{{ candidate.salary }}</div>
+                        <div class="items">
+                            <div class="item">
+                                <span class="title-item">Ciudad</span>
+                                <span class="desc">{{ offer.city }}</span>
+                            </div>
+                            <div class="item">
+                                <span class="title-item">Fecha de cierre</span>
+                                <span class="desc">{{ offer.endDate }}</span>
+                            </div>
+                            <div class="item">
+                                <span class="title-item">Salario</span>
+                                <span class="desc salary">{{ offer.salary }}</span>
+                            </div>
                         </div>
-                        <router-link :to="{ name: 'CandidateDetails' }" class="button">
-                            <img src="@/assets/icons/whiteFrame.svg" alt="Frame">
-                            <span>Ver candidato</span>
+                        <router-link :to="{ name: '' }" class="button">
+                            <span>Aplicar a la oferta</span>
                         </router-link>
                     </div>
                 </div>
@@ -145,15 +129,13 @@
                     </div>
                 </div>         
             </div>
-        
-            
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'HomeOffers',
+    name: 'OpportunityMarket',
     data() {
         return {
             selectedRole: '',
@@ -176,7 +158,7 @@ export default {
                 { value: 'presencial', label: 'Presencial' },
                 { value: 'remoto', label: 'Remoto' },
             ],
-            candidates: [],
+            offers: [],
             currentPage: 0,
             itemsPerPage: 12,
             isSmallScreen: window.innerWidth < 1200
@@ -185,8 +167,8 @@ export default {
     computed: {
         pagedItems() {
             const pages = [];
-            for (let i = 0; i < this.candidates.length; i += this.itemsPerPage) {
-                pages.push(this.candidates.slice(i, i + this.itemsPerPage));
+            for (let i = 0; i < this.offers.length; i += this.itemsPerPage) {
+                pages.push(this.offers.slice(i, i + this.itemsPerPage));
             }
             return pages;
         },
@@ -214,15 +196,16 @@ export default {
     },
     created() {
         for (let i = 1; i <= 24; i++) {
-            this.candidates.push({
-                name: 'Candidato ' + i,
-                position: 'Cargo ' + i,
-                place: 'Bogotá, Colombia',
-                description: 'Descripción del candidato ' + i,
-                labels: ['Servicio al cliente', 'Ingeniero', 'Planning', 'Branding', '+4'],
-                addInfo: 'Flexible para trabajar',
-                salary: '3’000.000',
-                img: require('@/assets/images/person.webp')
+            this.offers.push({
+                name: 'Nuestros beneficios ' + i,
+                description: 'En Nutresa, creemos firmemente en la importancia de mantener un equilibrio saludable entre la vida laboral y personal de nuestros empleados... ' + i,
+                namePosition: 'Líder de ventas ' + i,
+                channel: '(canal natural)',
+                descPosition: 'Buscamos líder comercial apasionado(a) por el bienestar y la alimentación saludable, empática y con orientación al logro...',
+                city: 'Bogotá',
+                endDate: '30 de Julio de 2024',
+                salary: '3.500.000 / 4.000.000',
+                img: require('@/assets/brands/nutresag.svg')
             });
         }
     },
@@ -269,76 +252,14 @@ export default {
     flex-direction: column
     gap: 16px
     @media(min-width: 1200px)
-        padding: 40px 196px 20px 196px
+        padding: 40px 196px 50px 196px
         gap: 40px
-
-    .offertButton
-        display: flex
-        flex-direction: column
-        gap: 16px
-        width: 100%
-        padding-bottom: 16px
-        border-bottom: 1px dashed #9E9E9E 
-        @media(min-width: 768px)
-            display: none
-        .up
-            display: flex
-            width: 100%
-            flex-wrap: wrap
-            gap: 10px
-            a
-                display: flex
-                flex-direction: row
-                align-items: center
-                justify-content: center
-                gap: 10px
-                background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
-                border-radius: 50px
-                padding: 14px
-                width: 100%
-                text-decoration: none
-                max-width: 270px
-
-                span
-                    text-decoration: none
-                    font-size: 16px
-                    font-weight: 500
-                    line-height: 19.5px
-                    text-align: center
-                    color: #CDFDF3
-            button
-                display: flex
-                flex-direction: row
-                align-items: center
-                justify-content: center
-                gap: 10px
-                border-radius: 28px
-                padding: 12px 16px
-                border: 1px solid #191F27
-        .options
-            display: flex
-            flex-direction: row
-            align-self: flex-end
-            gap: 20px
-            .element
-                display: flex
-                flex-direction: row
-                gap: 13px 
-                align-items: center
-                justify-content: center
-                .desc
-                    font-size: 12px
-                    font-weight: 500
-                    line-height: 14.63px
-                    text-align: center
-                    color: #354253
-
     .container
         display: flex
         flex-direction: column
         gap: 16px
         @media (min-width: 1200px)
-            gap: 40px
+            gap: 58px
         .up-section
             display: flex
             flex-direction: column
@@ -373,6 +294,7 @@ export default {
                     line-height: 29.26px
                     text-align: left
                     color: #023D6A
+                    white-space: nowrap
                 .filters-container
                     display: flex
                     flex-direction: column
@@ -416,151 +338,172 @@ export default {
                                     line-height: 14.63px
                                     text-align: left
                                     margin-left: 20px
-                                    
-                            
-
-        .aplicants-container
+        .offers-container
             display: flex
             flex-direction: column
-            gap: 16px
+            gap: 24px
             @media (min-width: 1200px)
-                gap: 20px
+                gap: 38px
             .results
-                font-size: 14px
+                font-size: 12px
                 font-weight: 400
-                line-height: 17.07px
+                line-height: 14.63px
                 text-align: left
                 color: #191F27
-            .aplicants-elements
+            .offer-elements
                 display: flex
                 flex-direction: column
-                gap: 16px
+                gap: 24px
                 @media (min-width: 1200px)
                     padding: 0 48px
                     display: grid
-                    row-gap: 20px
-                    column-gap: 32px
-                    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr))
-
+                    row-gap: 38px
+                    column-gap: 18px
+                    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr))
                 .card
-                    box-shadow: 0px 5px 7.9px 0px #00254B33
-                    border-radius: 16px
-                    padding: 24px 14px
+                    box-shadow: 0px 4px 6px 0px #00000026
+                    border-radius: 12px
+                    padding: 20px 24px
                     background-color: white
-                    gap: 16px
+                    gap: 13px
                     display: flex
                     flex-direction: column
                     .header
                         display: flex
                         flex-direction: row
-                        gap: 16px
-                        align-items: center
+                        gap: 18px
+                        align-items: flex-end
                         .img-container
-                            width: 56px
-                            height: 56px
+                            width: 96px
+                            height: 96px
                             border-radius: 50%
                             background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
-                            padding: 3px
+                            padding: 5px
                             display: flex
                             align-items: center
                             justify-content: center
-                            @media(min-width: 1200px)
-                                width: 81px
-                                height: 81px
-                                box-shadow: none
                             .inner-circle
                                 width: 100%
                                 height: 100%
                                 background-color: white
                                 border-radius: 50%
                                 display: flex
-                                align-items: flex-start
+                                align-items: center
                                 justify-content: center
                                 overflow: hidden
                                 img
-                                    max-width: 56px
+                                    max-width: 96px
                                     object-fit: cover
-                                    scale: 1.6
-                                    object-position: top center
+                                    object-position: center
                         .information
                             display: flex
                             flex-direction: column
-                            gap: 4px
                             .name
-                                font-size: 18px
+                                font-size: 22px
                                 font-weight: 600
-                                line-height: 21.94px
+                                line-height: 26.82px
                                 text-align: left
-                                color: #023D6A
-                            .position
-                                font-size: 14px
-                                font-weight: 500
-                                line-height: 17.07px
-                                text-align: left
-                                color: #354253
-                            .place
-                                font-size: 12px
-                                font-weight: 500
-                                line-height: 14.63px
-                                text-align: left
-                                color: #354253
-                    .desc
-                        font-size: 14px
+                                color: #023D6A     
+                    .desc-offer
+                        font-size: 12px
                         font-weight: 400
-                        line-height: 24px
+                        line-height: 14.63px
                         text-align: left
-                        color: #023D6A
-                    .labels
-                        display: flex
-                        flex-wrap: wrap
-                        row-gap: 9px
-                        column-gap: 5px
-                        padding: 0 96px 12px 0
-                        .label
-                            border-radius: 30px
-                            background-color: #A8A8A8
-                            padding: 6px 14px
-                            font-size: 12px
-                            font-weight: 400
-                            line-height: 14.52px
-                            text-align: left
-                            font-family: 'Inter'
-                            color: white
-                    .salary
+                        color: black
+                        padding: 0 18px
+                    .position
                         display: flex
                         flex-direction: column
-                        gap: 0
-                        padding-left: 10px
-                        .add-info
+                        gap: 6px 
+                        padding: 0 18px 20px 18px
+                        position: relative
+                        &::after
+                            content: ""
+                            position: absolute
+                            bottom: 0
+                            left: 0
+                            right: 0
+                            height: 1px
+                            background-color: black
+                            transform: scaleY(0.2)
+                            transform-origin: bottom
+                        .title
+                            display: flex
+                            flex-direction: column
+                            gap: 0
+                            .name
+                                font-size: 22px
+                                font-weight: 600
+                                line-height: 26.82px
+                                text-align: left
+                                color: #023D6A
+                            .channel
+                                font-size: 14px
+                                font-weight: 400
+                                line-height: 17.07px
+                                text-align: left
+                                color: #023D6A
+                        .desc-position
                             font-size: 12px
                             font-weight: 400
                             line-height: 14.63px
                             text-align: left
-                            color: #023D6A
-                        .amount
-                            font-size: 30px
-                            font-weight: 700
-                            line-height: 36.31px
-                            text-align: left
-                            font-family: 'Inter'
-                            color: #099BBE
+                            color: black
+                    .items
+                        display: grid
+                        grid-template-columns: repeat(2, 1fr)
+                        column-gap: 2px
+                        row-gap: 13px
+                        .item
+                            display: flex
+                            flex-direction: column
+                            gap: 12px
+                            .title-item
+                                padding: 1px 12px
+                                background-color: #CDFDF3
+                                border-radius: 30px
+                                font-size: 12px
+                                font-weight: 500
+                                line-height: 20px
+                                text-align: left
+                                color: #05454E
+                                width: fit-content
+                            .desc
+                                color: #023D6A
+                                padding-left: 12px
+                                font-size: 16px
+                                font-weight: 500
+                                line-height: 20px
+                                text-align: left
+                                color: #023D6A
+                                &.salary
+                                    font-size: 22px
+                                    font-weight: 600
+                                    line-height: 20px
+                                    text-align: left
+                            &:nth-child(3)
+                                grid-column: span 2
+
                     .button
-                        width: 100%
+                        width: fit-content
                         align-items: center
                         justify-content: center
                         gap: 10px
                         border-radius: 28px
-                        padding: 9px 24px
+                        padding: 11px 24px
                         display: flex
-                        background-color: #761D74
+                        align-items: center
+                        justify-content: center
+                        background-color: #0DC6DE
                         text-decoration: none
+                        align-self: center
+                        margin-top: 18px
                         span
-                            font-size: 14px
-                            font-weight: 400
-                            line-height: 16.94px
+                            font-size: 16px
+                            font-weight: 600
+                            line-height: 19.5px
                             text-align: center
-                            font-family: 'Inter'
-                            color: #F8D2EA
+                            color: #CDFDF3
             .navigation
                 display: flex
                 flex-direction: row
