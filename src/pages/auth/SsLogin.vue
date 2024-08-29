@@ -302,19 +302,22 @@ export default {
         overflow-x: auto;
         scrollbar-width: thin;
         -webkit-overflow-scrolling: touch; 
+        height: inherit;
     }
     .page-container .container .image-section img {
         position: relative;
-        height: 555px;
-        width: 128px;
         border-radius: 51px;
         object-fit: cover;
-        transition: width 0.3s ease;
+        transition: transform 0.6s ease-in-out, max-width 0.6s ease-in-out;
         flex-shrink: 0;
+        height: 100%;
+        max-height: 555px;
+        max-width: 128px;
+        width: 100%;
     }
 
     .page-container .container .image-section img.expand {
-        width: 385px;
+        max-width: 50%;
     }
 
     .page-container footer{
@@ -366,10 +369,15 @@ export default {
         }
         .page-container .container .image-section{
             width: 100%;
-            align-self: flex-start;
+            height: auto;
+            justify-content: center;
         }
         .page-container .container .image-section img{
-            width: 316px !important;
+            position: relative;
+            height: 555px;
+        }
+        .page-container .container .image-section img.expand{
+            max-width: 316px;
         }
         .page-container footer{
             gap: 16px;
@@ -420,6 +428,10 @@ export default {
         .page-container footer .brands{
             width: 100%;
         }
+        .page-container .container .image-section{
+            justify-content: flex-start;
+        }
+
     }
     .page-container .container .image-section::-webkit-scrollbar,
     .page-container footer .brands::-webkit-scrollbar {
