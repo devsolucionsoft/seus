@@ -10,7 +10,7 @@
           <p v-if="isMostRecent(index)">Último estudio realizado</p>
           <div class="actions">
             <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
-            <button @click="confirmDeleteFormation(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
+            <button @click="openDeleteFormationDialogVisible(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
           </div>
         </div>
         <div class="formation-level element">
@@ -65,6 +65,20 @@
         </button>
       </form>
     </div>
+    <el-dialog
+      v-model="deleteFormationDialogVisible"
+      title="Confirmar eliminación"
+      width="400px"
+      center
+    >
+      <span>¿Estás seguro de que deseas eliminar esta formación?</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="deleteFormationDialogVisible = false">Cancelar</el-button>
+          <el-button type="primary" @click="confirmDeleteFormation">Confirmar</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 

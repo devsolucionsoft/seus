@@ -1,5 +1,5 @@
 <template>
-    <section class="banner-profile">
+    <section v-if="!hideOnSmallScreens || windowWidth >= 1200" class="banner-profile">
         <div v-if="visibleSections.bannerImage" class="banner-image">
           <img :src="backgroundImageBanner" alt="Background" class="background">
           <button @click="changeBackground" class="edit-btn">
@@ -71,6 +71,10 @@
         type: Boolean,
         default: false,
       },
+      hideOnSmallScreens: {
+        type: Boolean,
+        default: false,
+      },
     },
     data() {
       return {
@@ -78,12 +82,20 @@
         profileImage: require('@/assets/images/bgProfileImage.webp'),
         cameraIcon: require('@/assets/icons/camera.svg'),
         lineTextColor: '#761D74',
+        windowWidth: window.innerWidth,
       };
     },
     mounted(){
+      window.addEventListener('resize', this.updateWindowWidth);
       this.updateLineColor()
     },
+    beforeUnmount() {
+      window.removeEventListener('resize', this.updateWindowWidth);
+    },
     methods: {
+      updateWindowWidth() {
+        this.windowWidth = window.innerWidth;
+      },
       changeBackground() {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';

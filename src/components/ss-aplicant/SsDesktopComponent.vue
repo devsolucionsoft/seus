@@ -98,7 +98,7 @@
                         <span>Editar</span>
                     </button>
     
-                    <button @click="confirmDeleteFormation(index)" class="transparent" type="submit">
+                    <button @click="openDeleteFormationDialogVisible(index)" class="transparent" type="submit">
                         <img src="@/assets/icons/delete.svg" alt="">
                         <span>Eliminar</span>
                     </button>
@@ -212,7 +212,7 @@
                         <img src="@/assets/icons/whiteEdit.svg" alt="Edit">
                         <span>Editar</span>
                     </button>
-                    <button class="white" @click="confirmDeleteExperience(index)">
+                    <button class="white" @click="openDeleteExperienceDialogVisible(index)">
                         <img src="@/assets/icons/whiteDelete.svg" alt="Edit">
                         <span>Eliminar</span>
                     </button>
@@ -247,6 +247,38 @@
                 <span>Guardar información</span>
             </button>
         </section>
+
+        <el-dialog
+            v-model="deleteExperienceDialogVisible"
+            title="Confirmar eliminación"
+            width="400px"
+            center
+            >
+            <span>¿Estás seguro de que deseas eliminar esta experiencia?</span>
+            <template #footer>
+                <div class="dialog-footer">
+                <el-button @click="deleteExperienceDialogVisible = false">Cancelar</el-button>
+                <el-button type="primary" @click="confirmDeleteExperience">Confirmar</el-button>
+                </div>
+            </template>
+        </el-dialog>
+
+        <el-dialog
+            v-model="deleteFormationDialogVisible"
+            title="Confirmar eliminación"
+            width="400px"
+            center
+            >
+            <span>¿Estás seguro de que deseas eliminar esta formación?</span>
+            <template #footer>
+                <div class="dialog-footer">
+                <el-button @click="deleteFormationDialogVisible = false">Cancelar</el-button>
+                <el-button type="primary" @click="confirmDeleteFormation">Confirmar</el-button>
+                </div>
+            </template>
+        </el-dialog>
+
+        
     </div>
 
 </template>

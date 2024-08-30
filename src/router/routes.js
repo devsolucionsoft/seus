@@ -46,6 +46,41 @@ const routes = [
       name: 'createOffer',
       component: () => import('../pages/recruiter/SsCreateOffer.vue'),
     },
+    {
+      path: '/offers',
+      name: 'Offers',
+      component: () => import('../pages/recruiter/SsOffers.vue'),
+    },
+    {
+      path: '/offer',
+      name: 'Offer',
+      component: () => import('../pages/recruiter/SsOffer.vue'),
+    },
+    {
+      path: '/candidates',
+      name: 'Candidates',
+      component: () => import('../pages/recruiter/SsCandidates.vue'),
+    },
+    {
+      path: '/candidate-details',
+      name: 'CandidateDetails',
+      component: () => import('../pages/recruiter/SsCandidateDetails.vue'),
+    },
+    {
+      path: '/home-offers',
+      name: 'HomeOffers',
+      component: () => import('../pages/recruiter/SsHomeOffers.vue'),
+    },
+    {
+      path: '/home-offers',
+      name: 'HomeOffers',
+      component: () => import('../pages/recruiter/SsHomeOffers.vue'),
+    },
+    {
+      path: '/opportunity-market',
+      name: 'OpportunityMarket',
+      component: () => import('../pages/applicant/SsOpportunityMarket.vue'),
+    },
   ]
   
   export default routes

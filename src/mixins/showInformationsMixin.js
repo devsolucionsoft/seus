@@ -51,15 +51,6 @@ export default {
             this.loadFormationsFromLocalStorage();
             this.loadExperiencesFromLocalStorage();
             this.updatePersonalInfoItems();
-        },  
-        confirmDeleteExperience(index) {
-            if (confirm("¿Estás seguro de que deseas eliminar esta experiencia?")) {
-                this.deleteExperience(index);
-            }
-        },
-        deleteExperience(index) {
-            this.step4Data.experiences.splice(index, 1);
-            this.updateLocalStorage();
         },
         editExperienceEmit(index) {
             this.$emit('edit-step', 4);

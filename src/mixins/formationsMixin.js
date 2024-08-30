@@ -17,6 +17,8 @@ export default {
           { label: 'Fecha de terminación', name: 'endDate', placeholder: '', type: 'SsFormInput', inputType: 'date', required: true },
         ],
         editIndex: null,
+        deleteFormationDialogVisible: false,
+        formationToDeleteIndex: null,
       };
     },
     methods: {
@@ -51,10 +53,15 @@ export default {
         this.editIndex = index;
         this.showForm = true;
       },
-      confirmDeleteFormation(index) {
-        const confirmed = window.confirm('¿Estás seguro de que deseas eliminar esta formación?');
-        if (confirmed) {
-          this.deleteFormation(index);
+      openDeleteFormationDialogVisible(index) {
+          this.formationToDelete = index;
+          this.deleteFormationDialogVisible = true;
+      },
+      confirmDeleteFormation() {
+        if (this.formationToDelete !== null) {
+          this.deleteFormation(this.formationToDelete);
+          this.formationToDelete = null;
+          this.deleteFormationDialogVisible = false;
         }
       },
       deleteFormation(index) {

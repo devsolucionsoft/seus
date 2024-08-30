@@ -1,8 +1,8 @@
 <template>
     <div class="content">
         <SsHeader></SsHeader>
-        <SsBannerProfile :visibleSections="{ bannerImage: true, profileSection: true, basicInfo: true, otherElements: false }"></SsBannerProfile>
-        <SsCreateOffer></SsCreateOffer>
+        <SsBannerProfile :visibleSections="{ bannerImage: true, profileSection: true, basicInfo: true, otherElements: false }" :createOffer="true" :hideOnSmallScreens="true"></SsBannerProfile>
+        <SsOffer></SsOffer>
         <SsFooter></SsFooter>
     </div>
 </template>
@@ -11,7 +11,7 @@
 import SsHeader from '@/components/ss-header/SsHeader.vue';
 import SsFooter from '@/components/ss-footer/SsFooter.vue';
 import SsBannerProfile from '@/components/ss-aplicant/SsBannerProfile.vue';
-import SsCreateOffer from '@/components/ss-offers/SsCreateOffer.vue';
+import SsOffer from '@/components/ss-offers/SsOffer.vue';
 
 
 export default {
@@ -19,7 +19,7 @@ export default {
         SsHeader,
         SsFooter,
         SsBannerProfile,
-        SsCreateOffer
+        SsOffer
     },
 }
 </script>

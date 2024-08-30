@@ -12,7 +12,7 @@
             <button @click="editExperience(index)">
               <img src="@/assets/icons/whiteEdit.svg" alt="Edit">
             </button>
-            <button @click="confirmDeleteExperience(index)">
+            <button @click="openDeleteExperienceDialogVisible(index)">
               <img src="@/assets/icons/whiteDelete.svg" alt="Edit">
             </button>
           </div>
@@ -108,6 +108,21 @@
         </button>
       </form>
     </div>
+
+    <el-dialog
+      v-model="deleteExperienceDialogVisible"
+      title="Confirmar eliminación"
+      width="400px"
+      center
+    >
+      <span>¿Estás seguro de que deseas eliminar esta experiencia?</span>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="deleteExperienceDialogVisible = false">Cancelar</el-button>
+          <el-button type="primary" @click="confirmDeleteExperience">Confirmar</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
