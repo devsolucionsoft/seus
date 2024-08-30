@@ -11,100 +11,117 @@
             </div>
         </div>
         <div class="card" v-for="(offer, index) in pagedItems[currentPage]" :key="index">
-            <div class="header">
-                <div class="action">
-                    <span class="action-text">Compartir en redes</span>
+            <template v-if="offer.applied">
+                <div class="applied-card">
                     <div class="img-container">
-                        <img src="@/assets/icons/arrow-white.svg" alt="Arrow">
+                        <div class="inner-circle">
+                            <img src="@/assets/brands/nutresag.svg" alt="Person">
+                        </div>
+                    </div>
+                    <img class="success-image" src="@/assets/icons/starSuccess.svg" alt="Success">
+                    <div class="info">
+                        <span class="title">Aplicaste correctamente a esta oferta</span>
+                        <span class="desc">Se adjuntó el documento a tu postulación. Puedes modificarlo y añadir otros documentos.</span>
+                    </div>
+                    <router-link :to="{ name: 'myApplications' }" class="button">Volver al listado de ofertas</router-link>
+                </div>
+            </template>
+            <template v-else>
+                <div class="header">
+                    <div class="action">
+                        <span class="action-text">Compartir en redes</span>
+                        <div class="img-container">
+                            <img src="@/assets/icons/arrow-white.svg" alt="Arrow">
+                        </div>
+                    </div>
+                    <div class="action">
+                        <span class="action-text">Enviar a un amigo</span>
+                        <div class="img-container">
+                            <img src="@/assets/icons/small-text.svg" alt="text">
+                        </div>
                     </div>
                 </div>
-                <div class="action">
-                    <span class="action-text">Enviar a un amigo</span>
+                <div class="up">
                     <div class="img-container">
-                        <img src="@/assets/icons/small-text.svg" alt="text">
+                        <div class="inner-circle">
+                            <img src="@/assets/brands/nutresag.svg" alt="Person">
+                        </div>
+                    </div>
+                    <div class="invitation">
+                        <div class="up-section">
+                            <img src="@/assets/icons/suitcase.svg" alt="Suitcase">
+                            <div class="title-up-section">¿Porque trabajar con nosotros?</div>
+                        </div>
+                        <div class="text-invitation">En Nutresa, creemos firmemente en la importancia de mantener un equilibrio saludable entre la vida laboral y personal de nuestros empleados. Por ello, ofrecemos una serie de beneficios que buscan mejorar su bienestar y satisfacción. Entre ellos, se destaca el día libre en el cumpleaños de cada empleado, permitiéndoles disfrutar de su día especial sin preocupaciones laborales. Además, proporcionamos horarios flexibles, la opción de trabajar desde casa y actividades recreativas mensuales para fome.</div>
                     </div>
                 </div>
-            </div>
-            <div class="up">
-                <div class="img-container">
-                    <div class="inner-circle">
-                        <img src="@/assets/brands/nutresag.svg" alt="Person">
+                <div class="offer-details dashed-group info-group">
+                    <div class="element offer-title">{{ offer.name }}</div>
+                    <div class="element green-item">
+                        <div class="element-title">Cargo</div>
+                        <div class="element-info">Cajero</div>
+                    </div>
+                    <div class="element green-item">
+                        <div class="element-title">Salario</div>
+                        <div class="element-info">3.500.000 / 4.000.000</div>
+                    </div>
+                    <div class="element green-item">
+                        <div class="element-title">Ciudad</div>
+                        <div class="element-info">Bogotá</div>
+                    </div>
+                    <div class="element green-item">
+                        <div class="element-title">Vacante disponible</div>
+                        <div class="element-info">Cajero</div>
+                    </div>
+                    <div class="element green-item">
+                        <div class="element-title">Responsabilidades</div>
+                        <div class="element-info">Manejo de dinero</div>
+                    </div>
+                    <div class="element green-item">
+                        <div class="element-title">Fecha de cierre</div>
+                        <div class="element-info">30 de Julio de 2024</div>
                     </div>
                 </div>
-                <div class="invitation">
-                    <div class="up-section">
-                        <img src="@/assets/icons/suitcase.svg" alt="Suitcase">
-                        <div class="title-up-section">¿Porque trabajar con nosotros?</div>
+                <div class="requires dashed-group info-group">
+                    <div class="element green-item">
+                        <div class="element-title">Estudios requeridos</div>
+                        <div class="element-info">Bachillerato / Universidad</div>
                     </div>
-                    <div class="text-invitation">En Nutresa, creemos firmemente en la importancia de mantener un equilibrio saludable entre la vida laboral y personal de nuestros empleados. Por ello, ofrecemos una serie de beneficios que buscan mejorar su bienestar y satisfacción. Entre ellos, se destaca el día libre en el cumpleaños de cada empleado, permitiéndoles disfrutar de su día especial sin preocupaciones laborales. Además, proporcionamos horarios flexibles, la opción de trabajar desde casa y actividades recreativas mensuales para fome.</div>
-                </div>
-            </div>
-            <div class="offer-details dashed-group info-group">
-                <div class="element offer-title">{{ offer.name }}</div>
-                <div class="element green-item">
-                    <div class="element-title">Cargo</div>
-                    <div class="element-info">Cajero</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Salario</div>
-                    <div class="element-info">3.500.000 / 4.000.000</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Ciudad</div>
-                    <div class="element-info">Bogotá</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Vacante disponible</div>
-                    <div class="element-info">Cajero</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Responsabilidades</div>
-                    <div class="element-info">Manejo de dinero</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Fecha de cierre</div>
-                    <div class="element-info">30 de Julio de 2024</div>
-                </div>
-            </div>
-            <div class="requires dashed-group info-group">
-                <div class="element green-item">
-                    <div class="element-title">Estudios requeridos</div>
-                    <div class="element-info">Bachillerato / Universidad</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Conocimientos esperados</div>
-                    <div class="element-info">Manejo de clientes</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Experiencia Requerida</div>
-                    <div class="element-info">1 año mínimo</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Palabras clave de la vacante</div>
-                    <div class="element-info">Cajero</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Experiencia Requerida</div>
-                    <div class="element-info">E-mail / Mensaje en Plataforma</div>
-                </div>
-                <div class="element green-item">
-                    <div class="element-title">Correo para portulaciones</div>
-                    <div class="element-info">Vacante@gmail.com</div>
-                </div>
-            </div>
-            <div class="footer-offer">
-                <div class="offer-desc-up">
-                    <div class="title-footer">
-                        <img src="@/assets/icons/comment.svg" alt="message">
-                        <span>Descripción del empleo</span>
+                    <div class="element green-item">
+                        <div class="element-title">Conocimientos esperados</div>
+                        <div class="element-info">Manejo de clientes</div>
                     </div>
-                    <span class="desc">Habilidades de liderazgo y colaboración, con experiencia en dirigir equipos creativos hacia el logro de objetivos comunes, fomentando un ambiente de trabajo positivo y productivo.</span>
+                    <div class="element green-item">
+                        <div class="element-title">Experiencia Requerida</div>
+                        <div class="element-info">1 año mínimo</div>
+                    </div>
+                    <div class="element green-item">
+                        <div class="element-title">Palabras clave de la vacante</div>
+                        <div class="element-info">Cajero</div>
+                    </div>
+                    <div class="element green-item">
+                        <div class="element-title">Experiencia Requerida</div>
+                        <div class="element-info">E-mail / Mensaje en Plataforma</div>
+                    </div>
+                    <div class="element green-item">
+                        <div class="element-title">Correo para portulaciones</div>
+                        <div class="element-info">Vacante@gmail.com</div>
+                    </div>
                 </div>
-                <div class="actions">
-                    <button class="white button">Cancelar</button>
-                    <button class="blue button">Aplicar a la oferta</button>
+                <div class="footer-offer">
+                    <div class="offer-desc-up">
+                        <div class="title-footer">
+                            <img src="@/assets/icons/comment.svg" alt="message">
+                            <span>Descripción del empleo</span>
+                        </div>
+                        <span class="desc">Habilidades de liderazgo y colaboración, con experiencia en dirigir equipos creativos hacia el logro de objetivos comunes, fomentando un ambiente de trabajo positivo y productivo.</span>
+                    </div>
+                    <div class="actions">
+                        <button class="white button">Cancelar</button>
+                        <button class="blue button" @click="applyToOffer(index)">Aplicar a la oferta</button>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
         <div class="navigation-container">
             <span class="result">{{ pagedItems[currentPage].length }} resultados de alrededor de 141.746</span>
@@ -155,12 +172,17 @@ export default {
                 this.currentPage++;
             }
         },
+        applyToOffer(index) {
+            this.pagedItems[this.currentPage][index].applied = true;
+        }
     },
     created() {
         for (let i = 1; i <= 24; i++) {
             this.offers.push({
                 name: 'Cajero / Tiempo completo ' + i,
                 description: 'Descripción del cargo ' + i,
+                logo: '@/assets/brands/nutresag.svg',
+                applied: false
             });
         }
     }
@@ -405,6 +427,67 @@ export default {
                         border: 1px solid #0DC6DE
                         background-color: #0DC6DE
                         color:  #CDFDF3
+        .applied-card
+            display: flex
+            flex-direction: column
+            gap: 32px
+            align-items: center
+            justify-content: center
+            .img-container
+                min-width: 152px
+                height: 152px
+                border-radius: 50%
+                background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
+                padding: 5px
+                display: flex
+                align-items: center
+                justify-content: center
+                .inner-circle
+                    width: 100%
+                    height: 100%
+                    background-color: white
+                    border-radius: 50%
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    overflow: hidden
+                    img
+                        max-width: 77px    
+                        width: 100%
+                        object-fit: cover
+                        object-position: center
+            .info
+                display: flex
+                flex-direction: column
+                gap: 0
+                align-items: center
+                justify-content: center
+                @media(min-width: 1200px)
+                    gap: 32px
+                .title
+                    font-size: 24px
+                    font-weight: 700
+                    line-height: 29.26px
+                    text-align: center
+                    color: #023D6A
+                .desc
+                    font-size: 14px
+                    font-weight: 500
+                    line-height: 20px
+                    text-align: center
+                    color: #023D6A
+                    max-width: 70%
+            .button
+                padding: 12px 24px
+                border-radius:  28px
+                background-color: #0DC6DE
+                color: #CDFDF3
+                text-decoration: none
+                width: fit-content
+                font-size: 16px
+                font-weight: 600
+                line-height: 19.5px
+                text-align: center
 
     .navigation-container
         display: flex
