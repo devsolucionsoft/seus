@@ -81,6 +81,11 @@ const routes = [
       name: 'OpportunityMarket',
       component: () => import('../pages/applicant/SsOpportunityMarket.vue'),
     },
+    {
+      path: '/offer-detail',
+      name: 'OfferDetail',
+      component: () => import('../pages/applicant/SsOfferDetail.vue'),
+    },
   ]
   
   export default routes
