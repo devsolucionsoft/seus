@@ -86,6 +86,11 @@ const routes = [
       name: 'OfferDetail',
       component: () => import('../pages/applicant/SsOfferDetail.vue'),
     },
+    {
+      path: '/myApplications',
+      name: 'MyApplications',
+      component: () => import('../pages/applicant/SsMyApplications.vue'),
+    },
   ]
   
   export default routes

@@ -1,8 +1,8 @@
 <template>
     <div class="content">
         <SsHeader/>
-        <SsBannerProfile :visibleSections="{ bannerImage: true, profileSection: true, basicInfo: true, otherElements: false }" createOffer="true"/>
-        <SsCandidateDetails/>
+        <SsBannerProfile :visibleSections="{ bannerImage: true, profileSection: false, basicInfo: false, otherElements: false }"/>
+        <SsMyApplications/>
         <SsFooter/>
     </div>
 </template>
@@ -11,7 +11,7 @@
 import SsHeader from '@/components/ss-header/SsHeader.vue';
 import SsFooter from '@/components/ss-footer/SsFooter.vue';
 import SsBannerProfile from '@/components/ss-aplicant/SsBannerProfile.vue';
-import SsCandidateDetails from '@/components/ss-offers/SsCandidateDetails.vue';
+import SsMyApplications from '@/components/ss-aplicant/SsMyApplications.vue';
 
 
 export default {
@@ -19,12 +19,7 @@ export default {
         SsHeader,
         SsFooter,
         SsBannerProfile,
-        SsCandidateDetails
+        SsMyApplications
     },
 }
 </script>
-
-<style scoped lang="sass">
-
-
-</style>
