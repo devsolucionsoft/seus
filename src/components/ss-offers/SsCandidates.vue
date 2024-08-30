@@ -220,6 +220,7 @@ export default {
         display: flex
         flex-direction: column
         gap: 40px
+        align-items: center
         .up-section
             display: flex
             flex-direction: column
@@ -228,7 +229,7 @@ export default {
             display: flex
             flex-direction: column
             gap: 16px
-            align-content: center
+            align-item: center
             justify-content: center
             @media(min-width: 1200px)
                 flex-direction: row
@@ -267,7 +268,7 @@ export default {
             display: flex
             flex-direction: column
             gap: 16px
-            align-content: center
+            align-item: center
             justify-content: center
             .element
                 background-color: white

@@ -315,7 +315,7 @@
       color: #023D6A;
       padding: 0 0 24px 196px;
       border-bottom: 24px solid #601565;
-      max-width: 50vw;
+      width: calc(100% - 120px)
     }
 
     section .content{
@@ -326,12 +326,14 @@
       max-height: 200vh;
       background-image: url('../../assets/images/bgLogin.jpeg');
       background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+      margin-top: -48px;
+      justify-content: space-between
     }
 
     section .content .startCarrer{
       margin: 0;
       width: 100%;
-      padding: 70px 0;
+      padding: 118px 0;
       border-radius: 0.5rem;
       max-width: 800px;
       display: flex;
@@ -728,7 +730,8 @@
         flex-direction: column;
         align-items: center;
         max-height: none;
-        gap: 0
+        gap: 0;
+        margin-top: 0px;
       }
       
       section .content .startCarrer{
@@ -736,6 +739,7 @@
         border-radius: 0;
         padding-bottom: 24px;
         max-width: none;
+        padding: 24px 0;
       }
 
       section > .title{
@@ -757,6 +761,7 @@
         max-width: none;
         width: 100%;
         text-align: center;
+        padding: 0
       }
       section .content{
         padding: 0;

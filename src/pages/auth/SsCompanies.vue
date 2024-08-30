@@ -15,16 +15,16 @@
             <div class="element">
               <div class="input-wrapper">
                 <img src="@/assets/icons/person.svg" alt="Person Icon" class="input-icon">
-                <input type="text" id="names" v-model="names" required placeholder="Nombres">
+                <input type="text" id="names" v-model="names" required placeholder="Razón social">
               </div>
               <span v-if="namesError" class="error-message">{{ namesError }}</span>
             </div>
             <div class="element">
               <div class="input-wrapper">
                 <img src="@/assets/icons/person.svg" alt="Person Icon" class="input-icon">
-                <input type="text" id="lastNames" v-model="lastNames" required placeholder="Apellidos">
+                <input type="text" id="commercialName" v-model="commercialName" required placeholder="Nombre comercial">
               </div>
-              <span v-if="lastNamesError" class="error-message">{{ lastNamesError }}</span>
+              <span v-if="commercialNameError" class="error-message">{{ commercialNameError }}</span>
             </div>
             <div class="element">
               <div class="input-wrapper">
@@ -38,6 +38,7 @@
                 <div class="contentElement">
                   <select id="documentType" v-model="documentType" required>
                     <option value="" disabled selected>Tipo de Documento</option>
+                    <option value="NIT">NIT</option>
                     <option value="CC">Cédula de Ciudadanía</option>
                     <option value="TI">Tarjeta de Identidad</option>
                     <option value="CE">Cédula de Extranjería</option>
@@ -131,7 +132,7 @@
     data() {
       return {
         names: '',
-        lastNames: '',
+        commercialName: '',
         email: '',
         documentType: '',
         documentNumber: '',
@@ -141,7 +142,7 @@
         showPassword: false,
         showConfirmPassword: false,
         namesError: '',
-        lastNamesError: '',
+        commercialNameError: '',
         emailError: '',
         documentTypeError: '',
         documentNumberError: '',
@@ -160,12 +161,12 @@
         let isValid = true;
 
         if (!this.names) {
-          this.namesError = 'Los nombres son requeridos';
+          this.namesError = 'La razón social es requerida';
           isValid = false;
         }
 
-        if (!this.lastNames) {
-          this.lastNamesError = 'Los apellidos son requeridos';
+        if (!this.commercialName) {
+          this.commercialNameError = 'El nombre comercial es requeridos';
           isValid = false;
         }
 
@@ -249,7 +250,7 @@
       },
       resetErrors() {
         this.namesError = '';
-        this.lastNamesError = '';
+        this.comercialNameError = '';
         this.emailError = '';
         this.documentTypeError = '';
         this.documentNumberError = '';
@@ -273,8 +274,8 @@
       names(value) {
         if (value) this.namesError = '';
       },
-      lastNames(value) {
-        if (value) this.lastNamesError = '';
+      commercialName(value) {
+        if (value) this.commercialNameError = '';
       },
       email(value) {
         if (value && this.isValidEmail(value)) this.emailError = '';
@@ -315,7 +316,7 @@
       color: #023D6A;
       padding: 0 0 24px 196px;
       border-bottom: 24px solid #601565;
-      max-width: 50vw;
+      width: calc(100% - 120px)
     }
 
     section .content{
@@ -326,12 +327,14 @@
       max-height: 200vh;
       background-image: url('../../assets/images/bgLogin.jpeg');
       background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+      margin-top: -48px;
+      justify-content: space-between
     }
 
     section .content .startCarrer{
       margin: 0;
       width: 100%;
-      padding: 70px 0;
+      padding: 118px 0;
       border-radius: 0.5rem;
       max-width: 800px;
       display: flex;
@@ -728,18 +731,19 @@
         flex-direction: column;
         align-items: center;
         max-height: none;
-        gap: 0
+        gap: 0;
+        margin-top: 0px;
       }
       
       section .content .startCarrer{
         border-bottom: 1px solid #023D6A;
         border-radius: 0;
-        padding-bottom: 24px;
         max-width: none;
+        padding: 24px 0;
       }
 
       section > .title{
-        padding: 0px 
+        padding: 0 0 0 50px
       }
     }
     @media(max-width: 700px){
@@ -751,6 +755,7 @@
         max-width: none;
         width: 100%;
         text-align: center;
+        padding: 0
       }
       section .content{
         padding: 0;
