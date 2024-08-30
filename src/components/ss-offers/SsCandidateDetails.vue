@@ -78,7 +78,7 @@
                                     <img src="@/assets/icons/download.svg" alt="download">
                                     <span>Decargar PDF</span>
                                 </button>
-                                <button class="desktop">
+                                <button>
                                     <img src="@/assets/icons/print.svg" alt="print">
                                     <span>Imprimir</span>
                                 </button>

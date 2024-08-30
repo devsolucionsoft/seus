@@ -1,7 +1,5 @@
 <template>
     <div class="create-offer">
-        <span class="main-title">Detalles del empleo</span>
-
         <button @click="goBack" class="back-button">
             <img src="@/assets/icons/backArrow.svg" alt="<">
             <span>Volver</span>

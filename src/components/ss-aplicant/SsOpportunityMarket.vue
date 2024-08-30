@@ -1,7 +1,5 @@
 <template>
     <div class="cont">
-  
-        
         <div class="container">
             <div class="up-section">
                 <h2 class="main-title">MERCADO DE OPORTUNIDADES</h2>
@@ -66,7 +64,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -338,6 +335,7 @@ export default {
                                     line-height: 14.63px
                                     text-align: left
                                     margin-left: 20px
+                                    color: #023D6A
         .offers-container
             display: flex
             flex-direction: column
