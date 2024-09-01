@@ -19,4 +19,13 @@ export const userTypeConfig = {
         { path: "/offertsMarket", label: "Buscar ofertas" }
       ]
     },
+    coach: {
+      name: "Francisco",
+      subtitle: "¡Bienvenido!",
+      image: require('@/assets/images/person.webp'),
+      routes: [
+        { path: "/coachs", label: "Coach's" },
+        { path: "/coachs", label: "Buscar coach’s" },
+      ]
+    },
   };
