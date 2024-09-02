@@ -99,7 +99,7 @@ const routes = [
     {
       path: '/coach',
       name: 'Coach',
-      component: () => import('../pages/coach/SsCoachs.vue'),
+      component: () => import('../pages/coach/SsCoach.vue'),
     },
   ]
   
