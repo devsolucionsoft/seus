@@ -298,6 +298,8 @@ export default {
             line-height: 19.5px
             text-align: left
             color: #8E8E93
+            @media(max-width: 1200px)
+                display: none
         .pagination
             display: flex
             flex-direction: row
