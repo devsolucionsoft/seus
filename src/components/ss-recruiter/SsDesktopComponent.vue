@@ -17,7 +17,7 @@
     
         <section class="form first">
             <form @submit.prevent="submitForm">
-                <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.name === 'linkedin' ? 'linkedin' : '']">
+                <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.icon === 'true' ? 'icon-container' : '']">
                     <label :for="field.name">{{ field.label }}</label>
                     <component
                         :is="field.type"
@@ -29,7 +29,18 @@
                         :label="field.label"
                         @change="handleInputChange(field.name)"
                     />
-                    <img v-if="field.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
+                    <img 
+                        v-if="field.name === 'instagram'" 
+                        src="@/assets/icons/light-blue-ig.svg" 
+                        alt="Instagram Logo" 
+                        class="icon" 
+                        />
+                    <img 
+                        v-else-if="field.name === 'linkedin'" 
+                        src="@/assets/icons/linkedin.svg" 
+                        alt="LinkedIn Logo" 
+                        class="icon" 
+                    />
                 </div>
             </form>
         </section>
@@ -62,7 +73,6 @@
                         :label="field.label"
                         @change="handleInputChange(field.name)"
                     />
-                    <img v-if="field.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
                 </div>
             </form>
         </section>
@@ -201,9 +211,9 @@
             font-weight: 500
             color: #023d6a
 
-        &.linkedin
+        &.icon-container
             position: relative
-            .linkedin-icon
+            .icon
                 position: absolute
                 bottom: 0
                 right: 11px

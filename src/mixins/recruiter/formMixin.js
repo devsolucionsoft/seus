@@ -9,8 +9,8 @@ export default {
               { label: 'Correo corporativo', name: 'email', type: 'SsFormInput', placeholder: 'Escribe aquí...', inputType: 'text' },
               { label: 'Celular', name: 'phone', type: 'SsFormInput', placeholder: 'Escribe aquí...', inputType: 'number' },
               { label: 'Página web', name: 'webPage', type: 'SsFormInput', placeholder: 'Escribe aquí...', inputType: 'text' },
-              { label: 'LinkedIn', name: 'linkedin', type: 'SsFormInput', placeholder: 'Escribe aquí...', inputType: 'text' },
-              { label: 'Instagram', name: 'instagram', type: 'SsFormInput', placeholder: 'Escribe aquí...', inputType: 'text' },
+              { label: 'LinkedIn', name: 'linkedin', type: 'SsFormInput', placeholder: 'Escribe aquí...', inputType: 'text', icon: 'true' },
+              { label: 'Instagram', name: 'instagram', type: 'SsFormInput', placeholder: 'Escribe aquí...', inputType: 'text', icon: 'true' },
             ],
             formData: (() => {
               const stepsDataRecruiter = JSON.parse(localStorage.getItem('stepsDataRecruiter')) || {};

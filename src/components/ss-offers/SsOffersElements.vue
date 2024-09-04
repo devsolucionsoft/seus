@@ -72,14 +72,17 @@
                         <div class="actions">
                             <div class="action-element">
                                 <span>Estado del empleo</span>
-                                <ElSelect v-model="element.jobStatus">
-                                    <ElOption label="Activo" value="activo"></ElOption>
-                                    <ElOption label="Pausa" value="pausa"></ElOption>
-                                </ElSelect>
+                                <div class="select-wrapper">
+                                    <div class="status-indicator" v-if="element.jobStatus === 'activo'"></div>
+                                    <ElSelect :class="jobStatusClass(element)" v-model="element.jobStatus">
+                                      <ElOption label="Activo" value="activo"></ElOption>
+                                      <ElOption label="Pausa" value="pausa"></ElOption>
+                                    </ElSelect>
+                                </div>
                             </div>
                             <div class="action-element">
                                 <span>Acciones</span>
-                                <ElSelect v-model="element.action">
+                                <ElSelect v-model="element.action" :class="actionClass(element)">
                                     <ElOption label="Editar" value="editar"></ElOption>
                                     <ElOption label="Eliminar" value="eliminar"></ElOption>
                                 </ElSelect>
@@ -115,7 +118,7 @@ export default {
         return {
             items: [],
             currentPage: 0,
-            itemsPerPage: 6
+            itemsPerPage: 6,
         };
     },
     computed: {
@@ -128,9 +131,21 @@ export default {
         },
         maxPage() {
             return this.pagedItems.length - 1;
-        }
+        },
     },
     methods: {
+        actionClass(element) {
+            return {
+                'edit-action': element.action === 'editar',
+                'delete-action': element.action === 'eliminar',
+            };
+        },
+        jobStatusClass(element) {
+            return {
+                'active-job': element.jobStatus === 'activo',
+                'paused-job': element.jobStatus === 'pausa',
+            };
+        },
         prevPage() {
             if (this.currentPage > 0) {
                 this.currentPage--;
@@ -162,6 +177,35 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+
+
+.el-select
+    --el-select-border-color-hover: #9CFBEF !important
+    --el-select-disabled-color: #9CFBEF !important
+    --el-select-disabled-border: #9CFBEF !important
+    --el-select-font-size: #9CFBEF !important
+    --el-select-close-hover-color: #9CFBEF !important
+    --el-select-input-color: #023D6A !important
+    --el-select-multiple-input-color: #9CFBEF !important
+    --el-select-input-focus-border-color: #9CFBEF !important
+    --el-select-input-font-size: 12px !important
+    font-weight: 500
+    line-height: 14.63px
+    text-align: center
+
+.select-wrapper
+    display: flex
+    align-items: center
+    position: relative
+    
+.status-indicator 
+    width: 8px
+    height: 8px
+    background-color: #1CC74D
+    border-radius: 50%
+    position: absolute
+    left: 12px
+    z-index: 1
 
 .cont   
     padding: 16px 16px 59px 16px

@@ -9,7 +9,6 @@
             <div class="header-section">
                 <span>Cajero / Tiempo completo</span>
             </div>
-            
             <div class="group">
                 <div
                   v-for="(groupItems, groupIndex) in groupedItems"
@@ -46,11 +45,7 @@
 </template>
   
 <script>
-
-import offer from '@/mixins/createOffer/offer.js';
-
-  
-  
+import offer from '@/mixins/createOffer/offer.js';  
 export default {
     mixins: [offer],
     name: 'createOffer',
@@ -68,7 +63,7 @@ export default {
     width: 100%
     display: flex
     flex-direction: column
-    gap: 24px
+    gap: 56px
     @media(min-width: 1200px)
         gap: 44px
 

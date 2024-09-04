@@ -225,6 +225,7 @@ export default {
             display: flex
             flex-direction: column
             gap: 24px
+            width: 100%
         .top
             display: flex
             flex-direction: column
@@ -270,6 +271,7 @@ export default {
             gap: 16px
             align-item: center
             justify-content: center
+            width: 100%
             .element
                 background-color: white
                 padding: 20px
@@ -334,6 +336,7 @@ export default {
                         row-gap: 16px
                         align-items: center
                         width: 100%
+                        justify-content: flex-start
                         @media(min-width: 1200px)
                             justify-content: space-evenly
                         .detail
@@ -397,14 +400,13 @@ export default {
                             background-color: white
                             border-radius: 50%
                             display: flex
-                            align-items: center
+                            align-items: flex-start
                             justify-content: center
                             overflow: hidden
                             img
                                 max-width: 63px
                                 object-fit: cover       
-                            
-                            
+                                scale: 1.6         
         .navigation
             display: flex
             flex-direction: row

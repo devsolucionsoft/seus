@@ -168,10 +168,6 @@
         right: 184px
 
       .img-container
-        height: 26px
-        width: 26px
-        background-color: #0DC6DE
-        border-radius: 50px
         display: flex
         justify-content: center
         align-items: center
@@ -180,10 +176,11 @@
           max-height: 19px
           max-width: 20px
 
-        span
-          font-size: 14px
-          font-weight: 500
-          color: #333
+      span
+        font-size: 12px
+        font-weight: 500
+        line-height: 15px
+        color: #290A29
 
   .profile-section
     margin-top: -80px

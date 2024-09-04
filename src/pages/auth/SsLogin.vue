@@ -151,7 +151,7 @@ export default {
         height: 100vh;
         margin: 0;
         padding: 0;
-        font-family: 'Inter';
+        font-family: 'Inter' !important;
         position: relative;
         overflow: hidden;
         display: flex;
@@ -189,6 +189,7 @@ export default {
         color: #CDFDF3;
         text-decoration: none;
         z-index: 3;
+        font-family: 'Inter' !important;
     }
     .page-container .container .form-section form .element span{
         font-size: 12px;
@@ -253,6 +254,7 @@ export default {
         line-height: 16.94px;
         text-align: left;
         color: white;
+        font-family: 'Inter' !important;
     }
     .page-container .container .form-section form .element .inputElement{
         display: flex;
@@ -271,6 +273,7 @@ export default {
         border-bottom: 1px solid #CDFDF3;
         outline: none;
         box-shadow: none;
+        font-family: 'Inter' !important;
     }
     .page-container .container .form-section form .element input::placeholder{
         color: #CDFDF3;
@@ -288,6 +291,7 @@ export default {
         line-height: 19.36px;
         text-align: center;
         max-width: 114px;
+        font-family: 'Inter' !important;
     }
     .page-container .container .form-section form button:hover {
         background: #0bb5c9;
@@ -350,6 +354,7 @@ export default {
         line-height: 12.1px;
         text-align: left;
         color: white;
+        font-family: 'Inter' !important;
     }
     .page-container footer .poweredby p a{
         font-size: 10px;

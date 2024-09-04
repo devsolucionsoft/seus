@@ -15,7 +15,7 @@
                 <div class="applied-card">
                     <div class="img-container">
                         <div class="inner-circle">
-                            <img src="@/assets/brands/nutresag.svg" alt="Person">
+                            <img src="@/assets/brands/nutresa.svg" alt="Person">
                         </div>
                     </div>
                     <img class="success-image" src="@/assets/icons/starSuccess.svg" alt="Success">
@@ -44,7 +44,7 @@
                 <div class="up">
                     <div class="img-container">
                         <div class="inner-circle">
-                            <img src="@/assets/brands/nutresag.svg" alt="Person">
+                            <img src="@/assets/brands/nutresa.svg" alt="Person">
                         </div>
                     </div>
                     <div class="invitation">
@@ -181,7 +181,7 @@ export default {
             this.offers.push({
                 name: 'Cajero / Tiempo completo ' + i,
                 description: 'Descripción del cargo ' + i,
-                logo: '@/assets/brands/nutresag.svg',
+                logo: '@/assets/brands/nutresa.svg',
                 applied: false
             });
         }

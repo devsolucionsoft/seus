@@ -222,7 +222,7 @@ export default {
                 labels: ['Servicio al cliente', 'Ingeniero', 'Planning', 'Branding', '+4'],
                 addInfo: 'Flexible para trabajar',
                 salary: '3’000.000',
-                img: require('@/assets/images/person.webp')
+                img: require('@/assets/images/coach.webp')
             });
         }
     },
@@ -373,6 +373,8 @@ export default {
                     line-height: 29.26px
                     text-align: left
                     color: #023D6A
+                    @media (min-width: 1200px)
+                        white-space: nowrap
                 .filters-container
                     display: flex
                     flex-direction: column
@@ -416,9 +418,7 @@ export default {
                                     line-height: 14.63px
                                     text-align: left
                                     margin-left: 20px
-                                    
-                            
-
+                                    color: #023D6A
         .aplicants-container
             display: flex
             flex-direction: column
@@ -474,14 +474,18 @@ export default {
                                 background-color: white
                                 border-radius: 50%
                                 display: flex
-                                align-items: flex-start
+                                align-items: flex-end
                                 justify-content: center
                                 overflow: hidden
                                 img
                                     max-width: 56px
+                                    max-height: 56px
                                     object-fit: cover
-                                    scale: 1.6
-                                    object-position: top center
+                                    scale: 1.9
+                                    @media(min-width: 1200px)
+                                        width: 81px
+                                        height: 81px
+                                        box-shadow: none
                         .information
                             display: flex
                             flex-direction: column
@@ -518,7 +522,7 @@ export default {
                         padding: 0 96px 12px 0
                         .label
                             border-radius: 30px
-                            background-color: #A8A8A8
+                            background-color: #ABB7C2
                             padding: 6px 14px
                             font-size: 12px
                             font-weight: 400
