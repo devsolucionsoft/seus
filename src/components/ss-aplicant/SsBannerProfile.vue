@@ -1,13 +1,20 @@
 <template>
     <section v-if="!hideOnSmallScreens || windowWidth >= 1200" class="banner-profile">
         <div v-if="visibleSections.bannerImage" class="banner-image">
-          <img :src="backgroundImageBanner" alt="Background" class="background">
+          <div :class="{'background-container': true, 'blue-overlay': $route.query.userType === 'coach'}">
+            <img v-if="$route.query.userType === 'coach'" :src="backgroundImageBannerCoach" alt="Background" class="background center">
+            <img v-else :src="backgroundImageBanner" alt="Background" class="background top">
+          </div>
           <button @click="changeBackground" class="edit-btn">
             <span>Editar</span>
             <div class="img-container">
               <img src="@/assets/icons/edit.svg" alt="Editar">
             </div>
           </button>
+          <div v-if="$route.query.userType === 'coach'" class="coachs-title">
+            <img src="@/assets/images/bg-coach.svg" alt="bg-image">
+            <h1>MENTORES</h1>
+          </div>
         </div>
         <div v-if="visibleSections.profileSection" class="profile-section">
           <div class="profile-image" @click="changeProfileImage">
@@ -79,6 +86,7 @@
     data() {
       return {
         backgroundImageBanner: require('@/assets/images/bgProfileImageBanner.webp'),
+        backgroundImageBannerCoach: require('@/assets/images/bgProfileImageBannerCoach.webp'),
         profileImage: require('@/assets/images/bgProfileImage.webp'),
         cameraIcon: require('@/assets/icons/camera.svg'),
         lineTextColor: '#761D74',
@@ -143,13 +151,50 @@
     position: relative
     display: flex
 
-    img.background
+    .background-container
+      position: relative
       width: 100%
       max-height: 112px
-      object-fit: cover
-      object-position: top
-      @media(min-width: 768px)
-        max-height: 237px
+      @media (min-width: 768px) 
+        max-height: 360px
+      
+
+      img.background
+        width: 100%
+        max-height: 100%
+        object-fit: cover
+        display: block
+        &.center
+          object-position: center
+        &.top
+          object-position: top
+      
+      &.blue-overlay
+        &::before
+          content: ''
+          position: absolute
+          top: 0
+          left: 0
+          width: 100%
+          height: 100%
+          background-color: rgba(39, 59, 74, 0.6)
+          pointer-events: none
+          
+    .coachs-title
+      position: absolute
+      left: 196px
+      bottom: 60px
+      @media(max-width: 768px)
+        display: none
+      h1
+        font-size: 66px
+        font-weight: 700
+        line-height: 68px
+        text-align: left
+        color: #CDFDF3
+        position: absolute
+        bottom: 59px
+        left: 44px
 
     .edit-btn
       position: absolute
