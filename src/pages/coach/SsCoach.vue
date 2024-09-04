@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div class="content clean">
         <SsHeader/>
         <SsBannerProfile :visibleSections="{ bannerImage: true, profileSection: false, basicInfo: false, otherElements: false }"/>
         <SsCoach/>

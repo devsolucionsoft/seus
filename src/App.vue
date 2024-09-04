@@ -14,6 +14,7 @@
 
 *{
   box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
 }
 
 button{
@@ -42,10 +43,41 @@ h1,h2,h3,h4,h5,h6,p{
   .content{
     background-color: white;
     background-image: url('./assets/images/bgWhiteSection.png');
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
   }
+  .content.clean{
+    background: white;
+  }
 }
+
+select, textarea, input{
+  font-family: 'Montserrat';
+}
+
+.el-select__wrapper{
+  border-radius: 50px !important;
+}
+
+.el-select__placeholder {
+  color: #023D6A !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 14.63px !important;
+  box-shadow: none !important;
+}
+
+.active-job .el-select__wrapper{
+  background-color: #9CFBEF !important;
+  padding-left: 25px;
+  position: relative;
+}
+
+.paused-job .el-select__wrapper{
+  background-color: #F9F9F9 !important;
+}
+
+
 
 </style>

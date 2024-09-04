@@ -4,17 +4,21 @@
             <h2>Configura esta sección para un perfil más detallado.</h2>
             <div v-for="(option, index) in options" :key="index" class="option-group">
                 <h3>{{ option.title }}</h3>
-                <div class="options">
-                    <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
-                    <div 
-                        class="image-container" 
-                        :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" 
-                        @click="toggleSelection(`${index}-${idx}`)"
-                    >
-                        <img :src="item.image" :alt="item.label" />
+                <div class="options-wrapper">
+                    <button v-if="showLeftArrow[index]" @click="scrollLeft(index)" class="scroll-button left">‹</button>
+                    <div class="options" :ref="'options-' + index">
+                        <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
+                            <div 
+                                class="image-container" 
+                                :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" 
+                                @click="toggleSelection(`${index}-${idx}`)"
+                            >
+                                <img :src="item.image" :alt="item.label" />
+                            </div>
+                            <p>{{ item.label }}</p>
+                        </div>
                     </div>
-                    <p>{{ item.label }}</p>
-                    </div>
+                    <button v-if="showRightArrow[index]" @click="scrollRight(index)" class="scroll-button right">›</button>
                 </div>
             </div>
             <p class="description">{{ finalNote }}</p>
@@ -65,44 +69,41 @@
                             <img src="@/assets/icons/mailBox.svg" alt="">
                             <span>Guardar</span>
                         </button>
+                        <button class="transparent" type="submit">
+                            <img src="@/assets/icons/plus.svg" alt="">
+                            <span>Añadir</span>
+                        </button>
                     </div>
                 </form>
             </div>
-    
-            <div v-for="(formation, index) in formations" :key="index" class="formation-item">
-                <div class="header-element element">
-                    <p v-if="isMostRecent(formation)">Último estudio realizado</p>
-                </div>
-                <div class="element">
-                    <div class="up">
-                        <span>Titulo obtenido</span>
-                    </div>
-                    <span>{{ formation.title }}</span>
-                </div>
-                <div class="element">
-                    <div class="up">
-                        <span>Institución</span>
-                    </div>
-                    <span>{{ formation.institution }}</span>
-                </div>
-                <div class="element">
-                    <div class="up">
-                        <span>Fecha de certificación</span>
-                    </div>
-                    <span>{{ formatDate(formation.startDate) }} - {{ formatDate(formation.endDate) }}</span>
-                </div>
-    
-                <div class="button-container element">
-                    <button @click="editFormation(index)" class="blue" type="submit">
-                        <img src="@/assets/icons/edit2.svg" alt="Edit">
-                        <span>Editar</span>
-                    </button>
-    
-                    <button @click="openDeleteFormationDialogVisible(index)" class="transparent" type="submit">
-                        <img src="@/assets/icons/delete.svg" alt="">
-                        <span>Eliminar</span>
-                    </button>
-    
+            
+            <div class="formations-elements">
+                <div v-for="(formation, index) in formations" :key="index" class="form-modal">
+                    <form class="grouped" @submit.prevent="saveFormation">
+                        <div class="form-group" v-for="(field, index) in formationFormFields" :key="index">
+                            <label :for="field.name">{{ field.label }}</label>
+                            <component
+                                :is="field.type"
+                                :key="index"
+                                v-model="formation[field.name]"
+                                :label="field.label"
+                                :placeholder="field.placeholder"
+                                :type="field.inputType"
+                                :required="field.required"
+                                :id="field.name"
+                            />
+                        </div>
+                        <div class="button-container">
+                            <button @click="openDeleteFormationDialogVisible(index)" class="purple" type="submit">
+                                <span>Eliminar</span>
+                                <img src="@/assets/icons/trash.svg" alt="">
+                            </button>
+                            <button @click="editFormation(index)" class="ultrawhite" type="submit">
+                                <img src="@/assets/icons/edit.svg" alt="">
+                                <span>Editar</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </section>
@@ -170,52 +171,87 @@
                     
                     <div class="button-container">
                         <button class="blue" type="submit">
-                            <img src="@/assets/icons/mailBox.svg" alt="">
+                            <img src="@/assets/icons/mailBox.svg" alt="save">
                             <span>Guardar</span>
                         </button>
     
                         <button class="white">
-                            <img src="@/assets/icons/plus.svg" alt="">
+                            <img src="@/assets/icons/plus.svg" alt="add">
                             <span>Añadir</span>
                         </button>
                     </div>
                 </form>
             </div>
     
-            <div v-for="(experience, index) in experiences" :key="index" class="experience-item">
-                <div class="header-element element">
-                    <p v-if="experience.currentWork">Trabaja aquí actualmente</p>
-                </div>
-    
-                <div class="element">
-                    <div class="up">
-                        <span>Cargo</span>
-                    </div>
-                    <span>{{ experience.position }}</span>
-                </div>
-    
-                <div class="element">
-                    <div class="up">
-                        <span>Empresa</span>
-                    </div>
-                    <span>{{ experience.company }}</span>
-                </div>
-                <div class="element">
-                    <div class="up">
-                        <span>Tiempo de duración</span>
-                    </div>
-                    <span>{{ formatDate(experience.startDate) }} - {{ formatDate(experience.endDate) }}</span>
-                </div>
-    
-                <div class="button-container element">
-                    <button class="blue" @click="editExperience(index)">
-                        <img src="@/assets/icons/whiteEdit.svg" alt="Edit">
-                        <span>Editar</span>
-                    </button>
-                    <button class="white" @click="openDeleteExperienceDialogVisible(index)">
-                        <img src="@/assets/icons/whiteDelete.svg" alt="Edit">
-                        <span>Eliminar</span>
-                    </button>
+            <div class="experiences-items">
+                <div v-for="(experience, index) in experiences" :key="index" class="form-modal">
+                    <form class="grouped" @submit.prevent="saveExperience">
+                        <div
+                        :class="[
+                            'form-group',
+                            { formToggle: field.type === 'SsFormToggle' }
+                        ]"
+                        v-for="(field, index) in experiencesFormFields"
+                        :key="index"
+                        >
+                        <label :for="field.name">{{ field.label }}</label>
+                        <component
+                            :is="field.type"
+                            :key="index"
+                            v-model="experience[field.name]"
+                            :label="field.label"
+                            :placeholder="field.placeholder"
+                            :type="field.inputType"
+                            :inputType="field.inpuType"
+                            :required="field.required"
+                            :id="field.name"
+                        />
+                        </div>
+        
+        
+                        <div class="form-group attachments-form-group">
+                            <label class="attachments" for="attachments">
+                                <div class="addMedia">
+                                    <img src="@/assets/icons/clip.svg" alt="Clip">
+                                    <span>
+                                        Añadir certificación, fotos o premios
+                                    </span>
+                                    <span class="optional">
+                                        Opcional
+                                    </span>
+                                </div>
+                            </label>
+                            <input
+                                type="file"
+                                id="attachments"
+                                @change="handleFileUpload"
+                                multiple
+                                accept="image/*"
+                            />
+                            <div class="previews">
+                                <img
+                                v-for="(attachment, index) in newExperience.attachments"
+                                :key="index"
+                                :src="attachment"
+                                class="preview-image"
+                                alt="Vista previa"
+                                />
+                            </div>
+                            <p class="description">{{ experiencesFinalNote }}</p>
+                        </div>
+                        
+                        <div class="button-container">
+                            <button class="blue-text">
+                                <span>Eliminar</span>
+                                <img src="@/assets/icons/white-delete.svg" alt="delete">
+                            </button>
+        
+                            <button class="bgwhite-txblack">
+                                <span>Editar</span>
+                                <img src="@/assets/icons/edit.svg" alt="edit">
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </section>
@@ -300,6 +336,8 @@
         data() {
             return {
                 finalNote: 'Elegir una cultura específica no te descarta de ningún proceso.',
+                showLeftArrow: [],
+                showRightArrow: [],
             };
         },
         components:{
@@ -308,6 +346,43 @@
             SsFormTextarea,
             SsFormToggle,
         },
+        mounted() {
+            this.checkArrowsVisibility();
+        },
+        methods: {
+            scrollLeft(index) {
+                const optionsContainer = this.$refs[`options-${index}`][0];
+                optionsContainer.scrollBy({ left: -178, behavior: 'smooth' });
+                this.updateArrows(index);
+            },
+            scrollRight(index) {
+                const optionsContainer = this.$refs[`options-${index}`][0];
+                optionsContainer.scrollBy({ left: 178, behavior: 'smooth' });
+                this.updateArrows(index);
+            },
+            updateArrows(index) {
+                this.$nextTick(() => {
+                    const optionsContainer = this.$refs[`options-${index}`][0];
+                    this.showLeftArrow[index] = optionsContainer.scrollLeft > 0;
+                    this.showRightArrow[index] = optionsContainer.scrollLeft < (optionsContainer.scrollWidth - optionsContainer.clientWidth);
+                });
+            },
+            checkArrowsVisibility() {
+                this.$nextTick(() => {
+                    this.options.forEach((_, index) => {
+                        this.updateArrows(index);
+                    });
+                });
+            }
+        },
+        watch: {
+            options: {
+                handler() {
+                    this.checkArrowsVisibility();
+                },
+                immediate: true
+            }
+        }
     };
 </script>
   
@@ -345,45 +420,62 @@
       text-align: left
       color: #023D6A
       margin: 0
-
-    .options
-      display: flex
-      width: 100%
-      overflow-x: auto
-      scrollbar-width: none
-      -webkit-overflow-scrolling: touch
-      gap: 32px
-
-      .option-item
+    .options-wrapper
+        position: relative
         display: flex
-        flex-direction: column
         align-items: center
-        text-align: center
-        padding: 11px 24px
-        gap: 10px
-        cursor: pointer
+        .options
+            display: flex
+            width: 100%
+            overflow-x: auto
+            scrollbar-width: none
+            -webkit-overflow-scrolling: touch
+            gap: 32px
 
-        .image-container
-          background: #761D74
-          height: 112px
-          width: 112px
-          border-radius: 100px
-          display: flex
-          align-items: center
-          justify-content: center
-          transition: background 0.3s ease-in-out
+            .option-item
+                display: flex
+                flex-direction: column
+                align-items: center
+                text-align: center
+                padding: 11px 24px
+                gap: 10px
+                cursor: pointer
 
-          &.selected
-            background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
-            transition: background 0.3s ease-in-out
+                .image-container
+                    background: #761D74
+                    height: 112px
+                    width: 112px
+                    border-radius: 100px
+                    display: flex
+                    align-items: center
+                    justify-content: center
+                    transition: background 0.3s ease-in-out
 
-        p
-          font-size: 14px
-          font-weight: 500
-          line-height: 17.07px
-          text-align: center
-          color: #350D34
+                    &.selected
+                        background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
+                        transition: background 0.3s ease-in-out
 
+                p
+                font-size: 14px
+                font-weight: 500
+                line-height: 17.07px
+                text-align: center
+                color: #350D34
+        .scroll-button
+            position: absolute
+            top: 50%
+            transform: translateY(-50%)
+            color: #191F27
+            border: none
+            cursor: pointer
+            z-index: 1
+            font-size: 50px
+    
+            &.left
+                left: -20px
+    
+            &.right
+                right: -20px
   .description
     font-size: 14px
     font-weight: 400
@@ -442,6 +534,10 @@
     display: flex
     flex-direction: column
     gap: 34px
+    .formations-elements
+        display: flex
+        flex-direction: column
+        gap: 32px
     .form-modal
         display: flex
         flex-direction: column
@@ -459,6 +555,10 @@
             gap: 32px
             align-items: center
             justify-content: space-between
+            padding-bottom: 10px
+            border-bottom: 1px solid #FFFFFF
+            &.grouped
+                border-bottom: none
             .form-group
                 display: flex
                 flex-direction: column
@@ -477,51 +577,6 @@
 
                 &:nth-child(3), &:nth-child(4)
                     grid-column: span 1
-            
-
-    .formation-item
-        border-top: 1px dashed white
-        padding-top: 32px
-        display: grid
-        grid-template-columns: repeat(6, 1fr)
-        gap: 32px
-        align-items: center
-        justify-content: space-between
-        .header-element
-            display: flex
-            flex-direction: row
-            align-items: center
-            justify-content: space-between
-            p
-                padding: 1px 12px
-                background-color: #023D6A
-                border-radius: 30px
-                color: #EDEEF1
-                font-size: 12px
-                font-weight: 500
-                line-height: 20px
-                text-align: left
-        .element
-            display: flex
-            flex-direction: column
-            gap: 15px
-            .up
-                span
-                    font-size: 14px
-                    font-weight: 500
-                    line-height: 20px
-                    text-align: left
-                    color: #023D6A
-                    white-space: nowrap
-
-            &:nth-child(1), &:nth-child(5)
-                grid-column: span 6
-            &:nth-child(2), &:nth-child(3),&:nth-child(4)
-                grid-column: span 2
-        .header-element
-            display: flex
-            width: fit-content
-
 .button-container
     display: flex
     flex-direction: row !important
@@ -535,8 +590,13 @@
         align-items: center
         justify-content: center
         gap: 10px
-        padding: 9px 24px
+        padding: 5px 16px
         border-radius: 28px
+        span
+            font-size: 12px
+            font-weight: 500
+            line-height: 14.63px
+            text-align: center
         &.blue
             background-color: #0DC6DE
             border: 1px solid #0DC6DE
@@ -547,6 +607,20 @@
         &.white
             border: 1px solid white
             background-color: transparent
+        &.purple
+            border: 1px solid #761D74
+            background-color: transparent
+            color: #290A29
+        &.ultrawhite
+            border: 1px solid #EDEEF1
+            background-color: #EDEEF1
+        &.blue-text
+            border: 1px solid #CDFDF3
+            color: #CDFDF3
+        &.bgwhite-txblack
+            border: 1px solid #EDEEF1
+            background-color: #EDEEF1
+            color: #290A29
 
 .experiences
     padding: 40px 197px
@@ -572,6 +646,10 @@
             gap: 32px
             align-items: center
             justify-content: space-between
+            padding-bottom: 42px
+            border-bottom: 1px solid #FFFFFF
+            &.grouped
+                border-bottom: none
             .form-group
                 display: flex
                 flex-direction: column
@@ -633,49 +711,6 @@
 
                     input
                         display: none
-
-    .experience-item
-        border-top: 1px dashed white
-        padding-top: 32px
-        display: grid
-        grid-template-columns: repeat(6, 1fr)
-        gap: 32px
-        align-items: center
-        justify-content: space-between
-        .header-element
-            display: flex
-            flex-direction: row
-            align-items: center
-            justify-content: space-between
-            p
-                padding: 1px 12px
-                background-color: white
-                border-radius: 30px
-                color: black
-                font-size: 12px
-                font-weight: 500
-                line-height: 20px
-                text-align: left
-        .element
-            display: flex
-            flex-direction: column
-            gap: 15px
-            .up
-                span
-                    font-size: 14px
-                    font-weight: 500
-                    line-height: 20px
-                    text-align: left
-                    color: white
-                    white-space: nowrap
-
-            &:nth-child(1), &:nth-child(5)
-                grid-column: span 6
-            &:nth-child(2), &:nth-child(3),&:nth-child(4)
-                grid-column: span 2
-        .header-element
-            display: flex
-            width: fit-content
 .additional-info
     padding: 40px 197px
     background-color: white

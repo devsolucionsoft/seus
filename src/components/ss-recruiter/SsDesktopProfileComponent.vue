@@ -27,13 +27,24 @@
                             <span>{{ item.title }}</span>
                         </div>
                         <p>
-                            <img v-if="item.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
-                            <template v-if="item.isToggle">
-                                <SsFormToggle v-model="item.willingToRelocate" :isEditable="isEditing" />
-                            </template>
-                            <template v-else>
-                                {{ item.value !== null && item.value !== '' ? item.value : 'N/A' }}
-                            </template>
+                          <img 
+                            v-if="item.name === 'instagram'" 
+                            src="@/assets/icons/blue-ig.svg" 
+                            alt="Instagram Logo" 
+                            class="instagram-icon" 
+                          />
+                          <img 
+                            v-else-if="item.name === 'linkedin'" 
+                            src="@/assets/icons/bluelinkedin.svg" 
+                            alt="LinkedIn Logo" 
+                            class="linkedin-icon" 
+                          />
+                          <template v-if="item.isToggle">
+                              <SsFormToggle v-model="item.willingToRelocate" :isEditable="isEditing" />
+                          </template>
+                          <template v-else>
+                              {{ item.value !== null && item.value !== '' ? item.value : 'N/A' }}
+                          </template>
                         </p>
                     </div>
                 </div>
@@ -65,7 +76,6 @@
                             <span>{{ item.title }}</span>
                         </div>
                         <p>
-                            <img v-if="item.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
                             <template v-if="item.isToggle">
                                 <SsFormToggle v-model="item.willingToRelocate" :isEditable="isEditing" />
                             </template>
@@ -255,6 +265,10 @@
                         flex-direction: row
                         align-items: center
                         gap: 10px
+                        margin-left: 12px
+                        img
+                          width: 32px
+                          height: 32px
 
                 &.green-items
                     .title

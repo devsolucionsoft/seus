@@ -202,7 +202,7 @@ export default {
                 city: 'Bogotá',
                 endDate: '30 de Julio de 2024',
                 salary: '3.500.000 / 4.000.000',
-                img: require('@/assets/brands/nutresag.svg')
+                img: require('@/assets/brands/nutresa.svg')
             });
         }
     },
@@ -492,7 +492,7 @@ export default {
                         display: flex
                         align-items: center
                         justify-content: center
-                        background-color: #0DC6DE
+                        background-color: #023D6A
                         text-decoration: none
                         align-self: center
                         margin-top: 18px
@@ -501,7 +501,7 @@ export default {
                             font-weight: 600
                             line-height: 19.5px
                             text-align: center
-                            color: #CDFDF3
+                            color: white
             .navigation
                 display: flex
                 flex-direction: row

@@ -5,21 +5,21 @@ export default {
         step1Data: null,
         step2Data: null,
         personalInfoItems: [
-            { title: 'Nivel profesional', value: '', icon: require('@/assets/icons/reviewIcons/suitcase.svg'), name: 'professionalLevel' },
-            { title: 'Rango Salarial', value: '', icon: require('@/assets/icons/reviewIcons/wallet.svg'), name: 'salaryRange', class: 'dashed-box' },
-            { title: 'Nombre', value: '', icon: null, name: 'fullName', class: 'green-items' },
-            { title: 'Profesion', value: '', icon: null, name: 'profession', class: 'green-items' },
-            { title: 'Especialización', value: '', icon: null, name: 'specialization', class: 'green-items' },
-            { title: 'Número de documento', value: '', icon: null, name: 'documentNumber', class: 'green-items' },
-            { title: 'Ciudad donde busco', value: '', icon: null, name: 'city', class: 'green-items' },
-            { title: 'Abierto a nueva ubicación', value: '', icon: null, name: 'willingToRelocate', class: 'toggle-element', isToggle: true },
-            { title: 'Correo electrónico', value: '', icon: null, name: 'email', class: 'green-items' },
-            { title: 'Número de celular', value: '', icon: null, name: 'phoneNumber', class: 'green-items' },
-            { title: 'Red profesional', value: '', name: 'linkedin', class: 'green-items dashed-box', icon: null },
-            { title: 'Valor agregado personal', value: '', icon: require('@/assets/icons/reviewIcons/like.svg'), name: 'addedValue',},
-            { title: 'Lo que me hace feliz', value: '', icon: require('@/assets/icons/reviewIcons/heart.svg'), name: 'happiness',},
-            { title: 'Talento profesional', value: '', icon: require('@/assets/icons/reviewIcons/star.svg'), name: 'professionalTalent',},
-            { title: 'Ideas, proyectos o actividades a futuro', value: '', icon: require('@/assets/icons/reviewIcons/sun.svg'), name: 'ideas', },
+            { title: 'Nivel profesional', value: '', icon: require('@/assets/icons/reviewIcons/suitcase.svg'), name: 'professionalLevel', group: 1 },
+            { title: 'Rango Salarial', value: '', icon: require('@/assets/icons/reviewIcons/wallet.svg'), name: 'salaryRange', group: 1 },
+            { title: 'Nombre', value: '', icon: null, name: 'fullName', class: 'green-items', group: 2 },
+            { title: 'Profesion', value: '', icon: null, name: 'profession', class: 'green-items', group: 2 },
+            { title: 'Especialización', value: '', icon: null, name: 'specialization', class: 'green-items', group: 2 },
+            { title: 'Número de documento', value: '', icon: null, name: 'documentNumber', class: 'green-items', group: 2 },
+            { title: 'Ciudad donde busco', value: '', icon: null, name: 'city', class: 'green-items', group: 2 },
+            { title: 'Abierto a nueva ubicación', value: '', icon: null, name: 'willingToRelocate', class: 'toggle-element', isToggle: true, group: 2 },
+            { title: 'Correo electrónico', value: '', icon: null, name: 'email', class: 'green-items', group: 2 },
+            { title: 'Número de celular', value: '', icon: null, name: 'phoneNumber', class: 'green-items', group: 2 },
+            { title: 'Red profesional', value: '', name: 'linkedin', class: 'green-items', icon: null, group: 2 },
+            { title: 'Valor agregado personal', value: '', icon: require('@/assets/icons/reviewIcons/like.svg'), name: 'addedValue', group: 3},
+            { title: 'Lo que me hace feliz', value: '', icon: require('@/assets/icons/reviewIcons/heart.svg'), name: 'happiness', group: 3},
+            { title: 'Talento profesional', value: '', icon: require('@/assets/icons/reviewIcons/star.svg'), name: 'professionalTalent', group: 3},
+            { title: 'Ideas, proyectos o actividades a futuro', value: '', icon: require('@/assets/icons/reviewIcons/sun.svg'), name: 'ideas', group: 3},
         ]
         };
     },
@@ -36,6 +36,16 @@ export default {
         },
         filteredSections() {
             return this.filteredOptions.filter(section => section.selectedItems && section.selectedItems.length > 0);
+        },
+        groupedItems() {
+            return this.personalInfoItems.reduce((groups, item) => {
+                const groupIndex = item.group;
+                if (!groups[groupIndex]) {
+                    groups[groupIndex] = [];
+                }
+                groups[groupIndex].push(item);
+                return groups;
+            }, {});
         },
     },
     mounted() {

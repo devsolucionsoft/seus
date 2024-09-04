@@ -18,10 +18,10 @@
 
 <script setup>
 import { ref } from 'vue';
-import cocacola from '@/assets/brands/cocacolag.png';
-import bancolombia from '@/assets/brands/bancolombiag.png';
-import nutresa from '@/assets/brands/nutresag.png';
-import velez from '@/assets/brands/velezg.png';
+import cocacola from '@/assets/brands/cocacolag.svg';
+import bancolombia from '@/assets/brands/bancolombiag.svg';
+import nutresa from '@/assets/brands/nutresag.svg';
+import velez from '@/assets/brands/velezg.svg';
 
 const images = ref([
     {url: cocacola, alt: 'Coca Cola'},

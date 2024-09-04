@@ -1,7 +1,7 @@
 <template>
   <div class="step2">
     <form @submit.prevent="submitForm">
-      <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.name === 'linkedin' ? 'linkedin' : '']">
+      <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.icon === 'true' ? 'icon-container' : '']">
         <label :for="field.name">{{ field.label }}</label>
         <component
           :is="field.type"
@@ -14,7 +14,18 @@
           :class="{'switch-label': field.type === 'SsFormToggle'}"
           @change="handleInputChange(field.name)"
         />
-        <img v-if="field.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
+        <img 
+            v-if="field.name === 'instagram'" 
+            src="@/assets/icons/light-blue-ig.svg" 
+            alt="Instagram Logo" 
+            class="icon" 
+            />
+        <img 
+            v-else-if="field.name === 'linkedin'" 
+            src="@/assets/icons/linkedin.svg" 
+            alt="LinkedIn Logo" 
+            class="icon" 
+        />
       </div>
     </form>
   </div>
@@ -59,9 +70,9 @@
         line-height: 20px
         text-align: left
         color: #023D6A
-      &.linkedin
+      &.icon-container
         position: relative
-        .linkedin-icon
+        .icon
           position: absolute
           bottom: 0
           right: 11px

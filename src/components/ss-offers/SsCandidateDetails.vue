@@ -89,9 +89,19 @@
             </div>
         
             <div class="cards-elements">
-                <div class="personal-info card" v-if="personalInfoItems">
-                    <div class="group" v-for="(item, index) in personalInfoItems" :key="index" :class="item.class">
-                        <div class="group-info-element">
+                <div class="personal-info card" v-if="groupedItems">
+                    <span class="head-title">Datos personales</span>
+                    <div
+                      v-for="(groupItems, groupIndex) in groupedItems"
+                      :key="groupIndex"
+                      class="dashed-group"
+                    >
+                        <div
+                            v-for="(item, index) in groupItems"
+                            :key="index"
+                            :class="item.class"
+                            class="group-info-element"
+                        >
                             <div class="title">
                                 <div v-if="item.icon">
                                     <img :src="item.icon" alt="Icon">
@@ -99,7 +109,7 @@
                                 <span>{{ item.title }}</span>
                             </div>
                             <p>
-                                <img v-if="item.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
+                                <img v-if="item.name === 'linkedin'" src="@/assets/icons/bluelinkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
                                 <template v-if="item.isToggle">
                                     <SsFormToggle v-model="item.willingToRelocate" :isEditable="false" />
                                 </template>
@@ -117,7 +127,6 @@
                     </div>
                     <div class="formation-container">
                         <div v-for="(formation, index) in formations" :key="index" class="formation-item">
-                
                             <div class="header-element">
                                 <p v-if="isMostRecent(index)">Último estudio realizado</p>
                             </div>
@@ -225,10 +234,6 @@ import showInformationsMixin from '@/mixins/showInformationsMixin';
 import formationsMixin from '@/mixins/formationsMixin.js';
 import experiencesMixin from '@/mixins/experiencesMixin.js';
 import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
-
-
-
-
 export default {
     name: 'CandidateDetails',
     mixins: [showInformationsMixin, formationsMixin, experiencesMixin],
@@ -537,6 +542,68 @@ export default {
                 &.personal-info
                     box-shadow: 0px 4px 10px 0px #00000026
                     background-color: white
+                    gap: 0
+                    .head-title
+                        color: #023D6A
+                        font-family: Montserrat
+                        font-size: 20px
+                        font-weight: 600
+                        line-height: 26px
+                        text-align: left
+                        @media(min-width: 1200px)
+                            display: none
+                    .dashed-group
+                        padding: 24px 0
+                        gap: 16px
+                        display: flex
+                        flex-direction: column
+                        border-bottom: 1px dashed #9E9E9E
+                        &:last-child
+                            border-bottom: none
+                            padding-bottom: 0
+                        .group-info-element
+                            display: flex
+                            flex-direction: column
+                            gap: 12px
+                            .title
+                                display: flex
+                                flex-direction: row
+                                align-items: center
+                                gap: 7px
+                            span
+                                font-size: 14px
+                                font-weight: 500
+                                line-height: 20px
+                                text-align: left
+                                color: #47586E
+                            p
+                                font-size: 16px
+                                font-weight: 500
+                                line-height: 24px
+                                text-align: left
+                                color: #023D6A
+                                display: flex
+                                flex-direction: row
+                                align-items: center
+                                gap: 10px
+                            &.green-items
+                                .title
+                                    span
+                                        font-size: 12px
+                                        font-weight: 500
+                                        line-height: 20px
+                                        text-align: left
+                                        color: #05454E
+                                        padding: 1px 12px
+                                        background-color: #CDFDF3
+                                        border-radius: 30px
+                                p
+                                    margin-left: 12px
+                            &.toggle-element
+                                flex-direction: row      
+                                justify-content: space-between
+                                @media(min-width: 1200px)
+                                    flex-direction: column
                 &.formations
                     background-color: #C6CBD2
                     box-shadow: 0px 4px 10px 0px #00000026
@@ -698,56 +765,6 @@ export default {
                             line-height: 17.07px
                             text-align: center
                             color: #350D34
-                .group
-                    display: flex
-                    flex-direction: column
-                    gap: 16px
-                    .group-info-element
-                        display: flex
-                        flex-direction: column
-                        gap: 12px
-                        .title
-                            display: flex
-                            flex-direction: row
-                            align-items: center
-                            gap: 7px
-                        span
-                            font-size: 14px
-                            font-weight: 500
-                            line-height: 20px
-                            text-align: left
-                            color: #47586E
-                        p
-                            font-size: 16px
-                            font-weight: 500
-                            line-height: 24px
-                            text-align: left
-                            color: #023D6A
-                            display: flex
-                            flex-direction: row
-                            align-items: center
-                            gap: 10px
-                    &.dashed-box
-                        border-bottom: 1px dashed #9E9E9E
-                        padding-bottom: 24px
-                    &.green-items
-                        .group-info-element
-                            .title
-                                span
-                                    font-size: 12px
-                                    font-weight: 500
-                                    line-height: 20px
-                                    text-align: left
-                                    color: #05454E
-                                    padding: 1px 12px
-                                    background-color: #CDFDF3
-                                    border-radius: 30px
-                            p
-                                margin-left: 12px
-                    &.toggle-element
-                        .group-info-element
-                            flex-direction: row      
-                            justify-content: space-between
             .information-cards
                 .formation-container
                     display: flex
@@ -963,59 +980,27 @@ export default {
                 .personal-info
                     grid-area: 1 / 1 / 2 / 3
                     width: 100%
-                    flex-direction: column
                     padding: 66px 64px
                     box-shadow: 0px 4px 10px 0px #00000026
                     border-radius: 8px
-                    display: grid
-                    grid-template-columns: repeat(3, 1fr)
-                    grid-template-rows: repeat(7, 1fr)
-                    gap: 24px
+                    display: flex
+                    flex-direction: column
                     background-color: white
-                    .group 
-                        &:nth-child(1)
-                            grid-area: 1 / 1 / 2 / 2
+                    .dashed-group
+                        display: grid !important
+                        gap: 24px !important
                         &:nth-child(2)
-                            grid-area: 1 / 3 / 2 / 4
-
+                            grid-template-columns: repeat(2, 1fr)
+                            grid-template-rows: repeat(1, 1fr)
                         &:nth-child(3)
-                            grid-area: 2 / 1 / 3 / 2
-
+                            grid-template-columns: repeat(3, 1fr)
+                            grid-template-rows: repeat(3, 1fr)
                         &:nth-child(4)
-                            grid-area: 2 / 2 / 3 / 3
-
-                        &:nth-child(5)
-                            grid-area: 2 / 3 / 3 / 4
-
-                        &:nth-child(6)
-                            grid-area: 3 / 1 / 4 / 2
-
-                        &:nth-child(7)
-                            grid-area: 3 / 2 / 4 / 3
-
-                        &:nth-child(8)
-                            grid-area: 3 / 3 / 4 / 4
-
-                        &:nth-child(9)
-                            grid-area: 4 / 1 / 5 / 2
-
-                        &:nth-child(10)
-                            grid-area: 4 / 2 / 5 / 3
-
-                        &:nth-child(11)
-                            grid-area: 4 / 3 / 5 / 4
-
-                        &:nth-child(12)
-                            grid-area: 5 / 1 / 6 / 4
-
-                        &:nth-child(13)
-                            grid-area: 6 / 1 / 7 / 2
-
-                        &:nth-child(14)
-                            grid-area: 6 / 3 / 7 / 4
-
-                        &:nth-child(15)
-                            grid-area: 7 / 1 / 8 / 4
-
+                            grid-template-columns: repeat(2, 1fr)
+                            grid-template-rows: repeat(3, 1fr)
+                            .group-info-element
+                                &:nth-child(1), &:nth-child(4)
+                                    grid-column: span 2
+                            
 
 </style>
