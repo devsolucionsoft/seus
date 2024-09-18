@@ -10,6 +10,11 @@ const routes = [
       component: () => import('../pages/auth/SsLogin.vue'),
     },
     {
+      path: '/forgotten-password',
+      name : 'forgottenPassword',
+      component: () => import('../pages/auth/SsForgottenPassword.vue'),
+    },
+    {
       path: '/companies',
       name : 'companies',
       component: () => import('../pages/auth/SsCompanies.vue'),
