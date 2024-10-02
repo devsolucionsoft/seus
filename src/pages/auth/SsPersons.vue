@@ -11,7 +11,7 @@
             <div class="lineTitle"></div>
           </div>
 
-          <form @submit.prevent="validateForm" novalidate>
+          <form ref="opportunityForm" @submit.prevent="validateForm" novalidate>
             <div class="element">
               <div class="input-wrapper">
                 <img src="@/assets/icons/person.svg" alt="Person Icon" class="input-icon">
@@ -61,10 +61,10 @@
                 <img @click="togglePasswordVisibility('showPassword')" style="cursor: pointer;" src="@/assets/icons/hidden-eye.svg" alt="Eye Icon" class="eye-icon">
               </div>
               <div class="password-strength-bar">
-                <div class="strength-bar weak"></div>
-                <div class="strength-bar moderate"></div>
-                <div class="strength-bar strong"></div>
-                <div class="strength-bar very-strong"></div>
+                <div class="strength-bar weak hide"></div>
+                <div class="strength-bar moderate hide"></div>
+                <div class="strength-bar strong hide"></div>
+                <div class="strength-bar very-strong hide"></div>
               </div>
               <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
             </div>
@@ -104,12 +104,12 @@
                   
                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
                 </p>
-                <button>Acepto términos y condiciones</button>
+                <button @click="acceptTermsAndCloseModal">Acepto términos y condiciones</button>
               </div>
             </div>
           </div>
         </div>
-        <SsOpportunityMarket/>
+        <SsOpportunityMarket @focus-form="focusForm"/>
       </div>
     </section>
     <SsFooter></SsFooter>
@@ -260,6 +260,10 @@
       submitForm() {
         // Código para enviar el formulario
       },
+      acceptTermsAndCloseModal() {
+        this.acceptTerms = true; // Marca el checkbox
+        this.hideTermsModal(); // Cierra el modal
+      },
       showTermsModal() {
         this.termsModalVisible = true;
         document.body.classList.add('modal-open');
@@ -267,7 +271,14 @@
       hideTermsModal() {
         this.termsModalVisible = false;
         document.body.classList.remove('modal-open');
+      },
+      focusForm() {
+      const form = this.$refs.opportunityForm;
+      if (form) {
+        form.scrollIntoView({ behavior: "smooth" });
+        form.querySelector('input').focus(); // Focaliza el primer input del formulario
       }
+    },
     },
     watch: {
       names(value) {
@@ -559,7 +570,6 @@
     section .content .startCarrer form .password-strength-bar {
       width: 100%;
       height: 2px;
-      background-color: #e6e6e6;
       border-radius: 4px;
       margin-top: 4px;
       display: flex;
@@ -590,19 +600,19 @@
     }
 
     .weak.hide {
-    background-color: transparent !important;
+      background-color: #e6e6e6 !important;
     }
 
     .moderate.hide {
-      background-color: transparent !important;
+      background-color: #e6e6e6 !important;
     }
 
     .strong.hide {
-      background-color: transparent !important;
+      background-color: #e6e6e6 !important;
     }
 
     .very-strong.hide {
-      background-color: transparent !important;
+      background-color: #e6e6e6 !important;
     }
 
     .modal {
@@ -666,6 +676,7 @@
       overflow-y: auto;
       height: 100%;
       border-radius:  0 0 12px 12px;
+      margin-top: 0;
     }
     
     .modal-content .content h5{

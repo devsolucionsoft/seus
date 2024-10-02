@@ -12,7 +12,7 @@
         <div class="container">
             <div class="form-section">
                 <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
-                <form  @submit.prevent="validateForm" novalidate>
+                <form @submit.prevent="validateForm" novalidate>
                     <div class="element">
                         <div class="input">
                             <label for="email">Usuario</label>
@@ -33,7 +33,7 @@
                         </div>
                         <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
                     </div>   
-                    <button type="submit">Ingresar</button>
+                    <button @click="login" type="submit">Ingresar</button>
                     <router-link to="/forgotten-password" class="forgotten-password">
                         ¿Olvidaste tu contraseña?
                     </router-link>
@@ -68,6 +68,10 @@
 import speakerImg from '@/assets/images/speaker.webp';
 import cityImg from '@/assets/images/city.webp';
 import micImg from '@/assets/images/mic.webp';
+import store from 'store2';
+import { useAuthService } from '@/services/auth/useAuthService';
+/* import { decodeJWT } from '../../utils/decodejwt'; */
+import router from '../../router';
 
 export default {
     data() {
@@ -100,6 +104,23 @@ export default {
         }
     },
     methods: {
+        async login(){
+            const authService = useAuthService();
+            try {
+                const response = await authService.login({username: this.email, password: this.password});
+                if(response && response.status === 200){
+                    const token = response?.data?.data?.token;
+                    store.set('token', token);
+                    /* const tokenInfo = decodeJWT(token);
+                    if(tokenInfo.includes('Admin')){
+                    } */
+                   router.push({name: 'configProfile'});
+                }
+            } catch (error) {
+                console.log(error);
+                return error;
+            }
+        },
         expandImage(index) {
             this.expandedIndex = index;
         },
