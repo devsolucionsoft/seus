@@ -1,7 +1,9 @@
 <template>
     <div class="page-container">
         <div class="container">
-            <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
+            <router-link to="/">
+                <img src="@/assets/logo.png" alt="SEUS Talent Logo" class="logo">
+            </router-link>
             <div class="figure">
                 <div class="title">
                     <h1>Reestablecer contraseña</h1>

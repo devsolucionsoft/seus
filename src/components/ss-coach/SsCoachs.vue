@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                         </div>
-                        <router-link :to="{ name: 'Coach' }" class="button">
+                        <router-link :to="{ name: 'coach', params: { id: 1 } }" class="button">
                             <img src="@/assets/icons/star-success-blue.svg" alt="Frame">
                             <span>Ver Coach</span>
                         </router-link>
@@ -69,7 +69,7 @@
 
 <script>
 export default {
-    name: 'Coachs',
+    name: 'coachs',
     data() {
         return {
             selectedRole: '',

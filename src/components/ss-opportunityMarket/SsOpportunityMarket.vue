@@ -9,7 +9,7 @@
                 <div class="opportunity">
                     <div class="logoOpportunity">
                         <div class="inner-circle">
-                            <img src="@/assets/brands/nutresag.svg" alt="">
+                            <img src="@/assets/brands/nutresa.svg" alt="">
                         </div>
                     </div>
                     <div class="cardOpportunityContainer">
@@ -26,19 +26,19 @@
                             </p>
                         </div>
                         <div class="actionsContainer">
-                            <button class="readMore">Leer más</button>
-                            <button class="applyOfert">Aplicar a oferta</button>
+                            <button class="readMore" @click="notifyFocusForm">Leer más</button>
+                            <button class="applyOfert" @click="notifyFocusForm">Aplicar a oferta</button>
                         </div>
                     </div>
                     <div class="extraActions">
-                        <button class="ask"><img src="@/assets/icons/star.svg" alt=""><span>Preguntar</span></button>
-                        <button class="recommend"><img src="@/assets/icons/recomendationArrow.svg" alt=""><span>Recomendar</span></button>
+                        <button class="ask"  @click="notifyFocusForm"><img src="@/assets/icons/star.svg" alt=""><span>Preguntar</span></button>
+                        <button class="recommend" @click="notifyFocusForm"><img src="@/assets/icons/recomendationArrow.svg" alt=""><span>Recomendar</span></button>
                     </div>
                 </div>
                 <div class="opportunity">
                     <div class="logoOpportunity">
                         <div class="inner-circle">
-                            <img src="@/assets/brands/nutresag.svg" alt="">
+                            <img src="@/assets/brands/nutresa.svg" alt="">
                         </div>
                     </div>
                     <div class="cardOpportunityContainer">
@@ -55,25 +55,35 @@
                             </p>
                         </div>
                         <div class="actionsContainer">
-                            <button class="readMore">Leer más</button>
-                            <button class="applyOfert">Aplicar a oferta</button>
+                            <button @click="notifyFocusForm" class="readMore">Leer más</button>
+                            <button @click="notifyFocusForm" class="applyOfert">Aplicar a oferta</button>
                         </div>
                     </div>
                     <div class="extraActions">
-                        <button class="ask"><img src="@/assets/icons/star.svg" alt=""><span>Preguntar</span></button>
-                        <button class="recommend"><img src="@/assets/icons/recomendationArrow.svg" alt=""><span>Recomendar</span></button>
+                        <button @click="notifyFocusForm" class="ask"><img src="@/assets/icons/star.svg" alt=""><span>Preguntar</span></button>
+                        <button @click="notifyFocusForm" class="recommend"><img src="@/assets/icons/recomendationArrow.svg" alt=""><span>Recomendar</span></button>
                     </div>
                 </div>
                 
             </div>
         </div>
-        <div class="downSection">
+        <!-- <div class="downSection">
             <button class="applies"><img src="@/assets/icons/applies.svg" alt=""></button>
             <button class="video"><img src="@/assets/icons/play.svg" alt=""></button>
             <button class="companies"><img src="@/assets/icons/companyp.svg" alt=""></button>
-        </div>
+        </div> -->
     </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    notifyFocusForm() {
+      this.$emit("focus-form");
+    },
+  },
+};
+</script>
 
 <style scoped>
 
@@ -130,11 +140,12 @@
     gap: 29px;
     position: relative;
     overflow: visible;
+    align-items: center;
 }
 
 .opportunityMarket .upSection .opportunitysContainer .opportunity .logoOpportunity {
     position: absolute;
-    left: 18px;
+    left: 36px;
     top: -48px;
     width: 96px;
     height: 96px;
