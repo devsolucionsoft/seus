@@ -71,10 +71,10 @@
             <div class="select-wrapper">
               <div class="contentElement">
                 <select id="documentType" v-model="documentType" required>
-                  <option value="" disabled selected>Tipo de Documento</option>
-                  <option value="CC">Cédula de Ciudadanía</option>
-                  <option value="TI">Tarjeta de Identidad</option>
-                  <option value="CE">Cédula de Extranjería</option>
+                  <option value="" disabled>Tipo de Documento</option>
+                  <option v-for="doc in typeDocuments" :key="doc.id" :value="doc.id">
+                    {{ doc.type }}
+                  </option>
                 </select>
                 <div class="custom-arrow">
                   <img src="@/assets/icons/down-arrow.svg" alt="Custom Arrow" />
@@ -157,9 +157,7 @@
                 class="eye-icon"
               />
             </div>
-            <span v-if="confirmPasswordError" class="error-message">{{
-              confirmPasswordError
-            }}</span>
+            <span v-if="confirmPasswordError" class="error-message">{{ confirmPasswordError }}</span>
           </div>
           <div class="element">
             <label class="checkbox-label">
@@ -279,6 +277,7 @@ export default {
       termsModalVisible: false,
       passwordStrengthMessage: "",
       passwordStrengthClass: "",
+      typeDocuments: []
     };
   },
   async mounted() {
@@ -289,11 +288,11 @@ export default {
       try {
         const response = await typeDocuments.listTypeDocuments();
         if (response && response.status === 200) {
-          console.log(response.data.data);
+          console.log(response.data.data)
+          this.typeDocuments = response.data.data;
         }
       } catch (error) {
         console.log(error);
-        // ElMessage.error(error);
       }
     },
     validateForm() {
