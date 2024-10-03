@@ -120,6 +120,9 @@
   import SsHeader from '@/components/ss-header/SsHeader.vue';
   import SsFooter from '@/components/ss-footer/SsFooter.vue';
   import SsOpportunityMarket from '@/components/ss-opportunityMarket/SsOpportunityMarket.vue';
+  import { ElMessage } from 'element-plus';
+  import { useTypeDocument } from '@/services/globals/useTypeDocument.js';
+
 
   export default {
     name: 'Companies',
@@ -154,6 +157,16 @@
       };
     },
     methods: {
+      async listTypeDocuments () {
+        const typeDocuments = useTypeDocument();
+        try {
+          const response = await typeDocuments.listTypeDocuments();
+          console.log(response.data.data);
+        } catch (error) {
+          console.log(error);
+          ElMessage.error(error);
+        }
+      },
       validateForm() {
         this.resetErrors();
 
@@ -305,7 +318,10 @@
       acceptTerms(value) {
         if (value) this.acceptTermsError = '';
       }
-    }
+    },
+    async mounted(){
+      await this.listTypeDocuments() 
+    },
   };
 </script>
 

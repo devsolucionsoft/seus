@@ -9,6 +9,7 @@ const login = async (data) => {
     throw error;
   }
 };
+
 export const useAuthService = () => {
   return { login };
 };
