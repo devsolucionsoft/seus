@@ -6,7 +6,7 @@ const login = async (data) => {
     return response;
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 };
 export const useAuthService = () => {

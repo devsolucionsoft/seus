@@ -1,112 +1,147 @@
 const routes = [
-    {
-      path: '/register',
-      name : 'register',
-      component: () => import('../components/ss-register/SsRegister.vue'),
-    },
+  //No auth pages
     {
       path: '/',
-      name : 'signIn',
+      name: 'signIn',
       component: () => import('../pages/auth/SsLogin.vue'),
     },
+
     {
       path: '/forgotten-password',
-      name : 'forgottenPassword',
+      name: 'forgottenPassword',
       component: () => import('../pages/auth/SsForgottenPassword.vue'),
     },
+
     {
       path: '/companies',
-      name : 'companies',
+      name: 'companies',
       component: () => import('../pages/auth/SsCompanies.vue'),
     },
+
     {
       path: '/persons',
-      name : 'persons',
+      name: 'persons',
       component: () => import('../pages/auth/SsPersons.vue'),
     },
+    
+    // Página no encontrada (404)
     {
-      path: '/configProfile',
-      name : 'configProfile',
+      path: '/:pathMatch(.*)*', // Captura rutas no encontradas
+      name: 'notFound',
+      component: () => import('../pages/NotFound.vue'),
+    },
+
+  // Candidate Pages
+    {
+      path: '/config-profile',
+      name: 'configProfile',
       component: () => import('../pages/applicant/SsConfigProfile.vue'),
+      meta: { requiresAuth: true, role: 'Candidate' }, // Protegida por autenticación
     },
+
     {
-      path: '/configRecruiterProfile',
-      name : 'configRecruiterProfile',
+      path: '/my-applications',
+      name: 'myApplications',
+      component: () => import('../pages/applicant/SsMyApplications.vue'),
+      meta: { requiresAuth: true },
+    },
+
+  // Recruiter Pages
+    {
+      path: '/config-recruiter-profile',
+      name: 'configRecruiterProfile',
       component: () => import('../pages/recruiter/SsConfigRecruiterProfile.vue'),
+      meta: { requiresAuth: true, role: 'Admin' },
     },
-    {
-      path: '/successRegister',
-      name : 'successRegister',
-      component: () => import('../pages/applicant/SsSuccessRegister.vue'),
-      props: route => ({ userType: route.query.userType }),
-    },
-    {
-      path: '/profile',
-      name : 'profile',
-      component: () => import('../pages/applicant/SsProfile.vue'),
-      props: route => ({ userType: route.query.userType || 'person' }),
-    },
+
     {
       path: '/create-offer',
       name: 'createOffer',
       component: () => import('../pages/recruiter/SsCreateOffer.vue'),
+      meta: { requiresAuth: true, role: 'Admin' },
     },
+
     {
       path: '/offers',
-      name: 'Offers',
+      name: 'offers',
       component: () => import('../pages/recruiter/SsOffers.vue'),
+      meta: { requiresAuth: true, role: 'Admin' },
     },
+    
     {
-      path: '/offer',
-      name: 'Offer',
+      path: '/offer/:id',
+      name: 'offer',
       component: () => import('../pages/recruiter/SsOffer.vue'),
+      meta: { requiresAuth: true, role: 'Admin' },
+      props: true, // Habilitar recibir el ID como prop
     },
+
     {
       path: '/candidates',
-      name: 'Candidates',
+      name: 'candidates',
       component: () => import('../pages/recruiter/SsCandidates.vue'),
+      meta: { requiresAuth: true, role: 'Admin' },
     },
+
     {
-      path: '/candidate-details',
-      name: 'CandidateDetails',
+      path: '/candidate-details/:id',
+      name: 'candidateDetails',
       component: () => import('../pages/recruiter/SsCandidateDetails.vue'),
+      meta: { requiresAuth: true, role: 'Admin' },
+      props: true,
     },
+
     {
       path: '/home-offers',
-      name: 'HomeOffers',
+      name: 'homeOffers',
       component: () => import('../pages/recruiter/SsHomeOffers.vue'),
+      meta: { requiresAuth: true, role: 'Admin' },
     },
+
+  //Candidate and Companie Pages
     {
-      path: '/home-offers',
-      name: 'HomeOffers',
-      component: () => import('../pages/recruiter/SsHomeOffers.vue'),
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../pages/applicant/SsProfile.vue'),
+      meta: { requiresAuth: true, role: 'Candidate' },
     },
+ 
     {
       path: '/opportunity-market',
-      name: 'OpportunityMarket',
+      name: 'opportunityMarket',
       component: () => import('../pages/applicant/SsOpportunityMarket.vue'),
+      meta: { requiresAuth: true },
     },
+
     {
-      path: '/offer-detail',
-      name: 'OfferDetail',
+      path: '/offer-detail/:id',
+      name: 'offerDetail',
       component: () => import('../pages/applicant/SsOfferDetail.vue'),
+      meta: { requiresAuth: true },
+      props: true,
     },
+
     {
-      path: '/myApplications',
-      name: 'MyApplications',
-      component: () => import('../pages/applicant/SsMyApplications.vue'),
+      path: '/successRegister',
+      name : 'successRegister',
+      component: () => import('../pages/applicant/SsSuccessRegister.vue'),
     },
+
+  // Coaching
+    {
+      path: '/coach/:id',
+      name: 'coach',
+      component: () => import('../pages/coach/SsCoach.vue'),
+      meta: { requiresAuth: true },
+      props: true,
+    },
+
     {
       path: '/coachs',
       name: 'coachs',
       component: () => import('../pages/coach/SsCoachs.vue'),
+      meta: { requiresAuth: true },
     },
-    {
-      path: '/coach',
-      name: 'Coach',
-      component: () => import('../pages/coach/SsCoach.vue'),
-    },
-  ]
-  
-  export default routes
-  
+];
+
+export default routes;

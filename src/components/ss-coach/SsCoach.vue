@@ -117,7 +117,7 @@
 
 <script>
 export default {
-    name: 'Coach',
+    name: 'coach',
     data() {
         return {
             currentVideoUrl: '',

@@ -20,16 +20,13 @@
                 <input
                   type="email"
                   id="email"
-                  required
                   v-model="email"
                   placeholder="Ingresa un correo electrónico"
                 />
                 <img src="@/assets/icons/mail.svg" alt="Mail Icon" />
               </div>
             </div>
-            <span v-if="emailError" class="error-message">{{
-              emailError
-            }}</span>
+            <span v-if="emailError" class="error-message">{{ emailError }}</span>
           </div>
           <div class="element">
             <div class="input">
@@ -38,7 +35,6 @@
                 <input
                   :type="showPassword ? 'text' : 'password'"
                   id="password"
-                  required
                   v-model="password"
                   placeholder="Ingresa tu contraseña"
                 />
@@ -50,11 +46,9 @@
                 />
               </div>
             </div>
-            <span v-if="passwordError" class="error-message">{{
-              passwordError
-            }}</span>
+            <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
           </div>
-          <button @click="login" type="submit">Ingresar</button>
+          <button type="submit">Ingresar</button>
           <router-link to="/forgotten-password" class="forgotten-password">
             ¿Olvidaste tu contraseña?
           </router-link>
@@ -95,113 +89,132 @@
   </div>
 </template>
 
-<script>
-import speakerImg from "@/assets/images/speaker.webp";
-import cityImg from "@/assets/images/city.webp";
-import micImg from "@/assets/images/mic.webp";
-import store from "store2";
-import { useAuthService } from "@/services/auth/useAuthService";
-/* import { decodeJWT } from '../../utils/decodejwt'; */
-import router from "../../router";
+<script setup>
+  import { ref, watch } from 'vue';
+  import { useRouter } from 'vue-router';
+  import store from 'store2';
+  import { useAuthService } from '@/services/auth/useAuthService';
+  import { ElMessage } from 'element-plus';
+  import { decodeJWT } from '@/utils/decodeJWT';
 
-export default {
-  data() {
-    return {
-      email: "",
-      password: "",
-      showPassword: false,
-      emailError: "",
-      passwordError: "",
-      images: [
-        { src: speakerImg, alt: "Speaker Image" },
-        { src: cityImg, alt: "City Image" },
-        { src: micImg, alt: "Microphone Image" },
-      ],
-      expandedIndex: 0,
-    };
-  },
-  watch: {
-    email(value) {
-      this.emailError = "";
-      if (value && !this.isValidEmail(value)) {
-        this.emailError = "El correo electrónico no es válido";
-      }
-    },
-    password(value) {
-      this.passwordError = "";
-      if (value && value.length < 6) {
-        this.passwordError = "La contraseña debe tener al menos 6 caracteres";
-      }
-    },
-  },
-  methods: {
-    async login() {
-      const authService = useAuthService();
-      try {
-        const response = await authService.login({
-          username: this.email,
-          password: this.password,
-        });
-        if (response && response.status === 200) {
-          const token = response?.data?.data?.token;
-          store.set("token", token);
-          /* const tokenInfo = decodeJWT(token);
-                    if(tokenInfo.includes('Admin')){
-                    } */
-          router.push({ name: "configProfile" });
-        }
-      } catch (error) {
-        console.log(error);
-        return error;
-      }
-    },
-    expandImage(index) {
-      this.expandedIndex = index;
-    },
-    resetExpand() {
-      this.expandedIndex = 0;
-    },
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword;
-    },
-    validateForm() {
-      this.emailError = "";
-      this.passwordError = "";
-      let isValid = true;
+  import speakerImg from '@/assets/images/speaker.webp';
+  import cityImg from '@/assets/images/city.webp';
+  import micImg from '@/assets/images/mic.webp';
 
-      if (!this.email) {
-        this.emailError = "El correo electrónico es requerido";
-        isValid = false;
-      } else if (!this.isValidEmail(this.email)) {
-        this.emailError = "El correo electrónico no es válido";
-        isValid = false;
-      }
+  // Reactive form data
+  const email = ref('');
+  const password = ref('');
+  const showPassword = ref(false);
 
-      if (!this.password) {
-        this.passwordError = "La contraseña es requerida";
-        isValid = false;
-      } else if (this.password.length < 6) {
-        this.passwordError = "La contraseña debe tener al menos 6 caracteres";
-        isValid = false;
-      }
+  // Validation errors
+  const emailError = ref('');
+  const passwordError = ref('');
 
-      if (isValid) {
-        this.submitForm();
-      }
-    },
-    isValidEmail(email) {
-      const re =
-        /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()\\[\]\\.,;:\s@"]+\.)+[^<>()\\[\]\\.,;:\s@"]{2,})$/i;
-      return re.test(email);
-    },
-    submitForm() {
-      console.log("Formulario enviado:", {
-        email: this.email,
-        password: this.password,
+  // State to check if login was attempted
+  const loginAttempted = ref(false);
+
+  // Router and AuthService
+  const router = useRouter();
+  const authService = useAuthService();
+
+  // Images for the image section
+  const images = ref([
+    { src: speakerImg, alt: 'Speaker Image' },
+    { src: cityImg, alt: 'City Image' },
+    { src: micImg, alt: 'Microphone Image' },
+  ]);
+
+  const expandedIndex = ref(0);
+
+  // Toggle visibility of password
+  const togglePasswordVisibility = () => {
+    showPassword.value = !showPassword.value;
+  };
+
+  // Validate email format
+  const isValidEmail = (email) => {
+    const re =  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
+    return re.test(email);
+  };
+
+  // Form validation logic
+  const validateForm = async () => {
+    // Set login attempt to true when the user tries to login
+    loginAttempted.value = true;
+
+    let isValid = true;
+    emailError.value = '';
+    passwordError.value = '';
+
+    if (!email.value) {
+      emailError.value = 'El correo electrónico es requerido';
+      isValid = false;
+    } else if (!isValidEmail(email.value)) {
+      emailError.value = 'El correo electrónico no es válido';
+      isValid = false;
+    }
+
+    if (!password.value) {
+      passwordError.value = 'La contraseña es requerida';
+      isValid = false;
+    } else if (password.value.length < 6) {
+      passwordError.value = 'La contraseña debe tener al menos 6 caracteres';
+      isValid = false;
+    }
+
+    if (isValid) {
+      await login();
+    }
+  };
+
+  // Login logic
+  const login = async () => {
+    try {
+      const response = await authService.login({
+        username: email.value,
+        password: password.value,
       });
-    },
-  },
-};
+      if (response && response.data.status_code === 200) {
+        const token = response.data.data.token;
+
+        const decodedToken = decodeJWT(token);
+        const roles = decodedToken.roles;
+        store.set("token", token);
+        store.set("roles", roles); 
+        router.push({ name: "configProfile" });
+      }
+    } catch (error) {
+      ElMessage.error(error.response.data.message);
+    }
+  };
+
+  // Image hover effect
+  const expandImage = (index) => {
+    expandedIndex.value = index;
+  };
+
+  const resetExpand = () => {
+    expandedIndex.value = 0;
+  };
+
+  // Watchers for real-time validation
+  watch(email, (newVal) => {
+    if (loginAttempted.value) {
+      emailError.value = '';
+      if (newVal && !isValidEmail(newVal)) {
+        emailError.value = 'El correo electrónico no es válido';
+      }
+    }
+  });
+
+  watch(password, (newVal) => {
+    if (loginAttempted.value) {
+      passwordError.value = '';
+      if (newVal && newVal.length < 6) {
+        passwordError.value = 'La contraseña debe tener al menos 6 caracteres';
+      }
+    }
+  });
 </script>
 
 <style scoped lang="scss">
