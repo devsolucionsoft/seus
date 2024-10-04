@@ -5,8 +5,8 @@ const api = axios.create({
     ? 'https://seusapi.solucionsoft.com/' // Backend url config for production
     : '/api', // Dev is config by proxy
   headers: {
-    "Access-Control-Allow-Origin": "*"
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 export { api };
