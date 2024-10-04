@@ -1,5 +1,5 @@
 export const userTypeConfig = {
-  Admin: {
+  Company: {
     name: "Carrulla",
     subtitle: "Supermercados",
     image: require('@/assets/images/carulla.png'),

@@ -51,28 +51,28 @@ const routes = [
       path: '/config-recruiter-profile',
       name: 'configRecruiterProfile',
       component: () => import('../pages/recruiter/SsConfigRecruiterProfile.vue'),
-      meta: { requiresAuth: true, role: 'Admin' },
+      meta: { requiresAuth: true, role: 'Company' },
     },
 
     {
       path: '/create-offer',
       name: 'createOffer',
       component: () => import('../pages/recruiter/SsCreateOffer.vue'),
-      meta: { requiresAuth: true, role: 'Admin' },
+      meta: { requiresAuth: true, role: 'Company' },
     },
 
     {
       path: '/offers',
       name: 'offers',
       component: () => import('../pages/recruiter/SsOffers.vue'),
-      meta: { requiresAuth: true, role: 'Admin' },
+      meta: { requiresAuth: true, role: 'Company' },
     },
     
     {
       path: '/offer/:id',
       name: 'offer',
       component: () => import('../pages/recruiter/SsOffer.vue'),
-      meta: { requiresAuth: true, role: 'Admin' },
+      meta: { requiresAuth: true, role: 'Company' },
       props: true, // Habilitar recibir el ID como prop
     },
 
@@ -80,14 +80,14 @@ const routes = [
       path: '/candidates',
       name: 'candidates',
       component: () => import('../pages/recruiter/SsCandidates.vue'),
-      meta: { requiresAuth: true, role: 'Admin' },
+      meta: { requiresAuth: true, role: 'Company' },
     },
 
     {
       path: '/candidate-details/:id',
       name: 'candidateDetails',
       component: () => import('../pages/recruiter/SsCandidateDetails.vue'),
-      meta: { requiresAuth: true, role: 'Admin' },
+      meta: { requiresAuth: true, role: 'Company' },
       props: true,
     },
 
@@ -95,7 +95,7 @@ const routes = [
       path: '/home-offers',
       name: 'homeOffers',
       component: () => import('../pages/recruiter/SsHomeOffers.vue'),
-      meta: { requiresAuth: true, role: 'Admin' },
+      meta: { requiresAuth: true, role: 'Company' },
     },
 
   //Candidate and Companie Pages

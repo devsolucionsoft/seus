@@ -90,131 +90,137 @@
 </template>
 
 <script setup>
-  import { ref, watch } from 'vue';
-  import { useRouter } from 'vue-router';
-  import store from 'store2';
-  import { useAuthService } from '@/services/auth/useAuthService';
-  import { ElMessage } from 'element-plus';
-  import { decodeJWT } from '@/utils/decodeJWT';
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import store from 'store2';
+import { useAuthService } from '@/services/auth/useAuthService';
+import { ElMessage } from 'element-plus';
+import { decodeJWT } from '@/utils/decodeJWT';
 
-  import speakerImg from '@/assets/images/speaker.webp';
-  import cityImg from '@/assets/images/city.webp';
-  import micImg from '@/assets/images/mic.webp';
+import speakerImg from '@/assets/images/speaker.webp';
+import cityImg from '@/assets/images/city.webp';
+import micImg from '@/assets/images/mic.webp';
 
-  // Reactive form data
-  const email = ref('');
-  const password = ref('');
-  const showPassword = ref(false);
+// Reactive form data
+const email = ref('');
+const password = ref('');
+const showPassword = ref(false);
 
-  // Validation errors
-  const emailError = ref('');
-  const passwordError = ref('');
+// Validation errors
+const emailError = ref('');
+const passwordError = ref('');
 
-  // State to check if login was attempted
-  const loginAttempted = ref(false);
+// State to check if login was attempted
+const loginAttempted = ref(false);
 
-  // Router and AuthService
-  const router = useRouter();
-  const authService = useAuthService();
+// Router and AuthService
+const router = useRouter();
+const authService = useAuthService();
 
-  // Images for the image section
-  const images = ref([
-    { src: speakerImg, alt: 'Speaker Image' },
-    { src: cityImg, alt: 'City Image' },
-    { src: micImg, alt: 'Microphone Image' },
-  ]);
+// Images for the image section
+const images = ref([
+  { src: speakerImg, alt: 'Speaker Image' },
+  { src: cityImg, alt: 'City Image' },
+  { src: micImg, alt: 'Microphone Image' },
+]);
 
-  const expandedIndex = ref(0);
+const expandedIndex = ref(0);
 
-  // Toggle visibility of password
-  const togglePasswordVisibility = () => {
-    showPassword.value = !showPassword.value;
-  };
+// Toggle visibility of password
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
+};
 
-  // Validate email format
-  const isValidEmail = (email) => {
-    const re =  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
-    return re.test(email);
-  };
+// Validate email format
+const isValidEmail = (email) => {
+  const re =  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/i;
+  return re.test(email);
+};
 
-  // Form validation logic
-  const validateForm = async () => {
-    // Set login attempt to true when the user tries to login
-    loginAttempted.value = true;
+// Form validation logic
+const validateForm = async () => {
+  // Set login attempt to true when the user tries to login
+  loginAttempted.value = true;
 
-    let isValid = true;
-    emailError.value = '';
-    passwordError.value = '';
+  let isValid = true;
+  emailError.value = '';
+  passwordError.value = '';
 
-    if (!email.value) {
-      emailError.value = 'El correo electrónico es requerido';
-      isValid = false;
-    } else if (!isValidEmail(email.value)) {
-      emailError.value = 'El correo electrónico no es válido';
-      isValid = false;
-    }
+  if (!email.value) {
+    emailError.value = 'El correo electrónico es requerido';
+    isValid = false;
+  } else if (!isValidEmail(email.value)) {
+    emailError.value = 'El correo electrónico no es válido';
+    isValid = false;
+  }
 
-    if (!password.value) {
-      passwordError.value = 'La contraseña es requerida';
-      isValid = false;
-    } else if (password.value.length < 6) {
-      passwordError.value = 'La contraseña debe tener al menos 6 caracteres';
-      isValid = false;
-    }
+  if (!password.value) {
+    passwordError.value = 'La contraseña es requerida';
+    isValid = false;
+  } else if (password.value.length < 6) {
+    passwordError.value = 'La contraseña debe tener al menos 6 caracteres';
+    isValid = false;
+  }
 
-    if (isValid) {
-      await login();
-    }
-  };
+  if (isValid) {
+    await login();
+  }
+};
 
-  // Login logic
-  const login = async () => {
-    try {
-      const response = await authService.login({
-        username: email.value,
-        password: password.value,
-      });
-      if (response && response.data.status_code === 200) {
-        const token = response.data.data.token;
+// Login logic
+const login = async () => {
+  try {
+    const response = await authService.login({
+      username: email.value,
+      password: password.value,
+    });
+    if (response && response.data.status_code === 200) {
+      const token = response.data.data.token;
 
-        const decodedToken = decodeJWT(token);
-        const roles = decodedToken.roles;
-        store.set("token", token);
-        store.set("roles", roles); 
+      const decodedToken = decodeJWT(token);
+      const roles = decodedToken.roles;
+
+      store.set("token", token);
+      store.set("roles", roles); 
+
+      if (roles.includes("Company")) {
+        router.push({ name: "configRecruiterProfile" });
+      } else if (roles.includes("Candidate")) {
         router.push({ name: "configProfile" });
       }
-    } catch (error) {
-      ElMessage.error(error.response.data.message);
     }
-  };
+  } catch (error) {
+    ElMessage.error(error.response.data.message);
+  }
+};
 
-  // Image hover effect
-  const expandImage = (index) => {
-    expandedIndex.value = index;
-  };
+// Image hover effect
+const expandImage = (index) => {
+  expandedIndex.value = index;
+};
 
-  const resetExpand = () => {
-    expandedIndex.value = 0;
-  };
+const resetExpand = () => {
+  expandedIndex.value = 0;
+};
 
-  // Watchers for real-time validation
-  watch(email, (newVal) => {
-    if (loginAttempted.value) {
-      emailError.value = '';
-      if (newVal && !isValidEmail(newVal)) {
-        emailError.value = 'El correo electrónico no es válido';
-      }
+// Watchers for real-time validation
+watch(email, (newVal) => {
+  if (loginAttempted.value) {
+    emailError.value = '';
+    if (newVal && !isValidEmail(newVal)) {
+      emailError.value = 'El correo electrónico no es válido';
     }
-  });
+  }
+});
 
-  watch(password, (newVal) => {
-    if (loginAttempted.value) {
-      passwordError.value = '';
-      if (newVal && newVal.length < 6) {
-        passwordError.value = 'La contraseña debe tener al menos 6 caracteres';
-      }
+watch(password, (newVal) => {
+  if (loginAttempted.value) {
+    passwordError.value = '';
+    if (newVal && newVal.length < 6) {
+      passwordError.value = 'La contraseña debe tener al menos 6 caracteres';
     }
-  });
+  }
+});
 </script>
 
 <style scoped lang="scss">

@@ -63,8 +63,8 @@ export default {
         return userTypeConfig.Coach; // Always show Coach config for these routes
       }
 
-      if (userRoles.includes("Admin")) {
-        return userTypeConfig.Admin;
+      if (userRoles.includes("Company")) {
+        return userTypeConfig.Company;
       } else if (userRoles.includes("Candidate")) {
         return userTypeConfig.Candidate;
       }
@@ -75,7 +75,7 @@ export default {
     const shouldShowNavigation = computed(() => {
       return (
         userConfig.value && 
-        !['/config-profile', '/config-recruiter-profile'].includes(window.location.pathname)
+        !['/config-profile', '/config-recruiter-profile', '/persons', '/companies'].includes(window.location.pathname)
       );
     });
 
