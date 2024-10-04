@@ -2,7 +2,7 @@ module.exports = {
   devServer: {
     proxy: {
       '^/api': {
-        target: 'http://3.233.173.228:5003/',
+        target: 'https://seusapi.solucionsoft.com/',
         changeOrigin: true,
         pathRewrite: { '^/api': '' },
       },
