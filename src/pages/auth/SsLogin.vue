@@ -179,9 +179,15 @@ const login = async () => {
 
       const decodedToken = decodeJWT(token);
       const roles = decodedToken.roles;
+
       store.set("token", token);
       store.set("roles", roles); 
-      router.push({ name: "configProfile" });
+
+      if (roles.includes("Company")) {
+        router.push({ name: "configRecruiterProfile" });
+      } else if (roles.includes("Candidate")) {
+        router.push({ name: "configProfile" });
+      }
     }
   } catch (error) {
     ElMessage.error(error.response.data.message);
