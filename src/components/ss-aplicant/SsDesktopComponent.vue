@@ -23,8 +23,8 @@
             </div>
             <p class="description">{{ finalNote }}</p>
         </section>
-    
-        <!-- <section class="form">
+        
+        <section class="form">
             <form @submit.prevent="submitForm">
                 <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.name === 'linkedin' ? 'linkedin' : '']">
                     <label :for="field.name">{{ field.label }}</label>
@@ -94,11 +94,11 @@
                             />
                         </div>
                         <div class="button-container">
-                            <button @click="openDeleteFormationDialogVisible(index)" class="purple" type="submit">
+                            <button @click="openDeleteFormationDialog(index)" class="purple" type="button">
                                 <span>Eliminar</span>
                                 <img src="@/assets/icons/trash.svg" alt="">
                             </button>
-                            <button @click="editFormation(index)" class="ultrawhite" type="submit">
+                            <button @click="editFormation(index)" class="ultrawhite" type="button">
                                 <img src="@/assets/icons/edit.svg" alt="">
                                 <span>Editar</span>
                             </button>
@@ -107,6 +107,21 @@
                 </div>
             </div>
         </section>
+
+        <el-dialog
+            v-model="deleteFormationDialogVisible"
+            title="Confirmar eliminación"
+            width="400px"
+            center
+            >
+            <span>¿Estás seguro de que deseas eliminar esta formación?</span>
+            <template #footer>
+                <div class="dialog-footer">
+                <el-button @click="deleteFormationDialogVisible = false">Cancelar</el-button>
+                <el-button type="primary" @click="confirmDeleteFormation">Confirmar</el-button>
+                </div>
+            </template>
+        </el-dialog>
     
         <section class="experiences">
             <div class="form-modal">
@@ -136,7 +151,6 @@
                         :id="field.name"
                     />
                     </div>
-    
     
                     <div class="form-group attachments-form-group">
                         <label class="attachments" for="attachments">
@@ -208,7 +222,6 @@
                         />
                         </div>
         
-        
                         <div class="form-group attachments-form-group">
                             <label class="attachments" for="attachments">
                                 <div class="addMedia">
@@ -241,12 +254,12 @@
                         </div>
                         
                         <div class="button-container">
-                            <button class="blue-text">
+                            <button @click="openDeleteExperienceDialog(index)" type="button" class="blue-text">
                                 <span>Eliminar</span>
                                 <img src="@/assets/icons/white-delete.svg" alt="delete">
                             </button>
         
-                            <button class="bgwhite-txblack">
+                            <button @click="editExperience(index)" type="button" class="bgwhite-txblack">
                                 <span>Editar</span>
                                 <img src="@/assets/icons/edit.svg" alt="edit">
                             </button>
@@ -255,7 +268,22 @@
                 </div>
             </div>
         </section>
-    
+        
+        <el-dialog
+            v-model="deleteExperienceDialogVisible"
+            title="Confirmar eliminación"
+            width="400px"
+            center
+            >
+            <span>¿Estás seguro de que deseas eliminar esta experiencia?</span>
+            <template #footer>
+                <div class="dialog-footer">
+                <el-button @click="deleteExperienceDialogVisible = false">Cancelar</el-button>
+                <el-button type="primary" @click="confirmDeleteExperience">Confirmar</el-button>
+                </div>
+            </template>
+        </el-dialog>
+        
         <section class="additional-info">
             <form @submit.prevent="submitForm">
                 <div v-for="(field, index) in additionalInfoFormFields" :key="index" class="form-group">
@@ -282,65 +310,97 @@
                 <img src="@/assets/icons/whiteMailBox.svg" alt="Icon">
                 <span>Guardar información</span>
             </button>
-        </section>
-
-        <el-dialog
-            v-model="deleteExperienceDialogVisible"
-            title="Confirmar eliminación"
-            width="400px"
-            center
-            >
-            <span>¿Estás seguro de que deseas eliminar esta experiencia?</span>
-            <template #footer>
-                <div class="dialog-footer">
-                <el-button @click="deleteExperienceDialogVisible = false">Cancelar</el-button>
-                <el-button type="primary" @click="confirmDeleteExperience">Confirmar</el-button>
-                </div>
-            </template>
-        </el-dialog>
-
-        <el-dialog
-            v-model="deleteFormationDialogVisible"
-            title="Confirmar eliminación"
-            width="400px"
-            center
-            >
-            <span>¿Estás seguro de que deseas eliminar esta formación?</span>
-            <template #footer>
-                <div class="dialog-footer">
-                <el-button @click="deleteFormationDialogVisible = false">Cancelar</el-button>
-                <el-button type="primary" @click="confirmDeleteFormation">Confirmar</el-button>
-                </div>
-            </template>
-        </el-dialog>
- -->
-        
+        </section>        
     </div>
-
 </template>
 
 <script setup>
 import { ref, onMounted, nextTick, watch } from 'vue';
-import optionMixin from '@/mixins/optionMixin.js';
+import useOptions from '@/mixins/optionMixin.js';
 import { useEmploymentTypes } from '@/services/candidate/useEmploymentTypes';
 import { useJobOptions } from '@/services/candidate/useJobOptions';
 import { useCultureTypes } from '@/services/candidate/useCultureTypes';
+import SsFormInput from '@/components/ss-form/SsFormInput.vue';
+import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
+import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
+import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
 
-/* import formMixin from '@/mixins/formMixin.js';
-import formationsMixin from '@/mixins/formationsMixin.js';
-import experiencesMixin from '@/mixins/experiencesMixin.js';
-import additionalInfoMixin from '../../mixins/additionalInfoMixin'; */
+const formFields = ref([
+    { label: 'Rango salarial desde:', name: 'salaryRange', type: SsFormSelect, options: ['Option 1', 'Option 2'] },
+    { label: '¿Cuál es tu nivel profesional?', name: 'professionalLevel', type: SsFormSelect, options: ['Junior', 'Mid', 'Senior'] },
+    { label: 'Nombre completo', name: 'fullName', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
+    { label: 'Profesión', name: 'profession', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
+    { label: 'Especialización', name: 'specialization', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
+    { label: 'Número de documento', name: 'documentNumber', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
+    { label: 'Ciudad donde buscas empleo', name: 'city', type: SsFormSelect, options: ['Ciudad 1', 'Ciudad 2'] },
+    { label: '¿Estás dispuesto a trasladarte?', name: 'willingToRelocate', type: SsFormToggle },
+    { label: 'Correo electrónico', name: 'email', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'email' },
+    { label: 'Número de celular', name: 'phoneNumber', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
+    { label: 'LinkedIn', name: 'linkedin', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
+    { label: '¿Qué valor agregado le ofreces a una empresa que te contrata? ¿Qué te diferencia de otras personas?', name: 'addedValue', type: SsFormTextarea, placeholder: 'Escríbelas aquí...' },
+    { label: '¿Qué te hace feliz a nivel laboral?', name: 'happiness', type: SsFormInput, placeholder: 'Escríbe aquí...' },
+    { label: '¿Cuál es tu talento profesional?', name: 'professionalTalent', type: SsFormInput, placeholder: 'Escríbe aquí...' },
+    { label: 'Qué ideas, proyectos o actividades has implementado que quieras contar. / Si no tienes experiencia ¿qué ideas tienes para implementar?', name: 'ideas', type: SsFormTextarea, placeholder: 'Escríbelas aquí...' },
+]);
+
+const formData = ref(JSON.parse(localStorage.getItem('stepsData'))?.step2 || {
+    salaryRange: '',
+    professionalLevel: '',
+    fullName: '',
+    profession: '',
+    specialization: '',
+    documentNumber: '',
+    city: '',
+    willingToRelocate: false,
+    linkedin: '', 
+    email: '',
+    phoneNumber: '',
+    addedValue: '',
+    happiness: '',
+    professionalTalent: '',
+    ideas: '',
+});
+
+import useAdditionalInfo from '@/mixins/additionalInfoMixin';
+import useExperiences from '@/mixins/experiencesMixin.js';
+import useFormations from '@/mixins/formationsMixin.js';
+
+const {
+    formations,
+    newFormation,
+    formationFormFields,
+    deleteFormationDialogVisible,
+    saveFormation,
+    editFormation,
+    openDeleteFormationDialog,
+    confirmDeleteFormation,
+} = useFormations();
+
+const {
+    experiences,
+    newExperience,
+    experiencesFinalNote,
+    experiencesFormFields,
+    deleteExperienceDialogVisible,
+    editExperience,
+    openDeleteExperienceDialog,
+    saveExperience,
+    handleFileUpload,
+} = useExperiences();
+
+const { additionalInfoFormFields} = useAdditionalInfo();
 
 const finalNote = ref('Elegir una cultura específica no te descarta de ningún proceso.');
 const showLeftArrow = ref([]);
 const showRightArrow = ref([]);
 const optionContainers = ref([]);
+
 const employmentTypes = ref([]);
 const jobOptions = ref([]);
 const cultureTypes = ref([]);
 
 // Composable
-const { selectedOptions, options, toggleSelection } = optionMixin();
+const { selectedOptions, options, toggleSelection } = useOptions();
 const { listEmploymentTypes } = useEmploymentTypes();
 const { listJobOptions } = useJobOptions();
 const { listCultureTypes } = useCultureTypes(); 
@@ -428,6 +488,30 @@ const checkArrowsVisibility = () => {
   });
 };
 
+const handleInputChange = (fieldName) => {
+    if (fieldName === 'willingToRelocate') {
+        updateSwitchLabel();
+    }
+    saveToLocalStorage();
+};
+
+const saveToLocalStorage = () => {
+    const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+    stepsData.step2 = formData.value;
+    localStorage.setItem('stepsData', JSON.stringify(stepsData));
+};
+
+const updateSwitchLabel = () => {
+    const switchElement = document.querySelector('.switch .slider');
+    if (switchElement) {
+        switchElement.setAttribute('data-label', formData.value.willingToRelocate ? 'Sí' : 'No');
+    }
+};
+
+const submitForm = () => {
+    console.log(formData.value);
+};
+
 onMounted(() => {
     checkArrowsVisibility();
     fetchEmploymentTypes();
@@ -437,7 +521,6 @@ onMounted(() => {
 
 watch(options, checkArrowsVisibility, { immediate: true });
 </script>
-
   
 <style scoped lang="sass">
 
