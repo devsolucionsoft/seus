@@ -6,16 +6,16 @@
                 <h3>{{ option.title }}</h3>
                 <div class="options-wrapper">
                     <button v-if="showLeftArrow[index]" @click="scrollLeft(index)" class="scroll-button left">‹</button>
-                    <div class="options" :ref="'options-' + index">
+                    <div class="options" :ref="el => optionContainers[index] = el">
                         <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
                             <div 
                                 class="image-container" 
                                 :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" 
                                 @click="toggleSelection(`${index}-${idx}`)"
                             >
-                                <img :src="item.image" :alt="item.label" />
+                                <img :src="item.icon" :alt="item.name" />
                             </div>
-                            <p>{{ item.label }}</p>
+                            <p>{{ item.name }}</p>
                         </div>
                     </div>
                     <button v-if="showRightArrow[index]" @click="scrollRight(index)" class="scroll-button right">›</button>
@@ -24,7 +24,7 @@
             <p class="description">{{ finalNote }}</p>
         </section>
     
-        <section class="form">
+        <!-- <section class="form">
             <form @submit.prevent="submitForm">
                 <div v-for="(field, index) in formFields" :key="index" :class="['form-group', field.name === 'linkedin' ? 'linkedin' : '']">
                     <label :for="field.name">{{ field.label }}</label>
@@ -313,78 +313,131 @@
                 </div>
             </template>
         </el-dialog>
-
+ -->
         
     </div>
 
 </template>
 
-<script>
-    import SsFormInput from '@/components/ss-form/SsFormInput.vue';
-    import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
-    import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
-    import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
-    import optionMixin from '@/mixins/optionMixin.js';
-    import formMixin from '@/mixins/formMixin.js';
-    import formationsMixin from '@/mixins/formationsMixin.js';
-    import experiencesMixin from '@/mixins/experiencesMixin.js';
-    import additionalInfoMixin from '../../mixins/additionalInfoMixin';
+<script setup>
+import { ref, onMounted, nextTick, watch } from 'vue';
+import optionMixin from '@/mixins/optionMixin.js';
+import { useEmploymentTypes } from '@/services/candidate/useEmploymentTypes';
+import { useJobOptions } from '@/services/candidate/useJobOptions';
+import { useCultureTypes } from '@/services/candidate/useCultureTypes';
 
-    export default {
-        mixins: [optionMixin, formMixin, formationsMixin, experiencesMixin, additionalInfoMixin],
-        name: 'SsDesktopComponent.vue',
-        data() {
-            return {
-                finalNote: 'Elegir una cultura específica no te descarta de ningún proceso.',
-                showLeftArrow: [],
-                showRightArrow: [],
-            };
-        },
-        components:{
-            SsFormInput,
-            SsFormSelect,
-            SsFormTextarea,
-            SsFormToggle,
-        },
-        mounted() {
-            this.checkArrowsVisibility();
-        },
-        methods: {
-            scrollLeft(index) {
-                const optionsContainer = this.$refs[`options-${index}`][0];
-                optionsContainer.scrollBy({ left: -178, behavior: 'smooth' });
-                this.updateArrows(index);
-            },
-            scrollRight(index) {
-                const optionsContainer = this.$refs[`options-${index}`][0];
-                optionsContainer.scrollBy({ left: 178, behavior: 'smooth' });
-                this.updateArrows(index);
-            },
-            updateArrows(index) {
-                this.$nextTick(() => {
-                    const optionsContainer = this.$refs[`options-${index}`][0];
-                    this.showLeftArrow[index] = optionsContainer.scrollLeft > 0;
-                    this.showRightArrow[index] = optionsContainer.scrollLeft < (optionsContainer.scrollWidth - optionsContainer.clientWidth);
-                });
-            },
-            checkArrowsVisibility() {
-                this.$nextTick(() => {
-                    this.options.forEach((_, index) => {
-                        this.updateArrows(index);
-                    });
-                });
-            }
-        },
-        watch: {
-            options: {
-                handler() {
-                    this.checkArrowsVisibility();
-                },
-                immediate: true
-            }
-        }
-    };
+/* import formMixin from '@/mixins/formMixin.js';
+import formationsMixin from '@/mixins/formationsMixin.js';
+import experiencesMixin from '@/mixins/experiencesMixin.js';
+import additionalInfoMixin from '../../mixins/additionalInfoMixin'; */
+
+const finalNote = ref('Elegir una cultura específica no te descarta de ningún proceso.');
+const showLeftArrow = ref([]);
+const showRightArrow = ref([]);
+const optionContainers = ref([]);
+const employmentTypes = ref([]);
+const jobOptions = ref([]);
+const cultureTypes = ref([]);
+
+// Composable
+const { selectedOptions, options, toggleSelection } = optionMixin();
+const { listEmploymentTypes } = useEmploymentTypes();
+const { listJobOptions } = useJobOptions();
+const { listCultureTypes } = useCultureTypes(); 
+
+// Funciones para obtener datos de los servicios
+const fetchEmploymentTypes = async () => {
+  try {
+    const response = await listEmploymentTypes();
+    if (response.data && response.data.data) {
+      employmentTypes.value = response.data.data.map(item => ({
+        id: item.id,
+        name: item.name,
+        icon: item.icon,
+      }));
+      options.value[0].items = employmentTypes.value;
+    }
+  } catch (error) {
+    console.error("Error fetching employment types:", error);
+  }
+};
+
+const fetchJobOptions = async () => {
+  try {
+    const response = await listJobOptions();
+    if (response.data && response.data.data) {
+      jobOptions.value = response.data.data.map(item => ({
+        id: item.id,
+        name: item.name,
+        icon: item.icon,
+      }));
+      options.value[1].items = jobOptions.value;
+    }
+  } catch (error) {
+    console.error("Error fetching job options:", error);
+  }
+};
+
+const fetchCultureTypes = async () => {
+  try {
+    const response = await listCultureTypes();
+    if (response.data && response.data.data) {
+      cultureTypes.value = response.data.data.map(item => ({
+        id: item.id,
+        name: item.name,
+        icon: item.icon,
+      }));
+      options.value[2].items = cultureTypes.value;
+    }
+  } catch (error) {
+    console.error("Error fetching culture types:", error);
+  }
+};
+
+const scrollLeft = (index) => {
+  const optionsContainer = optionContainers.value[index];
+  if (optionsContainer) {
+    optionsContainer.scrollBy({ left: -178, behavior: 'smooth' });
+    updateArrows(index);
+  }
+};
+
+const scrollRight = (index) => {
+  const optionsContainer = optionContainers.value[index];
+  if (optionsContainer) {
+    optionsContainer.scrollBy({ left: 178, behavior: 'smooth' });
+    updateArrows(index);
+  }
+};
+
+const updateArrows = (index) => {
+  nextTick(() => {
+    const optionsContainer = optionContainers.value[index];
+    if (optionsContainer) {
+      showLeftArrow.value[index] = optionsContainer.scrollLeft > 0;
+      showRightArrow.value[index] = optionsContainer.scrollLeft < (optionsContainer.scrollWidth - optionsContainer.clientWidth);
+    }
+  });
+};
+
+const checkArrowsVisibility = () => {
+  nextTick(() => {
+    options.value.forEach((_, index) => {
+      updateArrows(index);
+    });
+  });
+};
+
+onMounted(() => {
+    checkArrowsVisibility();
+    fetchEmploymentTypes();
+    fetchJobOptions(); 
+    fetchCultureTypes();
+});
+
+watch(options, checkArrowsVisibility, { immediate: true });
 </script>
+
   
 <style scoped lang="sass">
 

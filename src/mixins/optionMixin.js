@@ -1,70 +1,58 @@
-export default {
-    data() {
-      return {
-        selectedOptions: [],
-        options: [
-          {
-              title: 'Tipo de formación y empleo que buscas:',
-              items: [
-                { label: 'Áreas humanas', image: require('@/assets/icons/selectIcons/human-resources.svg') },
-                { label: 'Áreas Financieras', image: require('@/assets/icons/selectIcons/finance.svg') },
-                { label: 'Área Comerciales', image: require('@/assets/icons/selectIcons/commercial.svg') },
-                { label: 'Áreas de Logística', image: require('@/assets/icons/selectIcons/logistic.svg') },
-                { label: 'Genérica', image: require('@/assets/icons/selectIcons/generic.svg') },
-              ]
-          },
-          {
-              title: 'Opciones de jornadas:',
-              items: [
-                { label: 'Presencial', image: require('@/assets/icons/selectIcons/presential.svg') },
-                { label: 'Remoto', image: require('@/assets/icons/selectIcons/remote.svg') },
-                { label: 'Híbrido', image: require('@/assets/icons/selectIcons/hybrid.svg') },
-                { label: 'Me es indiferente', image: require('@/assets/icons/selectIcons/indiferent.svg') }
-              ]
-          },
-          {
-              title: 'Qué tipos de culturas te gustan más:',
-              items: [
-              { label: 'Emocionales', image: require('@/assets/icons/selectIcons/emotional.svg') },
-              { label: 'Conocimiento', image: require('@/assets/icons/selectIcons/knowledge.svg') },
-              { label: 'Remoto', image: require('@/assets/icons/selectIcons/hybrid.svg') },
-              { label: 'Producción', image: require('@/assets/icons/selectIcons/production.svg') },
-              { label: 'Intuitiva', image: require('@/assets/icons/selectIcons/intuitive.svg') },
-              { label: 'Me es indiferente', image: require('@/assets/icons/selectIcons/indiferent.svg') }
-              ]
-          }
-        ],
-        
-      };
+import { ref, onMounted } from 'vue';
+
+export default function useOptions() {
+  const selectedOptions = ref([]);
+  const options = ref([
+    {
+      title: 'Tipo de formación y empleo que buscas:',
+      items: [],
     },
-    methods: {
-      toggleSelection(index) {
-        const position = this.selectedOptions.indexOf(index);
-        if (position === -1) {
-          this.selectedOptions.push(index);
-        } else {
-          this.selectedOptions.splice(position, 1);
-        }
-        this.saveToLocalStorage();
-      },
-      saveToLocalStorage() {
-        const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-        stepsData.step1 = {
-          selectedOptions: this.selectedOptions,
-          options: this.options
-        };
-        localStorage.setItem('stepsData', JSON.stringify(stepsData));
-      },
-      loadFromLocalStorage() {
-        const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-        if (stepsData.step1) {
-          this.selectedOptions = stepsData.step1.selectedOptions || [];
-          this.options = stepsData.step1.options || [];
-        }
-      },
+    {
+      title: 'Opciones de jornadas:',
+      items: [],
     },
-    created() {
-      this.loadFromLocalStorage();
+    {
+      title: 'Qué tipos de culturas te gustan más:',
+      items: [],
+    },
+  ]);
+
+  const toggleSelection = (index) => {
+    const position = selectedOptions.value.indexOf(index);
+    if (position === -1) {
+      selectedOptions.value.push(index);
+    } else {
+      selectedOptions.value.splice(position, 1);
+    }
+    saveToLocalStorage();
+  };
+
+  const saveToLocalStorage = () => {
+    const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+    stepsData.step1 = {
+      selectedOptions: selectedOptions.value,
+      options: options.value,
+    };
+    localStorage.setItem('stepsData', JSON.stringify(stepsData));
+  };
+
+  const loadFromLocalStorage = () => {
+    const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+    if (stepsData.step1) {
+      selectedOptions.value = stepsData.step1.selectedOptions || [];
+      options.value = stepsData.step1.options || [];
     }
   };
-  
+
+  // Cargar datos desde el localStorage al montar el componente
+  onMounted(() => {
+    loadFromLocalStorage();
+  });
+
+  // Retornamos los valores y métodos que queremos utilizar en el componente
+  return {
+    selectedOptions,
+    options,
+    toggleSelection,
+  };
+}
