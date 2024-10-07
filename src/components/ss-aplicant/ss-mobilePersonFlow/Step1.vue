@@ -4,12 +4,12 @@
       <h3>{{ option.title }}</h3>
       <div class="options-wrapper">
         <button v-if="showLeftArrow[index]" @click="scrollLeft(index)" class="scroll-button left">‹</button>
-        <div class="options" :ref="'options-' + index">
+        <div class="options" :ref="el => optionContainers[index] = el">
           <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
             <div class="image-container" :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" @click="toggleSelection(`${index}-${idx}`)">
-              <img :src="item.image" :alt="item.label" />
+              <img :src="item.icon" :alt="item.name" />
             </div>
-            <p>{{ item.label }}</p>
+            <p>{{ item.name }}</p>
           </div>
         </div>
         <button v-if="showRightArrow[index]" @click="scrollRight(index)" class="scroll-button right">›</button>
@@ -19,56 +19,24 @@
   </div>
 </template>
   
-<script>
-  import optionMixin from '@/mixins/optionMixin.js';
-  export default {
-    mixins: [optionMixin],
-    name: 'Step1',
-    data() {
-      return {
-        finalNote: 'Elegir una cultura específica no te descarta de ningún proceso.',
-        showLeftArrow: [],
-        showRightArrow: [],
-      };
-    },
-    mounted() {
-      this.checkArrowsVisibility();
-    },
-    methods: {
-      scrollLeft(index) {
-        const optionsContainer = this.$refs[`options-${index}`][0];
-        optionsContainer.scrollBy({ left: -178, behavior: 'smooth' });
-        this.updateArrows(index);
-      },
-      scrollRight(index) {
-        const optionsContainer = this.$refs[`options-${index}`][0];
-        optionsContainer.scrollBy({ left: 178, behavior: 'smooth' });
-        this.updateArrows(index);
-      },
-      updateArrows(index) {
-        this.$nextTick(() => {
-          const optionsContainer = this.$refs[`options-${index}`][0];
-          this.showLeftArrow[index] = optionsContainer.scrollLeft > 0;
-          this.showRightArrow[index] = optionsContainer.scrollLeft < (optionsContainer.scrollWidth - optionsContainer.clientWidth);
-        });
-      },
-      checkArrowsVisibility() {
-        this.$nextTick(() => {
-          this.options.forEach((_, index) => {
-            this.updateArrows(index);
-          });
-        });
-      }
-    },
-    watch: {
-      options: {
-        handler() {
-          this.checkArrowsVisibility();
-        },
-        immediate: true
-      }
-    }
-  };
+<script setup>
+import { ref } from 'vue';
+import useOptions from '@/composables/useOptions.js';
+const finalNote = ref('Elegir una cultura específica no te descarta de ningún proceso.');
+
+const {
+  selectedOptions,
+  options,
+  toggleSelection,
+  scrollLeft,
+  scrollRight,
+  showLeftArrow,
+  showRightArrow,
+  optionContainers,
+  checkArrowsVisibility,
+} = useOptions();
+
+checkArrowsVisibility();
 </script>
   
 

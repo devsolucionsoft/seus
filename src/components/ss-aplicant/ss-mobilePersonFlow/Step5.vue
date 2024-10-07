@@ -8,7 +8,7 @@
         </label>
         <component
           :is="field.type"
-          v-model="formData[field.name]"
+          v-model="additionalInfoFormData[field.name]"
           :placeholder="field.placeholder"
           :options="field.options"
           :type="field.inputType"
@@ -21,27 +21,9 @@
   </div>
 </template>
 
-<script>
-import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
-import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
-import additionalInfoMixin from '../../../mixins/additionalInfoMixin';
-
-export default {
-  name: 'Step5',
-  mixins: [additionalInfoMixin],
-  components: {
-    SsFormSelect,
-    SsFormTextarea,
-  },
-  watch: {
-    formData: {
-      handler() {
-        this.saveToLocalStorage();
-      },
-      deep: true,
-    },
-  },
-};
+<script setup>
+import useAdditionalInfo from '@/composables/useAdditionalInfo.js';
+const { additionalInfoFormFields, additionalInfoFormData} = useAdditionalInfo();
 </script>
 
 <style lang="sass">

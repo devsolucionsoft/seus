@@ -1,7 +1,7 @@
 <template>
   <div class="step4">
     <div class="container" v-if="!showForm">
-      <div :class="['add-experience-box', { 'small-box': experiences.length > 0 }]" @click="openForm">
+      <div :class="['add-experience-box', { 'small-box': experiences?.length > 0 }]" @click="openForm">
         <img src="@/assets/icons/plusCircle.svg" alt="+">
         <p>Añadir Experiencia</p>
       </div>
@@ -130,11 +130,11 @@
 import SsFormInput from '@/components/ss-form/SsFormInput.vue';
 import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
 import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
-import experiencesMixin from '@/mixins/experiencesMixin.js';
+import useExperiences from '@/composables/useExperiences.js';
 
 export default {
   name: 'Step4',
-  mixins: [experiencesMixin], 
+  mixins: [useExperiences], 
   components: {
     SsFormInput,
     SsFormTextarea,

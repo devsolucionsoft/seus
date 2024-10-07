@@ -20,24 +20,9 @@
   </div>
 </template>
 
-<script>
-  import SsFormInput from '@/components/ss-form/SsFormInput.vue';
-  import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
-  import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
-  import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
-  import formMixin from '@/mixins/formMixin.js';
-
-
-  export default {
-    mixins: [formMixin],
-    name: 'Step2',
-    components: {
-      SsFormInput,
-      SsFormSelect,
-      SsFormTextarea,
-      SsFormToggle,
-    },
-  };
+<script setup>
+import useStep2Form from '@/composables/useStep2Form.js';
+const { formFields, formData, handleInputChange } = useStep2Form();
 </script>
 
 <style lang="sass" scoped>

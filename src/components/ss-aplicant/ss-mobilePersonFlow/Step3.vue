@@ -1,7 +1,7 @@
 <template>
   <div class="step3">
     <div class="container" v-if="!showForm">
-      <div :class="['add-formation-box', { 'small-box': formations.length > 0 }]" @click="openForm">
+      <div :class="['add-formation-box', { 'small-box': formations?.length > 0 }]" @click="openForm">
         <img src="@/assets/icons/plusCircle.svg" alt="+">
         <p>Añadir Formación</p>
       </div>

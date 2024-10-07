@@ -293,7 +293,7 @@
                     </label>
                     <component
                     :is="field.type"
-                    v-model="formData[field.name]"
+                    v-model="additionalInfoFormData[field.name]"
                     :placeholder="field.placeholder"
                     :options="field.options"
                     :type="field.inputType"
@@ -315,55 +315,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, watch } from 'vue';
-import useOptions from '@/mixins/optionMixin.js';
-import { useEmploymentTypes } from '@/services/candidate/useEmploymentTypes';
-import { useJobOptions } from '@/services/candidate/useJobOptions';
-import { useCultureTypes } from '@/services/candidate/useCultureTypes';
-import SsFormInput from '@/components/ss-form/SsFormInput.vue';
-import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
-import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
-import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
+import { ref } from 'vue';
+import useOptions from '@/composables/useOptions.js';
+import useStep2Form from '@/composables/useStep2Form.js';   
+import useAdditionalInfo from '@/composables/useAdditionalInfo.js';
+import useExperiences from '@/composables/useExperiences.js';
+import useFormations from '@/composables/useFormations.js';
 
-const formFields = ref([
-    { label: 'Rango salarial desde:', name: 'salaryRange', type: SsFormSelect, options: ['Option 1', 'Option 2'] },
-    { label: '¿Cuál es tu nivel profesional?', name: 'professionalLevel', type: SsFormSelect, options: ['Junior', 'Mid', 'Senior'] },
-    { label: 'Nombre completo', name: 'fullName', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
-    { label: 'Profesión', name: 'profession', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
-    { label: 'Especialización', name: 'specialization', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
-    { label: 'Número de documento', name: 'documentNumber', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
-    { label: 'Ciudad donde buscas empleo', name: 'city', type: SsFormSelect, options: ['Ciudad 1', 'Ciudad 2'] },
-    { label: '¿Estás dispuesto a trasladarte?', name: 'willingToRelocate', type: SsFormToggle },
-    { label: 'Correo electrónico', name: 'email', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'email' },
-    { label: 'Número de celular', name: 'phoneNumber', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
-    { label: 'LinkedIn', name: 'linkedin', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
-    { label: '¿Qué valor agregado le ofreces a una empresa que te contrata? ¿Qué te diferencia de otras personas?', name: 'addedValue', type: SsFormTextarea, placeholder: 'Escríbelas aquí...' },
-    { label: '¿Qué te hace feliz a nivel laboral?', name: 'happiness', type: SsFormInput, placeholder: 'Escríbe aquí...' },
-    { label: '¿Cuál es tu talento profesional?', name: 'professionalTalent', type: SsFormInput, placeholder: 'Escríbe aquí...' },
-    { label: 'Qué ideas, proyectos o actividades has implementado que quieras contar. / Si no tienes experiencia ¿qué ideas tienes para implementar?', name: 'ideas', type: SsFormTextarea, placeholder: 'Escríbelas aquí...' },
-]);
+const {
+    selectedOptions,
+    options,
+    toggleSelection,
+    scrollLeft,
+    scrollRight,
+    showLeftArrow,
+    showRightArrow,
+    optionContainers,
+    checkArrowsVisibility,
+} = useOptions();
 
-const formData = ref(JSON.parse(localStorage.getItem('stepsData'))?.step2 || {
-    salaryRange: '',
-    professionalLevel: '',
-    fullName: '',
-    profession: '',
-    specialization: '',
-    documentNumber: '',
-    city: '',
-    willingToRelocate: false,
-    linkedin: '', 
-    email: '',
-    phoneNumber: '',
-    addedValue: '',
-    happiness: '',
-    professionalTalent: '',
-    ideas: '',
-});
+checkArrowsVisibility();
 
-import useAdditionalInfo from '@/mixins/additionalInfoMixin';
-import useExperiences from '@/mixins/experiencesMixin.js';
-import useFormations from '@/mixins/formationsMixin.js';
+const { formFields, formData, handleInputChange } = useStep2Form();
 
 const {
     formations,
@@ -388,138 +361,8 @@ const {
     handleFileUpload,
 } = useExperiences();
 
-const { additionalInfoFormFields} = useAdditionalInfo();
-
+const { additionalInfoFormFields, additionalInfoFormData} = useAdditionalInfo();
 const finalNote = ref('Elegir una cultura específica no te descarta de ningún proceso.');
-const showLeftArrow = ref([]);
-const showRightArrow = ref([]);
-const optionContainers = ref([]);
-
-const employmentTypes = ref([]);
-const jobOptions = ref([]);
-const cultureTypes = ref([]);
-
-// Composable
-const { selectedOptions, options, toggleSelection } = useOptions();
-const { listEmploymentTypes } = useEmploymentTypes();
-const { listJobOptions } = useJobOptions();
-const { listCultureTypes } = useCultureTypes(); 
-
-// Funciones para obtener datos de los servicios
-const fetchEmploymentTypes = async () => {
-  try {
-    const response = await listEmploymentTypes();
-    if (response.data && response.data.data) {
-      employmentTypes.value = response.data.data.map(item => ({
-        id: item.id,
-        name: item.name,
-        icon: item.icon,
-      }));
-      options.value[0].items = employmentTypes.value;
-    }
-  } catch (error) {
-    console.error("Error fetching employment types:", error);
-  }
-};
-
-const fetchJobOptions = async () => {
-  try {
-    const response = await listJobOptions();
-    if (response.data && response.data.data) {
-      jobOptions.value = response.data.data.map(item => ({
-        id: item.id,
-        name: item.name,
-        icon: item.icon,
-      }));
-      options.value[1].items = jobOptions.value;
-    }
-  } catch (error) {
-    console.error("Error fetching job options:", error);
-  }
-};
-
-const fetchCultureTypes = async () => {
-  try {
-    const response = await listCultureTypes();
-    if (response.data && response.data.data) {
-      cultureTypes.value = response.data.data.map(item => ({
-        id: item.id,
-        name: item.name,
-        icon: item.icon,
-      }));
-      options.value[2].items = cultureTypes.value;
-    }
-  } catch (error) {
-    console.error("Error fetching culture types:", error);
-  }
-};
-
-const scrollLeft = (index) => {
-  const optionsContainer = optionContainers.value[index];
-  if (optionsContainer) {
-    optionsContainer.scrollBy({ left: -178, behavior: 'smooth' });
-    updateArrows(index);
-  }
-};
-
-const scrollRight = (index) => {
-  const optionsContainer = optionContainers.value[index];
-  if (optionsContainer) {
-    optionsContainer.scrollBy({ left: 178, behavior: 'smooth' });
-    updateArrows(index);
-  }
-};
-
-const updateArrows = (index) => {
-  nextTick(() => {
-    const optionsContainer = optionContainers.value[index];
-    if (optionsContainer) {
-      showLeftArrow.value[index] = optionsContainer.scrollLeft > 0;
-      showRightArrow.value[index] = optionsContainer.scrollLeft < (optionsContainer.scrollWidth - optionsContainer.clientWidth);
-    }
-  });
-};
-
-const checkArrowsVisibility = () => {
-  nextTick(() => {
-    options.value.forEach((_, index) => {
-      updateArrows(index);
-    });
-  });
-};
-
-const handleInputChange = (fieldName) => {
-    if (fieldName === 'willingToRelocate') {
-        updateSwitchLabel();
-    }
-    saveToLocalStorage();
-};
-
-const saveToLocalStorage = () => {
-    const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
-    stepsData.step2 = formData.value;
-    localStorage.setItem('stepsData', JSON.stringify(stepsData));
-};
-
-const updateSwitchLabel = () => {
-    const switchElement = document.querySelector('.switch .slider');
-    if (switchElement) {
-        switchElement.setAttribute('data-label', formData.value.willingToRelocate ? 'Sí' : 'No');
-    }
-};
-
-const submitForm = () => {
-    console.log(formData.value);
-};
-
-onMounted(() => {
-    checkArrowsVisibility();
-    fetchEmploymentTypes();
-    fetchJobOptions(); 
-    fetchCultureTypes();
-});
-
-watch(options, checkArrowsVisibility, { immediate: true });
 </script>
   
 <style scoped lang="sass">
