@@ -1,7 +1,7 @@
 <template>
   <div>
     <multiselect 
-      v-model="value" 
+      v-model="internalValue" 
       :options="options" 
       :multiple="true" 
       :close-on-select="false" 
@@ -9,15 +9,16 @@
       :preserve-search="true" 
       placeholder="Selecciona" 
       label="name" 
-      track-by="name" 
-      :preselect-first="true"
+      track-by="name"
+      :custom-label="customLabel"
+      :select-label="selectLabel"
+      :deselect-label="deselectLabel"
+      :noOptions="noOptions"
+      :loading="loading"
+      :selectedLabel="selectedLabel"
     >
       <template #selection="{ values, isOpen }">
-        <span 
-          class="multiselect__single" 
-          v-if="values.length" 
-          v-show="!isOpen"
-        >
+        <span class="multiselect__single" v-if="values.length" v-show="!isOpen">
           {{ values.length }} competencias seleccionadas
         </span>
       </template>
@@ -26,29 +27,56 @@
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect'
+import Multiselect from 'vue-multiselect';
 
 export default {
-  name: 'YourComponentName',
+  name: 'SsMultipleFormSelect',
   components: {
     Multiselect
   },
-  data() {
-    return {
-      value: [],
-      options: this.getOptions()
+  props: {
+    modelValue: {
+      type: Array,
+      default: () => []
+    },
+    options: {
+      type: Array,
+      default: () => []
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    selectLabel: {
+      type: String,
+      default: 'Presiona Enter para seleccionar'
+    },
+    deselectLabel: {
+      type: String,
+      default: 'Presiona Enter para eliminar'
+    },
+    noOptions: {
+      type: String,
+      default: 'No hay opciones disponibles'
+    },
+    selectedLabel: {
+      type: String,
+      default: 'Seleccionado'
+    }
+  },
+  computed: {
+    internalValue: {
+      get() {
+        return this.modelValue;
+      },
+      set(value) {
+        this.$emit('update:modelValue', value);
+      }
     }
   },
   methods: {
-    getOptions() {
-      return [
-        { name: 'Vue.js', language: 'JavaScript' },
-        { name: 'Adonis', language: 'JavaScript' },
-        { name: 'Rails', language: 'Ruby' },
-        { name: 'Sinatra', language: 'Ruby' },
-        { name: 'Laravel', language: 'PHP' },
-        { name: 'Phoenix', language: 'Elixir' }
-      ];
+    customLabel(option) {
+      return option.name;
     }
   }
 }
@@ -57,13 +85,18 @@ export default {
 <style lang="scss" >
 .multiselect{
   color: #023D6A;
-  font-family: Montserrat;
+  font-family: Montserrat !important;
   font-size: 13px;
   font-weight: 400;
   line-height: 18px;
   text-align: left;
   background-color: #F2F2F2;
-  z-index: 4;
+  .multiselect__content-wrapper{
+    z-index: 4;
+  }
+  *{
+    font-family: Montserrat !important;
+  }
   &::placeholder{
     font-family: Montserrat;
     font-size: 13px !important;
@@ -73,7 +106,18 @@ export default {
     color: #023D6A;
   }
 
+  .multiselect__placeholder {
+    font-family: Montserrat;
+    font-size: 13px !important;
+    font-weight: 400;
+    line-height: 18px;
+    text-align: left;
+    color: #023D6A;
+    margin: 0;
+  }
+
   .multiselect__tags {
+    padding: 16px 20px;
     border-radius: 5px;
     border: 1px solid #E4E4E499;
     background-color: #F2F2F2 !important;
@@ -86,7 +130,13 @@ export default {
     line-height: 18px;
     text-align: left;
     background-color: #F2F2F2;
+    margin: 0;
   }
-  
+
+  .multiselect__select {
+    width: 29px;
+    height: 46px;
+  }
 }
+
 </style>
