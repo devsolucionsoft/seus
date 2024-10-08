@@ -1,12 +1,12 @@
 // src/composables/useAdditionalInfo.js
 import { ref, onMounted } from 'vue';
 import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
-import SsFormSelect from '@/components/ss-form/SsFormSelect.vue';
+import SsMultipleFormSelect from '@/components/ss-form/SsMultipleFormSelect.vue';
 import { useJobSkills } from '@/services/candidate/useJobSkills';
 
 export default function useAdditionalInfo() {
     const additionalInfoFormFields = ref([
-        { label: 'Elige las 5 competencias que más te caracterizan', name: 'profiency', type: SsFormSelect, options: [] },
+        { label: 'Elige las 5 competencias que más te caracterizan', name: 'profiency', type: SsMultipleFormSelect, options: [] },
         { label: 'Datos complementarios', name: 'aditionalinfo', type: SsFormTextarea, placeholder: 'Añade información complementaria útil para reclutadores', optional: true },
     ]);
 

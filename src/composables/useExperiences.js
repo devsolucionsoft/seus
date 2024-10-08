@@ -66,7 +66,6 @@ export default function useExperiences() {
     const openDeleteExperienceDialog = (index) => {
         experienceToDeleteIndex.value = index;
         deleteExperienceDialogVisible.value = true;
-        console.log("Abriendo diálogo de eliminación para el índice:", index);
     };
 
     const confirmDeleteExperience = () => {
@@ -142,13 +141,13 @@ export default function useExperiences() {
     const showImage = (image) => {
         selectedImage.value = image;
         isImageModalVisible.value = true;
-        document.body.style.overflow = 'hidden'; // Deshabilitar scroll
+        document.body.style.overflow = 'hidden';
     };
 
     const closeImageModal = () => {
         isImageModalVisible.value = false;
         selectedImage.value = null;
-        document.body.style.overflow = ''; // Restaurar scroll
+        document.body.style.overflow = '';
     };
 
     loadExperiencesFromLocalStorage();
@@ -177,5 +176,6 @@ export default function useExperiences() {
         showImage,
         closeImageModal,
         formatDate,
+        saveToLocalStorage
     };
 }

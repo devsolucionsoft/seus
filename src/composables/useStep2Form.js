@@ -10,12 +10,13 @@ export default function useStep2Form() {
   const formFields = ref([
     { label: 'Rango salarial desde:', name: 'salaryRange', type: SsFormSelect, options: [] },
     { label: '¿Cuál es tu nivel profesional?', name: 'professionalLevel', type: SsFormSelect, options: [] },
-    { label: 'Nombre completo', name: 'fullName', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
+    { label: 'Nombres', name: 'names', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
+    { label: 'Apellidos', name: 'lastNames', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
     { label: 'Profesión', name: 'profession', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
     { label: 'Especialización', name: 'specialization', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
     { label: 'Número de documento', name: 'documentNumber', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
     { label: 'Ciudad donde buscas empleo', name: 'city', type: SsFormSelect, options: [] },
-    { label: '¿Estás dispuesto a trasladarte?', name: 'willingToRelocate', type: SsFormToggle },
+    { label: '¿Estás dispuesto a trasladarte?', name: 'willingToRelocate', type: SsFormToggle, class: 'custom-toggle-class'},
     { label: 'Correo electrónico', name: 'email', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'email' },
     { label: 'Número de celular', name: 'phoneNumber', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
     { label: 'LinkedIn', name: 'linkedin', type: SsFormInput, placeholder: 'Escribe aquí...', inputType: 'text' },
@@ -49,7 +50,7 @@ export default function useStep2Form() {
   const fetchProfessionalLevels = async () => {
     try {
       const response = await listProfessionalLevels();
-  
+      console.log(response)
       const levelsData = response.data.data;
       if (Array.isArray(levelsData)) {
         const professionalLevels = levelsData.map(level => level.name);

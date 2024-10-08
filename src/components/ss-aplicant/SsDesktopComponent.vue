@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <section class="interest-items">
+        <section ref="interestSectionRef" class="interest-items">
             <h2>Configura esta sección para un perfil más detallado.</h2>
             <div v-for="(option, index) in options" :key="index" class="option-group">
                 <h3>{{ option.title }}</h3>
@@ -49,7 +49,7 @@
                 <div class="title">
                     <h3>Formación académica</h3>
                 </div>
-                <form @submit.prevent="saveFormation">
+                <form class="add-formation-form" @submit.prevent="saveFormation">
                     <div class="form-group" v-for="(field, index) in formationFormFields" :key="index">
                     <label :for="field.name">{{ field.label }}</label>
                     <component
@@ -76,8 +76,8 @@
                     </div>
                 </form>
             </div>
-            
-            <div class="formations-elements">
+
+            <div v-if="formations.length > 0" class="formations-elements">
                 <div v-for="(formation, index) in formations" :key="index" class="form-modal">
                     <form class="grouped" @submit.prevent="saveFormation">
                         <div class="form-group" v-for="(field, index) in formationFormFields" :key="index">
@@ -91,6 +91,7 @@
                                 :type="field.inputType"
                                 :required="field.required"
                                 :id="field.name"
+                                :style="field.style"
                             />
                         </div>
                         <div class="button-container">
@@ -128,40 +129,36 @@
                 <div class="title">
                     <h3>Experiencia laboral</h3>
                 </div>
-    
-                <form @submit.prevent="saveExperience">
+                <form class="add-experience-form" @submit.prevent="saveExperience">
                     <div
-                    :class="[
-                        'form-group',
-                        { formToggle: field.type === 'SsFormToggle' }
-                    ]"
-                    v-for="(field, index) in experiencesFormFields"
-                    :key="index"
-                    >
-                    <label :for="field.name">{{ field.label }}</label>
-                    <component
-                        :is="field.type"
+                        :class="[
+                            'form-group',
+                            { formToggle: field.type === 'SsFormToggle' }
+                        ]"
+                        v-for="(field, index) in experiencesFormFields"
                         :key="index"
-                        v-model="newExperience[field.name]"
-                        :label="field.label"
-                        :placeholder="field.placeholder"
-                        :type="field.inputType"
-                        :inputType="field.inpuType"
-                        :required="field.required"
-                        :id="field.name"
-                    />
+                        :style="{ order: index === 5 ? 2 : index === 6 ? 1 : 'initial' }"
+                        >
+                        <label :for="field.name">{{ field.label }}</label>
+                        <component
+                            :is="field.type"
+                            :key="index"
+                            v-model="newExperience[field.name]"
+                            :label="field.label"
+                            :placeholder="field.placeholder"
+                            :type="field.inputType"
+                            :inputType="field.inpuType"
+                            :required="field.required"
+                            :id="field.name"
+                        />
                     </div>
     
-                    <div class="form-group attachments-form-group">
+                    <div class="form-group attachments-form-group" :style="{ order: 1 }">
                         <label class="attachments" for="attachments">
                             <div class="addMedia">
                                 <img src="@/assets/icons/clip.svg" alt="Clip">
-                                <span>
-                                    Añadir certificación, fotos o premios
-                                </span>
-                                <span class="optional">
-                                    Opcional
-                                </span>
+                                <span>Añadir certificación, fotos o premios</span>
+                                <span class="optional">Opcional</span>
                             </div>
                         </label>
                         <input
@@ -173,56 +170,58 @@
                         />
                         <div class="previews">
                             <img
-                            v-for="(attachment, index) in newExperience.attachments"
-                            :key="index"
-                            :src="attachment"
-                            class="preview-image"
-                            alt="Vista previa"
+                                v-for="(attachment, index) in newExperience.attachments"
+                                :key="index"
+                                :src="attachment"
+                                class="preview-image"
+                                alt="Vista previa"
                             />
                         </div>
                         <p class="description">{{ experiencesFinalNote }}</p>
                     </div>
                     
-                    <div class="button-container">
+                    <div style="order:8" class="button-container">
                         <button class="blue" type="submit">
                             <img src="@/assets/icons/mailBox.svg" alt="save">
                             <span>Guardar</span>
                         </button>
     
                         <button class="white">
-                            <img src="@/assets/icons/plus.svg" alt="add">
+                            <img src="@/assets/icons/white-plus.svg" alt="add">
                             <span>Añadir</span>
                         </button>
                     </div>
                 </form>
             </div>
     
-            <div class="experiences-items">
+            
+            <div v-if="experiences.length > 0" class="experiences-items">
                 <div v-for="(experience, index) in experiences" :key="index" class="form-modal">
-                    <form class="grouped" @submit.prevent="saveExperience">
+                    <form class="grouped" @submit.prevent="saveExperience" >
                         <div
                         :class="[
                             'form-group',
                             { formToggle: field.type === 'SsFormToggle' }
                         ]"
+                        :style="{ order: index === 5 ? 2 : index === 6 ? 1 : 'initial' }"
                         v-for="(field, index) in experiencesFormFields"
                         :key="index"
                         >
-                        <label :for="field.name">{{ field.label }}</label>
-                        <component
-                            :is="field.type"
-                            :key="index"
-                            v-model="experience[field.name]"
-                            :label="field.label"
-                            :placeholder="field.placeholder"
-                            :type="field.inputType"
-                            :inputType="field.inpuType"
-                            :required="field.required"
-                            :id="field.name"
-                        />
+                            <label :for="field.name">{{ field.label }}</label>
+                            <component
+                                :is="field.type"
+                                :key="index"
+                                v-model="experience[field.name]"
+                                :label="field.label"
+                                :placeholder="field.placeholder"
+                                :type="field.inputType"
+                                :inputType="field.inpuType"
+                                :required="field.required"
+                                :id="field.name"
+                            />
                         </div>
         
-                        <div class="form-group attachments-form-group">
+                        <div style="order: 1" class="form-group attachments-form-group">
                             <label class="attachments" for="attachments">
                                 <div class="addMedia">
                                     <img src="@/assets/icons/clip.svg" alt="Clip">
@@ -253,7 +252,7 @@
                             <p class="description">{{ experiencesFinalNote }}</p>
                         </div>
                         
-                        <div class="button-container">
+                        <div style="order: 8" class="button-container">
                             <button @click="openDeleteExperienceDialog(index)" type="button" class="blue-text">
                                 <span>Eliminar</span>
                                 <img src="@/assets/icons/white-delete.svg" alt="delete">
@@ -305,22 +304,59 @@
             </form>
         </section>
     
-        <section class="sendProfile">
-            <button class="sendProfileButton">
+        <section ref="sendProfileSectionRef" class="sendProfile">
+            <button 
+                @click="handleSave" 
+                :class="['sendProfileButton', { 'floating': showFloatingButton, 'relative': isRelativeButton }]">
                 <img src="@/assets/icons/whiteMailBox.svg" alt="Icon">
                 <span>Guardar información</span>
             </button>
-        </section>        
+        </section>    
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useUpdateCandidateProfile } from '@/services/candidate/useUpdateCandidateProfile';
 import useOptions from '@/composables/useOptions.js';
 import useStep2Form from '@/composables/useStep2Form.js';   
 import useAdditionalInfo from '@/composables/useAdditionalInfo.js';
 import useExperiences from '@/composables/useExperiences.js';
 import useFormations from '@/composables/useFormations.js';
+import { ElMessage } from 'element-plus';
+import { router } from 'vue-router';
+
+const showFloatingButton = ref(false);
+const isRelativeButton = ref(false);
+const interestSectionRef = ref(null);
+const sendProfileSectionRef = ref(null);
+
+const handleScroll = () => {
+  const interestSection = interestSectionRef.value;
+  const sendProfileSection = sendProfileSectionRef.value;
+  
+  if (interestSection && sendProfileSection) {
+    const interestSectionBottom = interestSection.getBoundingClientRect().bottom;
+    const sendProfileTop = sendProfileSection.getBoundingClientRect().top;
+    
+    const windowHeight = window.innerHeight;
+
+    showFloatingButton.value = interestSectionBottom < windowHeight;
+
+    isRelativeButton.value = sendProfileTop <= windowHeight;
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+  handleScroll();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
+
+const { updateCandidateProfile } = useUpdateCandidateProfile();
 
 const {
     selectedOptions,
@@ -332,8 +368,11 @@ const {
     showRightArrow,
     optionContainers,
     checkArrowsVisibility,
+    selectedCultures,
+    selectedTrainingTypes,
+    selectedJornadaOptions,
+    selectedJobSkills,
 } = useOptions();
-
 checkArrowsVisibility();
 
 const { formFields, formData, handleInputChange } = useStep2Form();
@@ -359,10 +398,65 @@ const {
     openDeleteExperienceDialog,
     saveExperience,
     handleFileUpload,
+    confirmDeleteExperience
 } = useExperiences();
 
 const { additionalInfoFormFields, additionalInfoFormData} = useAdditionalInfo();
 const finalNote = ref('Elegir una cultura específica no te descarta de ningún proceso.');
+
+const handleSave = async () => {
+  const data = {
+    name: formData.value.fullName,
+    last_name: '',
+    email: formData.value.email,
+    type_document_id: '',
+    document_number: formData.value.documentNumber,
+    salary_from: formData.value.salaryRange,
+    professional_level_id: formData.value.professionalLevel,
+    profession: formData.value.profession,
+    specialization: formData.value.specialization,
+    willing_to_relocate: formData.value.willingToRelocate,
+    cover_image: '',
+    photo: '',
+    job_search_city_id: formData.value.city,
+    cell_phone_number: formData.value.phoneNumber,
+    linkedin: formData.value.linkedin,
+    added_value: formData.value.addedValue,
+    job_happiness: formData.value.happiness,
+    ideas_and_projects: formData.value.ideas,
+    additional_information: additionalInfoFormData.value.additionalInformation,
+    cultures: JSON.stringify({
+      add_ids: selectedCultures.value,
+      remove_ids: []
+    }),
+    employment_training_types: JSON.stringify({
+      add_ids: selectedTrainingTypes.value,
+      remove_ids: []
+    }),
+    jornada_options: JSON.stringify({
+      add_ids: selectedJornadaOptions.value,
+      remove_ids: []
+    }),
+    job_skills: JSON.stringify({
+      add_ids: selectedJobSkills.value,
+      remove_ids: []
+    })
+  };
+
+  try {
+    const response = await updateCandidateProfile(data);
+    if (response && response.data.status_code === 201) {
+      ElMessage.success(response.data.message);
+      setTimeout(() => {
+        router.push({ name: "signIn" });
+      }, 3000);
+    } else {
+      ElMessage.error(response.data.message);
+    }
+  } catch (error) {
+    ElMessage.error(error.response.data.message);
+  }
+};
 </script>
   
 <style scoped lang="sass">
@@ -476,8 +570,9 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
         display: flex
         flex-direction: column
         gap: 14px
+        justify-content: space-between
 
-        &:nth-child(1), &:nth-child(2), &:nth-child(13), &:nth-child(14)
+        &:nth-child(1), &:nth-child(2), &:nth-child(13), &:nth-child(14), &:nth-child(15)
             grid-column: span 3
             @media (max-width: 1024px) and (min-width: 768px)
                 grid-column: span 2
@@ -487,9 +582,13 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
             @media (max-width: 1024px) and (min-width: 768px)
                 grid-column: span 2
 
-        &:nth-child(12), &:nth-child(15)
+        &:nth-child(12), &:nth-child(13), &:nth-child(16)
             grid-column: span 6
             @media (max-width: 1024px) and (min-width: 768px)
+                grid-column: span 4
+
+        @media (max-width: 1024px) and (min-width: 768px)
+            &:nth-child(11)
                 grid-column: span 4
 
         label
@@ -512,15 +611,17 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
     background-color: #C6CBD2
     display: flex
     flex-direction: column
-    gap: 34px
     .formations-elements
         display: flex
         flex-direction: column
         gap: 32px
+        border-top: 1px solid #FFFFFF !important
     .form-modal
         display: flex
         flex-direction: column
         gap: 34px
+        .add-formation-form
+            padding-bottom: 32px
         .title
             h3
                 font-size: 24px
@@ -534,15 +635,16 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
             gap: 32px
             align-items: center
             justify-content: space-between
-            padding-bottom: 10px
-            border-bottom: 1px solid #FFFFFF
+            
             &.grouped
                 border-bottom: none
+                padding-top: 32px
             .form-group
                 display: flex
                 flex-direction: column
                 gap: 15px
-
+                height: 100%
+                justify-content: space-between
                 label
                     font-size: 14px
                     font-weight: 500
@@ -553,9 +655,14 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
 
                 &:nth-child(1), &:nth-child(2)
                     grid-column: span 2
-
+                    @media (max-width: 1140px)
+                        grid-column: span 3
                 &:nth-child(3), &:nth-child(4)
                     grid-column: span 1
+                    @media (max-width: 1140px)
+                        grid-column: span 3
+
+
 .button-container
     display: flex
     flex-direction: row !important
@@ -607,11 +714,13 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
     color: white
     display: flex
     flex-direction: column
-    gap: 34px
     .form-modal
         display: flex
         flex-direction: column
         gap: 34px
+        .add-experience-form
+            padding-bottom: 32px
+            padding-top: 0px !important
         .title
             h3
                 font-size: 24px
@@ -625,15 +734,14 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
             gap: 32px
             align-items: center
             justify-content: space-between
-            padding-bottom: 42px
-            border-bottom: 1px solid #FFFFFF
+            padding-top: 32px
             &.grouped
                 border-bottom: none
             .form-group
                 display: flex
                 flex-direction: column
                 gap: 15px
-
+                height: 100%
                 label
                     font-size: 14px
                     font-weight: 500
@@ -641,21 +749,24 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
                     text-align: left
                     color: white
                     white-space: nowrap
-
                 &:nth-child(1), &:nth-child(2)
                     grid-column: span 2
-
+                    @media (max-width: 1140px)
+                        grid-column: span 3
                 &:nth-child(3), &:nth-child(4)
                     grid-column: span 1
-
+                    @media (max-width: 1140px)
+                        grid-column: span 3
                 &:nth-child(5)
                     grid-column: span 6
-
                 &:nth-child(6)
                     grid-column: span 2
-
+                    @media (max-width: 1140px)
+                        grid-column: span 6
                 &:nth-child(7)
                     grid-column: span 4
+                    @media (max-width: 1140px)
+                        grid-column: span 6
 
                 &.attachments-form-group
                     display: flex
@@ -668,12 +779,30 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
                             align-content: center
                             gap: 8px
                             cursor: pointer
+                            align-items: center
+                            span
+                                font-size: 12px
+                                font-weight: 400
+                                line-height: 20px
+                                text-align: left
+                                color: #EDEEF1
+                            .optional
+                                padding: 4px 10px
+                                border-radius: 25px
+                                background-color: #06759F66
+                                font-family: Montserrat
+                                font-size: 12px
+                                font-weight: 500
+                                line-height: 14.63px
+                                text-align: center
+                                color: white
                     .previews 
                         display: flex
                         gap: 5px
                         flex-wrap: wrap
                         align-items: center
                         justify-content: center
+                        margin: 10px auto
                         .preview-image 
                             width: 60px
                             height: 60px
@@ -681,7 +810,7 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
                             border-radius: 8px
                             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2)
                     .description
-                        padding: 10px
+                        padding: 15px 10px 10px 10px
                         font-size: 10px
                         font-weight: 400
                         line-height: 12px
@@ -690,6 +819,8 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
 
                     input
                         display: none
+    .experiences-items
+        border-top: 1px solid white 
 .additional-info
     padding: 40px 197px
     background-color: white
@@ -739,10 +870,24 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
         display: flex
         border-radius: 50px
         background: linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)
+        position: static
+        transform: translateY(50px)
+        opacity: 0
+        transition: all 0.3s ease
         span
             font-size: 16px
             font-weight: 500
             line-height: 19.5px
             text-align: center
             color: #F8D2EA
+        &.floating
+            position: fixed
+            bottom: 20px
+            z-index: 3
+            transform: translateY(0) scale(1)
+            opacity: 1
+        &.relative
+            position: relative
+            transform: translateY(0) scale(1)
+            opacity: 1
 </style>

@@ -12,7 +12,7 @@
             <button @click="editExperience(index)">
               <img src="@/assets/icons/whiteEdit.svg" alt="Edit">
             </button>
-            <button @click="openDeleteExperienceDialogVisible(index)">
+            <button @click="openDeleteExperienceDialog(index)">
               <img src="@/assets/icons/whiteDelete.svg" alt="Edit">
             </button>
           </div>
@@ -126,36 +126,39 @@
   </div>
 </template>
 
-<script>
-import SsFormInput from '@/components/ss-form/SsFormInput.vue';
-import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
-import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
+<script setup>
+import { watch } from 'vue';
 import useExperiences from '@/composables/useExperiences.js';
 
-export default {
-  name: 'Step4',
-  mixins: [useExperiences], 
-  components: {
-    SsFormInput,
-    SsFormTextarea,
-    SsFormToggle,
-  },
-  watch:{
-    experiences: {
-      handler() {
-        this.saveToLocalStorage();
-      },
-      deep: true,
-    },
-    showForm(val) {
-      if (val) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-      }
-    }
-  },
-};
+const {
+  showForm,
+  experiences,
+  newExperience,
+  experiencesFinalNote,
+  experiencesFormFields,
+  deleteExperienceDialogVisible,
+  openForm,
+  cancelForm,
+  saveExperience,
+  editExperience,
+  openDeleteExperienceDialog,
+  confirmDeleteExperience,
+  handleFileUpload,
+  formatDate,
+  saveToLocalStorage
+} = useExperiences();
+
+watch(experiences, () => {
+  saveToLocalStorage();
+}, { deep: true });
+
+watch(showForm, (val) => {
+  if (val) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+});
 </script>
 
 <style lang="scss" scoped>

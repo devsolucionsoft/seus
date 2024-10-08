@@ -10,12 +10,14 @@ export default function useFormations() {
     startDate: '',
     endDate: '',
   });
+
   const formationFormFields = ref([
     { label: 'Título obtenido', name: 'title', placeholder: 'Ingresala aquí...', type: SsFormInput, required: true },
     { label: 'Institución', name: 'institution', placeholder: 'Ingresala aquí...', type: SsFormInput, required: true },
     { label: 'Fecha de inicio', name: 'startDate', placeholder: '', type: SsFormInput, inputType: 'date', required: true },
     { label: 'Fecha de terminación', name: 'endDate', placeholder: '', type: SsFormInput, inputType: 'date', required: true },
   ]);
+  
   const editIndex = ref(null);
   const deleteFormationDialogVisible = ref(false);
   const formationToDelete = ref(null);
@@ -94,6 +96,28 @@ export default function useFormations() {
     }
   };
 
+  const isMostRecent = (itemIndex) => {
+    if (formations.value.length === 0) return false;
+
+    const latestIndex = formations.value.reduce((latest, formation, index) => {
+      return new Date(formation.endDate) > new Date(formations.value[latest].endDate) ? index : latest;
+    }, 0);
+
+    return itemIndex === latestIndex;
+  };
+  
+  const formatDate = (dateString) => {
+    const dateParts = dateString.split('-');
+    const date = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
+
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    let month = date.toLocaleString('es-ES', { month: 'long', timeZone: 'UTC' });
+    month = month.charAt(0).toUpperCase() + month.slice(1);
+    const year = date.getUTCFullYear();
+
+    return `${day} ${month} ${year}`;
+  };
+
   // Cargar las formaciones al montar
   loadFormationsFromLocalStorage();
 
@@ -108,10 +132,13 @@ export default function useFormations() {
     openForm,
     cancelForm,
     saveFormation,
+    saveToLocalStorage,
     resetForm,
     editFormation,
     openDeleteFormationDialog,
     confirmDeleteFormation,
     deleteFormation,
+    isMostRecent,
+    formatDate,
   };
 }

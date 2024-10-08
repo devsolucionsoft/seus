@@ -10,7 +10,7 @@
           <p v-if="isMostRecent(index)">Último estudio realizado</p>
           <div class="actions">
             <button @click="editFormation(index)"><img src="@/assets/icons/edit2.svg" alt="Edit"></button>
-            <button @click="openDeleteFormationDialogVisible(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
+            <button @click="openDeleteFormationDialog(index)"><img src="@/assets/icons/delete.svg" alt="Delete"></button>
           </div>
         </div>
         <div class="formation-level element">
@@ -82,32 +82,40 @@
   </div>
 </template>
 
-<script>
-import SsFormInput from '@/components/ss-form/SsFormInput.vue';
-import formationsMixin from '@/mixins/formationsMixin.js';
+<script setup>
+import { watch } from 'vue';
+import useFormations from '@/composables/useFormations.js';
 
-export default {
-  name: 'Step3',
-  mixins: [formationsMixin], 
-  components: {
-    SsFormInput,
-  },
-  watch:{
-    formations: {
-      handler() {
-        this.saveToLocalStorage();
-      },
-      deep: true
-    },
-    showForm(val) {
-      if (val) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-      }
-    },
-  },
-};
+const {
+    showForm,
+    formations,
+    newFormation,
+    formationFormFields,
+    deleteFormationDialogVisible,
+    openForm,
+    cancelForm,
+    saveFormation,
+    saveToLocalStorage,
+    editFormation,
+    confirmDeleteFormation,
+    isMostRecent,
+    formatDate,
+    openDeleteFormationDialog,
+} = useFormations();
+
+
+watch(formations, () => {
+  saveToLocalStorage();
+}, { deep: true });
+
+watch(showForm, (val) => {
+  if (val) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = '';
+  }
+});
+
 </script>
 
 <style lang="scss" scoped>
