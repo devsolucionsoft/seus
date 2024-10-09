@@ -10,51 +10,60 @@
       </router-link>
     </div>
 
-    <div v-if="filteredSections.length > 0" class="employment card">
+    <div class="employment card">
       <div class="header-section">
         <span>Empleo</span>
         <button @click="goToStep(1)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
       </div>
       <div v-for="(section, sectionIndex) in filteredSections" :key="sectionIndex" class="option-group">
-        <h3>{{ section.title }}</h3>
+        <h3>{{ section?.title }}</h3>
         <div class="options">
-          <div v-for="(item, itemIndex) in section.selectedItems" :key="itemIndex" class="selected-item">
+          <div v-for="(item, itemIndex) in section?.selectedItems" :key="itemIndex" class="selected-item">
             <div class="image-container">
-              <img :src="item.image" :alt="item.label" />
+              <img :src="item?.icon" :alt="item?.name" />
             </div>
-            <p>{{ item.label }}</p>
+            <p>{{ item?.name }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="personal-info card" v-if="step2Data">
-      <div class="header-section">
-        <span>Datos Personales</span>
-        <button @click="goToStep(2)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
-      </div>
-      <div class="group" v-for="(item, index) in personalInfoItems" :key="index" :class="item.class">
-        <div class="group-info-element">
-          <div class="title">
-            <div v-if="item.icon">
-              <img :src="item.icon" alt="Icon">
-            </div>
-            <span>{{ item.title }}</span>
-          </div>
-          <p>
-            <img v-if="item.name === 'linkedin'" src="@/assets/icons/linkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
-            <template v-if="item.isToggle">
-              <SsFormToggle v-model="item.willingToRelocate" :isEditable="isEditing" />
-            </template>
-            <template v-else>
-              {{ item.value !== null && item.value !== '' ? item.value : 'N/A' }}
-            </template>
-          </p>
+    <div class="personal-info card" v-if="groupedItems">
+        <div class="header-section">
+          <span>Datos Personales</span>
+          <button @click="goToStep(2)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
         </div>
-      </div>
+        <div
+          v-for="(groupItems, groupIndex) in groupedItems"
+          :key="groupIndex"
+          class="dashed-group"
+        >
+            <div
+                v-for="(item, index) in groupItems"
+                :key="index"
+                :class="item.class"
+                class="group-info-element"
+            >
+                <div class="title">
+                    <div v-if="item.icon">
+                        <img :src="item.icon" alt="Icon">
+                    </div>
+                    <span>{{ item.title }}</span>
+                </div>
+                <p>
+                    <img v-if="item.name === 'linkedin'" src="@/assets/icons/bluelinkedin.svg" alt="LinkedIn Logo" class="linkedin-icon" />
+                    <template v-if="item.isToggle">
+                        <SsFormToggle v-model="item.willingToRelocate" :isEditable="false" />
+                    </template>
+                    <template v-else>
+                        {{ item.value !== null && item.value !== '' ? item.value : 'N/A' }}
+                    </template>
+                </p>
+            </div>
+        </div>
     </div>
 
-    <div v-if="formations.length > 0" class="formations card information-cards">
+    <!-- <div v-if="formations.length > 0" class="formations card information-cards">
       <div class="header-section">
         <span>Formación académica</span>
         <button @click="goToStep(3)"><img src="@/assets/icons/edit.svg" alt="Edit"></button>
@@ -196,23 +205,21 @@
           <el-button type="primary" @click="confirmDeleteFormation">Confirmar</el-button>
         </div>
       </template>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
-<script>
-import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
-import showInformationsMixin from '@/mixins/showInformationsMixin';
-import formationsMixin from '@/mixins/formationsMixin.js';
-import experiencesMixin from '@/mixins/experiencesMixin.js';
+<script setup>
+import useShowInformation from '@/composables/useShowInformation';
 
+/* import SsFormToggle from '@/components/ss-form/SsFormToggle.vue'; */
+import { defineEmits } from 'vue';
 
-export default {
-  name: 'StepPreview',
-  mixins: [showInformationsMixin, formationsMixin, experiencesMixin],
-  components: {
-    SsFormToggle,
-  },
+const emit = defineEmits(['edit-step']);
+const { filteredSections, groupedItems } = useShowInformation();
+
+const goToStep = (stepNumber) => {
+  emit('edit-step', stepNumber);
 };
 </script>
 
@@ -259,6 +266,64 @@ export default {
     &.personal-info
       box-shadow: 0px 4px 10px 0px #00000026
       background-color: white
+      gap: 0
+      .head-title
+        color: #023D6A
+        font-family: Montserrat
+        font-size: 20px
+        font-weight: 600
+        line-height: 26px
+        text-align: left
+      .dashed-group
+          padding: 24px 0
+          gap: 16px
+          display: flex
+          flex-direction: column
+          border-bottom: 1px dashed #9E9E9E
+          &:last-child
+              border-bottom: none
+              padding-bottom: 0
+          .group-info-element
+              display: flex
+              flex-direction: column
+              gap: 12px
+              .title
+                  display: flex
+                  flex-direction: row
+                  align-items: center
+                  gap: 7px
+              span
+                  font-size: 14px
+                  font-weight: 500
+                  line-height: 20px
+                  text-align: left
+                  color: #47586E
+              p
+                  font-size: 16px
+                  font-weight: 500
+                  line-height: 24px
+                  text-align: left
+                  color: #023D6A
+                  display: flex
+                  flex-direction: row
+                  align-items: center
+                  gap: 10px
+              &.green-items
+                  .title
+                      span
+                          font-size: 12px
+                          font-weight: 500
+                          line-height: 20px
+                          text-align: left
+                          color: #05454E
+                          padding: 1px 12px
+                          background-color: #CDFDF3
+                          border-radius: 30px
+                  p
+                      margin-left: 12px
+              &.toggle-element
+                  flex-direction: row      
+                  justify-content: space-between
     &.formations
       background-color: #C6CBD2
       box-shadow: 0px 4px 10px 0px #00000026

@@ -5,8 +5,8 @@
       class="form-select"
     >
       <option disabled value="">{{ placeholder }}</option>
-      <option v-for="(option, index) in options" :key="index" :value="option">
-        {{ option }}
+      <option v-for="option in options" :key="option.id" :value="option.id">
+        {{ option.name }}
       </option>
     </select>
 </template>
@@ -15,7 +15,7 @@
   export default {
     name: 'FormSelect',
     props: {
-      modelValue: String,
+      modelValue: [String, Number],
       placeholder: {
         type: String,
         default: 'Selecciona',

@@ -5,6 +5,7 @@ import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
 import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
 import { useProfessionalLevels } from '@/services/candidate/useProfessionalLevels';
 import { useCities } from '@/services/candidate/useCities';
+import { useCandidateGetProfile } from '@/services/candidate/useCandidateGetProfile';
 
 export default function useStep2Form() {
   const formFields = ref([
@@ -29,7 +30,8 @@ export default function useStep2Form() {
   const formData = ref(JSON.parse(localStorage.getItem('stepsData'))?.step2 || {
     salaryRange: '',
     professionalLevel: '',
-    fullName: '',
+    names: '',
+    lastNames: '',
     profession: '',
     specialization: '',
     documentNumber: '',
@@ -46,21 +48,44 @@ export default function useStep2Form() {
 
   const { listProfessionalLevels } = useProfessionalLevels();
   const { listCities } = useCities();
+  const { getCandidateProfile } = useCandidateGetProfile();
+
+  const fillFormWithCandidateData = (data) => {
+    formData.value.salaryRange = data.salary_from || '';
+    formData.value.professionalLevel = data.professional_level_id || '';
+    formData.value.names = data.name || '';
+    formData.value.lastNames = data.last_name || '';
+    formData.value.profession = data.profession || '';
+    formData.value.specialization = data.specialization || '';
+    formData.value.documentNumber = data.document_number || '';
+    formData.value.city = data.job_search_city_id || '';
+    formData.value.willingToRelocate = data.willing_to_relocate || false;
+    formData.value.linkedin = data.linkedin || '';
+    formData.value.email = data.user?.email || '';
+    formData.value.phoneNumber = data.cell_phone_number || '';
+    formData.value.addedValue = data.added_value || '';
+    formData.value.happiness = data.job_happiness || '';
+    formData.value.professionalTalent = data.professional_talent || '';
+    formData.value.ideas = data.ideas_and_projects || '';
+  };
 
   const fetchProfessionalLevels = async () => {
     try {
       const response = await listProfessionalLevels();
-      console.log(response)
       const levelsData = response.data.data;
+
       if (Array.isArray(levelsData)) {
-        const professionalLevels = levelsData.map(level => level.name);
+        const professionalLevels = levelsData.map(level => ({
+          id: level.id,
+          name: level.name,
+        }));
         const professionalLevelField = formFields.value.find(field => field.name === 'professionalLevel');
         professionalLevelField.options = professionalLevels;
       } else {
-        console.error('Unexpected response format:', levelsData);
+          console.error('Unexpected response format:', levelsData);
       }
     } catch (error) {
-      console.error('Error fetching professional levels:', error);
+        console.error('Error fetching professional levels:', error);
     }
   };
 
@@ -70,11 +95,14 @@ export default function useStep2Form() {
       const citiesData = response.data.data;
 
       if (Array.isArray(citiesData)) {
-        const cityNames = citiesData.map(city => city.name);
+        const cities = citiesData.map(city => ({
+          id: city.id, 
+          name: city.name,
+        }));
         const cityField = formFields.value.find(field => field.name === 'city');
-        cityField.options = cityNames;
+        cityField.options = cities; 
       } else {
-        console.error('Unexpected response format for cities:', citiesData);
+          console.error('Unexpected response format for cities:', citiesData);
       }
     } catch (error) {
       console.error('Error fetching cities:', error);
@@ -101,9 +129,17 @@ export default function useStep2Form() {
     }
   };
 
-  onMounted(() => {
-    fetchProfessionalLevels();
-    fetchCities();
+  onMounted(async () => {
+    await fetchProfessionalLevels();
+    await fetchCities();
+
+    try {
+      const candidateData = await getCandidateProfile();
+      fillFormWithCandidateData(candidateData);
+    } catch (error) {
+      console.error('Error fetching candidate profile:', error);
+    }
+
     updateSwitchLabel();
   });
 

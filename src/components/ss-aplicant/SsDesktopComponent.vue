@@ -889,5 +889,4 @@ const handleSave = async () => {
         &.relative
             position: relative
             transform: translateY(0) scale(1)
-            opacity: 1
 </style>

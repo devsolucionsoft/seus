@@ -37,7 +37,7 @@ export default {
     font-weight: 500
     line-height: 20px
     text-align: left
-    color: #EDEEF1
+    color: #023D6A
   .switch
     position: relative
     display: inline-block
