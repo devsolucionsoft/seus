@@ -212,7 +212,7 @@
 <script setup>
 import useShowInformation from '@/composables/useShowInformation';
 
-/* import SsFormToggle from '@/components/ss-form/SsFormToggle.vue'; */
+import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
 import { defineEmits } from 'vue';
 
 const emit = defineEmits(['edit-step']);

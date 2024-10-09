@@ -2,6 +2,7 @@ import { ref, onMounted, nextTick  } from 'vue';
 import { useEmploymentTypes } from '@/services/candidate/useEmploymentTypes';
 import { useJobOptions } from '@/services/candidate/useJobOptions';
 import { useCultureTypes } from '@/services/candidate/useCultureTypes';
+import { useCandidateGetProfile } from '@/services/candidate/useCandidateGetProfile';
 
 export default function useOptions() {
   const selectedOptions = ref([]);
@@ -32,6 +33,7 @@ export default function useOptions() {
   const { listEmploymentTypes } = useEmploymentTypes();
   const { listJobOptions } = useJobOptions();
   const { listCultureTypes } = useCultureTypes();
+  const { getCandidateProfile } = useCandidateGetProfile();
 
   // Funciones para obtener datos de los servicios
   const fetchEmploymentTypes = async () => {
@@ -79,6 +81,22 @@ export default function useOptions() {
       }
     } catch (error) {
       console.error("Error fetching culture types:", error);
+    }
+  };
+
+  const loadCandidateProfile = async () => {
+    try {
+      const response = await getCandidateProfile();
+      if (response.data && response.data.data) {
+        const candidateData = response.data.data;
+
+        // Asignar los valores a selectedOptions
+        selectedOptions.value[0] = candidateData.employment_training_types || [];
+        selectedOptions.value[1] = candidateData.jornada_options || [];
+        selectedOptions.value[2] = candidateData.cultures || [];
+      }
+    } catch (error) {
+      console.error("Error fetching candidate profile:", error);
     }
   };
 
@@ -149,6 +167,7 @@ export default function useOptions() {
     fetchEmploymentTypes();
     fetchJobOptions();
     fetchCultureTypes();
+    loadCandidateProfile();
     checkArrowsVisibility();
   });
 

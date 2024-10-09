@@ -1,146 +1,151 @@
 <template>
-    <section v-if="!hideOnSmallScreens || windowWidth >= 1200" class="banner-profile">
-        <div v-if="visibleSections.bannerImage" class="banner-image">
-          <div :class="{'background-container': true, 'blue-overlay': $route.query.userType === 'coach'}">
-            <img v-if="$route.query.userType === 'coach'" :src="backgroundImageBannerCoach" alt="Background" class="background center">
-            <img v-else :src="backgroundImageBanner" alt="Background" class="background top">
-          </div>
-          <button @click="changeBackground" class="edit-btn">
-            <span>Editar</span>
-            <div class="img-container">
-              <img src="@/assets/icons/edit.svg" alt="Editar">
-            </div>
-          </button>
-          <div v-if="$route.query.userType === 'coach'" class="coachs-title">
-            <img src="@/assets/images/bg-coach.svg" alt="bg-image">
-            <h1>MENTORES</h1>
-          </div>
+  <section v-if="!hideOnSmallScreens || windowWidth >= 1200" class="banner-profile">
+    <div v-if="visibleSections.bannerImage" class="banner-image">
+      <div :class="{'background-container': true, 'blue-overlay': $route.query.userType === 'coach'}">
+        <img v-if="$route.query.userType === 'coach'" :src="backgroundImageBannerCoach" alt="Background" class="background center">
+        <img v-else :src="backgroundImageBanner" alt="Background" class="background top">
+      </div>
+      <button @click="changeBackground" class="edit-btn">
+        <span>Editar</span>
+        <div class="img-container">
+          <img src="@/assets/icons/edit.svg" alt="Editar">
         </div>
-        <div v-if="visibleSections.profileSection" class="profile-section">
-          <div class="profile-image" @click="changeProfileImage">
-            <img :src="profileImage" alt="Perfil">
-            <div class="gradient-overlay"></div>
-            <div class="upload-overlay">
-              <img :src="cameraIcon" alt="Camera Image">
-              <span>Sube una imagen de perfil</span>
-            </div>
-          </div>
+      </button>
+      <div v-if="$route.query.userType === 'coach'" class="coachs-title">
+        <img src="@/assets/images/bg-coach.svg" alt="bg-image">
+        <h1>MENTORES</h1>
+      </div>
+    </div>
+    <div v-if="visibleSections.profileSection" class="profile-section">
+      <div class="profile-image" @click="changeProfileImage">
+        <img :src="profileImage" alt="Perfil">
+        <div class="gradient-overlay"></div>
+        <div class="upload-overlay">
+          <img :src="cameraIcon" alt="Camera Image">
+          <span>Sube una imagen de perfil</span>
+        </div>
+      </div>
 
-          <div v-if="visibleSections.basicInfo" class="basic-info">
-            <div class="text">
-              <span>Bienvenido <br><b>Francisco José Benavides</b></span>
-              <div class="lineText" :style="{ background: lineTextColor }"></div>
-            </div>
-            <div v-if="visibleSections.otherElements" class="info">
-              <div class="element">
-                <span class="title">Email</span>
-                <span class="desc">FRJosé@gmail.com</span>
-              </div>
-              <div class="element">
-                <span class="title">Documento</span>
-                <div class="document-container">
-                  <span class="type">CC</span>
-                  <span class="#">#</span>
-                  <span class="desc">1022345789</span>
-                </div>
-              </div>
-              <div class="element">
-                <span class="title">Password</span>
-                <span class="desc">***********</span>
-              </div>
-            </div>
-            <button v-if="visibleSections.otherElements">Cambiar contraseña</button>
-            <div class="offertButton" v-if="$route.query.userType === 'recruiter' && createOffer">
-              <router-link :to="{ name: 'createOffer' }" class="button">
-                <img src="@/assets/icons/upload.svg" alt="upload" />
-                <span>Crear oferta de empleo</span>
-              </router-link>
+      <div v-if="visibleSections.basicInfo" class="basic-info">
+        <div class="text">
+          <span>Bienvenido <br><b>{{ candidateData.name }} {{ candidateData.last_name }}</b></span>
+          <div class="lineText" :style="{ background: lineTextColor }"></div>
+        </div>
+        <div v-if="visibleSections.otherElements" class="info">
+          <div class="element">
+            <span class="title">Email</span>
+            <span class="desc">{{ candidateData.user?.email }}</span>
+          </div>
+          <div class="element">
+            <span class="title">Documento</span>
+            <div class="document-container">
+              <span class="type">{{ candidateData.type_document_name }}</span>
+              <span class="#">#</span>
+              <span class="desc">{{ candidateData.document_number }}</span>
             </div>
           </div>
+          <div class="element">
+            <span class="title">Password</span>
+            <span class="desc">***********</span>
+          </div>
         </div>
-    </section>
-  </template>
-  
-  <script>
-  export default {
-    name: 'BannerProfile',
-    props: {
-      visibleSections: {
-        type: Object,
-        default: () => ({
-          bannerImage: true,
-          profileSection: true,
-          basicInfo: true,
-          otherElements: true,
-        }),
-      },
-      createOffer: {
-        type: Boolean,
-        default: false,
-      },
-      hideOnSmallScreens: {
-        type: Boolean,
-        default: false,
-      },
+        <button v-if="visibleSections.otherElements">Cambiar contraseña</button>
+        <div class="offertButton" v-if="$route.query.userType === 'recruiter' && createOffer">
+          <router-link :to="{ name: 'createOffer' }" class="button">
+            <img src="@/assets/icons/upload.svg" alt="upload" />
+            <span>Crear oferta de empleo</span>
+          </router-link>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+import { ref, onMounted } from 'vue';
+import { useCandidateGetProfile } from '@/services/candidate/useCandidateGetProfile';
+import { useTypeDocuments } from '@/services/globals/useTypeDocuments';
+
+export default {
+  name: 'BannerProfile',
+  props: {
+    visibleSections: {
+      type: Object,
+      default: () => ({
+        bannerImage: true,
+        profileSection: true,
+        basicInfo: true,
+        otherElements: true,
+      }),
     },
-    data() {
-      return {
-        backgroundImageBanner: require('@/assets/images/bgProfileImageBanner.webp'),
-        backgroundImageBannerCoach: require('@/assets/images/bgProfileImageBannerCoach.webp'),
-        profileImage: require('@/assets/images/bgProfileImage.webp'),
-        cameraIcon: require('@/assets/icons/camera.svg'),
-        lineTextColor: '#761D74',
-        windowWidth: window.innerWidth,
-      };
+    createOffer: {
+      type: Boolean,
+      default: false,
     },
-    mounted(){
-      window.addEventListener('resize', this.updateWindowWidth);
-      this.updateLineColor()
+    hideOnSmallScreens: {
+      type: Boolean,
+      default: false,
     },
-    beforeUnmount() {
-      window.removeEventListener('resize', this.updateWindowWidth);
-    },
-    methods: {
-      updateWindowWidth() {
-        this.windowWidth = window.innerWidth;
-      },
-      changeBackground() {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-        fileInput.onchange = (event) => {
-          const file = event.target.files[0];
-          if (file) {
-            this.backgroundImage = URL.createObjectURL(file);
-          }
-        };
-        fileInput.click();
-      },
-      changeProfileImage() {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-        fileInput.onchange = (event) => {
-          const file = event.target.files[0];
-          if (file) {
-            this.profileImage = URL.createObjectURL(file);
-          }
-        };
-        fileInput.click();
-      },
-      updateLineColor() {
-        const queryParam = this.$route.query.userType;
-        if (queryParam === 'recruiter') {
-          this.lineTextColor = 'linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)';
+  },
+  setup(props) {
+    const backgroundImageBanner = require('@/assets/images/bgProfileImageBanner.webp');
+    const backgroundImageBannerCoach = require('@/assets/images/bgProfileImageBannerCoach.webp');
+    const profileImage = require('@/assets/images/bgProfileImage.webp');
+    const cameraIcon = require('@/assets/icons/camera.svg');
+    const lineTextColor = ref('#761D74');
+    const windowWidth = ref(window.innerWidth);
+    const candidateData = ref({});
+    const errorMessage = ref(null);
+
+    const { getCandidateProfile } = useCandidateGetProfile();
+    const { listTypeDocuments } = useTypeDocuments();
+
+    const fetchCandidateProfile = async () => {
+      const result = await getCandidateProfile();
+      
+      if (result.success) {
+        candidateData.value = result.data;
+        errorMessage.value = null;
+
+        const typesResult = await listTypeDocuments();
+        if (typesResult) {
+          const documentTypesMap = new Map(typesResult.data.data.map(type => [type.id, type.type]));
+          candidateData.value.type_document_name = documentTypesMap.get(candidateData.value.type_document_id) || 'Desconocido';
         }
-        else{
-          this.lineText = '761D74';
-        }
-      },
-    }
-  };
-  </script>
-  
+      } else {
+        errorMessage.value = result.message;
+      }
+    };
+
+    const updateLineColor = () => {
+      const userType = props.userType || ''; 
+      if (userType === 'recruiter') {
+        lineTextColor.value = 'linear-gradient(112.76deg, #761D74 0.53%, #0DC6DE 100%)';
+      }
+    };
+
+    onMounted(() => {
+      fetchCandidateProfile();
+      window.addEventListener('resize', () => {
+        windowWidth.value = window.innerWidth;
+      });
+    });
+
+    return {
+      backgroundImageBanner,
+      backgroundImageBannerCoach,
+      profileImage,
+      cameraIcon,
+      lineTextColor,
+      windowWidth,
+      candidateData,
+      updateLineColor,
+    };
+  },
+};
+</script>
+
+
 <style lang="sass">
 .banner-profile
   position: relative
@@ -373,6 +378,7 @@
         width: 100%
         justify-content: space-between
         padding-right: 67px
+        gap: 18px
         @media (min-width: 768px) and (max-width: 1200px)
           flex-direction: column
         .element
