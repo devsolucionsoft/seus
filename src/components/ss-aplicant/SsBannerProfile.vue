@@ -63,8 +63,9 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useCandidateGetProfile } from '@/services/candidate/useCandidateGetProfile';
+import { useCandidateService } from '@/services/candidate/useCandidateService';
 import { useTypeDocuments } from '@/services/globals/useTypeDocuments';
+import store from 'store2';
 
 export default {
   name: 'BannerProfile',
@@ -88,32 +89,42 @@ export default {
     },
   },
   setup(props) {
-    const backgroundImageBanner = require('@/assets/images/bgProfileImageBanner.webp');
+    const defaultBackgroundImageBanner  = require('@/assets/images/bgProfileImageBanner.webp');
+    const defaultProfileImage  = require('@/assets/images/bgProfileImage.webp');
     const backgroundImageBannerCoach = require('@/assets/images/bgProfileImageBannerCoach.webp');
-    const profileImage = require('@/assets/images/bgProfileImage.webp');
     const cameraIcon = require('@/assets/icons/camera.svg');
     const lineTextColor = ref('#761D74');
     const windowWidth = ref(window.innerWidth);
     const candidateData = ref({});
     const errorMessage = ref(null);
 
-    const { getCandidateProfile } = useCandidateGetProfile();
+    const CandidateService = useCandidateService();
     const { listTypeDocuments } = useTypeDocuments();
 
-    const fetchCandidateProfile = async () => {
-      const result = await getCandidateProfile();
-      
-      if (result.success) {
-        candidateData.value = result.data;
-        errorMessage.value = null;
+    const backgroundImageBanner = ref(defaultBackgroundImageBanner);
+    const profileImage = ref(defaultProfileImage);
 
-        const typesResult = await listTypeDocuments();
-        if (typesResult) {
-          const documentTypesMap = new Map(typesResult.data.data.map(type => [type.id, type.type]));
-          candidateData.value.type_document_name = documentTypesMap.get(candidateData.value.type_document_id) || 'Desconocido';
+    const token = store("token");
+
+    const fetchCandidateProfile = async () => {
+      try{
+        const response = await CandidateService.getCandidateProfile(token);
+        
+        if (response.status === 200) {
+          candidateData.value = response.data;
+          errorMessage.value = null;
+  
+          backgroundImageBanner.value = candidateData.value.cover_image || defaultBackgroundImageBanner;
+          profileImage.value = candidateData.value.photo || defaultProfileImage;
+  
+          const typesResult = await listTypeDocuments();
+          if (typesResult) {
+            const documentTypesMap = new Map(typesResult.data.data.map(type => [type.id, type.type]));
+            candidateData.value.type_document_name = documentTypesMap.get(candidateData.value.type_document_id) || 'Desconocido';
+          }
         }
-      } else {
-        errorMessage.value = result.message;
+      } catch (eror){
+        /* errorMessage.value = result.message; */
       }
     };
 

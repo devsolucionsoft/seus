@@ -5,9 +5,12 @@ import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
 import SsFormToggle from '@/components/ss-form/SsFormToggle.vue';
 import { useProfessionalLevels } from '@/services/candidate/useProfessionalLevels';
 import { useCities } from '@/services/candidate/useCities';
-import { useCandidateGetProfile } from '@/services/candidate/useCandidateGetProfile';
+import { useCandidateService } from '@/services/candidate/useCandidateService';
+import store from 'store2';
 
 export default function useStep2Form() {
+  const token = store("token");
+  
   const formFields = ref([
     { label: 'Rango salarial desde:', name: 'salaryRange', type: SsFormSelect, options: [] },
     { label: '¿Cuál es tu nivel profesional?', name: 'professionalLevel', type: SsFormSelect, options: [] },
@@ -48,25 +51,25 @@ export default function useStep2Form() {
 
   const { listProfessionalLevels } = useProfessionalLevels();
   const { listCities } = useCities();
-  const { getCandidateProfile } = useCandidateGetProfile();
+  const CandidateService = useCandidateService();
 
   const fillFormWithCandidateData = (data) => {
-    formData.value.salaryRange = data.salary_from || '';
-    formData.value.professionalLevel = data.professional_level_id || '';
-    formData.value.names = data.name || '';
-    formData.value.lastNames = data.last_name || '';
-    formData.value.profession = data.profession || '';
-    formData.value.specialization = data.specialization || '';
-    formData.value.documentNumber = data.document_number || '';
-    formData.value.city = data.job_search_city_id || '';
-    formData.value.willingToRelocate = data.willing_to_relocate || false;
-    formData.value.linkedin = data.linkedin || '';
-    formData.value.email = data.user?.email || '';
-    formData.value.phoneNumber = data.cell_phone_number || '';
-    formData.value.addedValue = data.added_value || '';
-    formData.value.happiness = data.job_happiness || '';
-    formData.value.professionalTalent = data.professional_talent || '';
-    formData.value.ideas = data.ideas_and_projects || '';
+    formData.value.salaryRange = data.data.salary_from || '';
+    formData.value.professionalLevel = data.data.professional_level_id || '';
+    formData.value.names = data.data.name || '';
+    formData.value.lastNames = data.data.last_name || '';
+    formData.value.profession = data.data.profession || '';
+    formData.value.specialization = data.data.specialization || '';
+    formData.value.documentNumber = data.data.document_number || '';
+    formData.value.city = data.data.job_search_city_id || '';
+    formData.value.willingToRelocate = data.data.willing_to_relocate || false;
+    formData.value.linkedin = data.data.linkedin || '';
+    formData.value.email = data.data.user?.email || '';
+    formData.value.phoneNumber = data.data.cell_phone_number || '';
+    formData.value.addedValue = data.data.added_value || '';
+    formData.value.happiness = data.data.job_happiness || '';
+    formData.value.professionalTalent = data.data.professional_talent || '';
+    formData.value.ideas = data.data.ideas_and_projects || '';
   };
 
   const fetchProfessionalLevels = async () => {
@@ -134,7 +137,7 @@ export default function useStep2Form() {
     await fetchCities();
 
     try {
-      const candidateData = await getCandidateProfile();
+      const candidateData = await CandidateService.getCandidateProfile(token);
       fillFormWithCandidateData(candidateData);
     } catch (error) {
       console.error('Error fetching candidate profile:', error);

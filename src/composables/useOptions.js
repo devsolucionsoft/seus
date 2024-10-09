@@ -2,11 +2,14 @@ import { ref, onMounted, nextTick  } from 'vue';
 import { useEmploymentTypes } from '@/services/candidate/useEmploymentTypes';
 import { useJobOptions } from '@/services/candidate/useJobOptions';
 import { useCultureTypes } from '@/services/candidate/useCultureTypes';
-import { useCandidateGetProfile } from '@/services/candidate/useCandidateGetProfile';
+import { useCandidateService } from '@/services/candidate/useCandidateService';
+import store from 'store2';
 
 export default function useOptions() {
+  const token = store("token");
   const selectedOptions = ref([]);
   const options = ref([
+    
     {
       title: 'Tipo de formación y empleo que buscas:',
       items: [],
@@ -33,7 +36,7 @@ export default function useOptions() {
   const { listEmploymentTypes } = useEmploymentTypes();
   const { listJobOptions } = useJobOptions();
   const { listCultureTypes } = useCultureTypes();
-  const { getCandidateProfile } = useCandidateGetProfile();
+  const CandidateService = useCandidateService();
 
   // Funciones para obtener datos de los servicios
   const fetchEmploymentTypes = async () => {
@@ -84,9 +87,10 @@ export default function useOptions() {
     }
   };
 
+
   const loadCandidateProfile = async () => {
     try {
-      const response = await getCandidateProfile();
+      const response = await CandidateService.getCandidateProfile(token);
       if (response.data && response.data.data) {
         const candidateData = response.data.data;
 
