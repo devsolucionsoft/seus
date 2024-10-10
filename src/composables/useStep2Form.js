@@ -39,7 +39,7 @@ export default function useStep2Form() {
     specialization: '',
     documentNumber: '',
     city: '',
-    willingToRelocate: false,
+    willingToRelocate: 0,
     linkedin: '',
     email: '',
     phoneNumber: '',
@@ -61,8 +61,8 @@ export default function useStep2Form() {
     formData.value.profession = data.data.data.profession || '';
     formData.value.specialization = data.data.data.specialization || '';
     formData.value.documentNumber = data.data.data.document_number || '';
-    formData.value.city = data.data.data.job_search_city_id || '';
-    formData.value.willingToRelocate = data.data.data.willing_to_relocate || false;
+    formData.value.city = data.data.data.job_search_city_id || 0;
+    formData.value.willingToRelocate = data.data.data.willing_to_relocate || 0;
     formData.value.linkedin = data.data.data.linkedin || '';
     formData.value.email = data.data.data.user?.email || '';
     formData.value.phoneNumber = data.data.data.cell_phone_number || '';

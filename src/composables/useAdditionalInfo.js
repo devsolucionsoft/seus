@@ -3,9 +3,12 @@ import { ref, onMounted, markRaw } from 'vue';
 import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
 import SsMultipleFormSelect from '@/components/ss-form/SsMultipleFormSelect.vue';
 import { useJobSkills } from '@/services/candidate/useJobSkills';
+import { useCandidateService } from '@/services/candidate/useCandidateService';
+import store from 'store2';
 
 export default function useAdditionalInfo() {
-    
+    const token = store("token");
+
     const additionalInfoFormData = ref(JSON.parse(localStorage.getItem('step5FormData')) || {
         profiency: [],
         aditionalinfo: '',
@@ -16,18 +19,21 @@ export default function useAdditionalInfo() {
         { label: 'Datos complementarios', name: 'aditionalinfo', type: markRaw(SsFormTextarea), placeholder: 'Añade información complementaria útil para reclutadores', optional: true },
     ]);
 
-    const saveToLocalStorage = () => {
-        localStorage.setItem('step5FormData', JSON.stringify(additionalInfoFormData.value));
+    const { listJobSkills } = useJobSkills();
+    const CandidateService = useCandidateService();
+    
+    const fillFormWithCandidateData = (data) => {
+        additionalInfoFormData.value.profiency = data.data.data.job_skills || '';
+        additionalInfoFormData.value.aditionalinfo = data.data.data.additional_information || '';
     };
 
-    const { listJobSkills } = useJobSkills();
     const fetchJobSkills = async () => {
         try {
             const response = await listJobSkills();
             const jobSkillsData = response.data.data;
 
             if (Array.isArray(jobSkillsData)) {
-                const jobSkillsNames = jobSkillsData.map(jobSkill => ({ name: jobSkill.name }));
+                const jobSkillsNames = jobSkillsData.map(jobSkill => ({ id: jobSkill.id, name: jobSkill.name }));
                 const jobSkillsField = additionalInfoFormFields.value.find(field => field.name === 'profiency');
                 jobSkillsField.options = jobSkillsNames;
             } else {
@@ -38,13 +44,31 @@ export default function useAdditionalInfo() {
         }
     };
 
-    onMounted(() => {
-        fetchJobSkills();
+    
+    const saveToLocalStorage = () => {
+        const stepsData = JSON.parse(localStorage.getItem('stepsData')) || {};
+        stepsData.step5 = additionalInfoFormData.value;
+        localStorage.setItem('stepsData', JSON.stringify(stepsData));
+    };
+
+    const handleInputChange = () => {
+        saveToLocalStorage();
+    };
+
+    onMounted(async () => {
+        await fetchJobSkills();
+        try {
+            const candidateData = await CandidateService.getCandidateProfile(token);
+            fillFormWithCandidateData(candidateData);
+        } catch (error) {
+            console.error('Error fetching candidate profile:', error);
+        }
     });
 
     return {
         additionalInfoFormFields,
         additionalInfoFormData,
         saveToLocalStorage,
+        handleInputChange
     };
 }

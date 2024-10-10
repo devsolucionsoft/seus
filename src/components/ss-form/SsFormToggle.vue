@@ -3,13 +3,13 @@
     <label class="switch">
       <input
         type="checkbox"
-        :checked="modelValue"
-        @change="$emit('update:modelValue', $event.target.checked)"
+        :checked="modelValue === 1"
+        @change="$emit('update:modelValue', $event.target.checked ? 1 : 0)"
         :disabled="!isEditable"
       />
       <span class="slider"></span>
     </label>
-    <span>{{ modelValue ? 'Sí' : 'No' }}</span>
+    <span>{{ modelValue === 1 ? 'Sí' : 'No' }}</span>
   </div>
 </template>
 
@@ -17,7 +17,10 @@
 export default {
   name: 'FormToggle',
   props: {
-    modelValue: Boolean,
+    modelValue: {
+      type: Number,
+      default: 0,
+    },
     isEditable: {
       type: Boolean,
       default: true,

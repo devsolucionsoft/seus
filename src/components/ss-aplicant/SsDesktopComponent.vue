@@ -2,25 +2,29 @@
     <div class="content">
         <section ref="interestSectionRef" class="interest-items">
             <h2>Configura esta sección para un perfil más detallado.</h2>
-            <div v-for="(option, index) in options" :key="index" class="option-group">
+
+            <div v-for="(option, categoryIndex) in options" :key="categoryIndex" class="option-group">
                 <h3>{{ option.title }}</h3>
                 <div class="options-wrapper">
-                    <button v-if="showLeftArrow[index]" @click="scrollLeft(index)" class="scroll-button left">‹</button>
-                    <div class="options" :ref="el => optionContainers[index] = el">
-                        <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
-                            <div 
-                                class="image-container" 
-                                :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" 
-                                @click="toggleSelection(`${index}-${idx}`)"
-                            >
-                                <img :src="item.icon" :alt="item.name" />
-                            </div>
-                            <p>{{ item.name }}</p>
-                        </div>
+                  <button v-if="showLeftArrow[categoryIndex]" @click="scrollLeft(categoryIndex)" class="scroll-button left">‹</button>
+                  
+                  <div class="options" :ref="el => optionContainers[categoryIndex] = el">
+                    <div v-for="(item) in option.items" :key="item.id" class="option-item">
+                      <div 
+                        class="image-container" 
+                        :class="{ selected: selectedOptions[categoryIndex] && selectedOptions[categoryIndex].includes(item.id) }" 
+                        @click="toggleSelection(categoryIndex, item.id)"
+                      >
+                        <img :src="item.icon" :alt="item.name" />
+                      </div>
+                      <p>{{ item.name }}</p>
                     </div>
-                    <button v-if="showRightArrow[index]" @click="scrollRight(index)" class="scroll-button right">›</button>
+                  </div>
+                  
+                  <button v-if="showRightArrow[categoryIndex]" @click="scrollRight(categoryIndex)" class="scroll-button right">›</button>
                 </div>
             </div>
+
             <p class="description">{{ finalNote }}</p>
         </section>
         
@@ -324,7 +328,6 @@ import useAdditionalInfo from '@/composables/useAdditionalInfo.js';
 import useExperiences from '@/composables/useExperiences.js';
 import useFormations from '@/composables/useFormations.js';
 import { ElMessage } from 'element-plus';
-import { router } from 'vue-router';
 import store from 'store2';
 
 const token = store("token");
@@ -341,11 +344,8 @@ const handleScroll = () => {
   if (interestSection && sendProfileSection) {
     const interestSectionBottom = interestSection.getBoundingClientRect().bottom;
     const sendProfileTop = sendProfileSection.getBoundingClientRect().top;
-    
     const windowHeight = window.innerHeight;
-
     showFloatingButton.value = interestSectionBottom < windowHeight;
-
     isRelativeButton.value = sendProfileTop <= windowHeight;
   }
 };
@@ -376,60 +376,84 @@ const { additionalInfoFormFields, additionalInfoFormData} = useAdditionalInfo();
 const finalNote = ref('Elegir una cultura específica no te descarta de ningún proceso.');
 
 const handleSave = async () => {
-  const data = {
-    name: formData.value.names,
-    last_name: formData.value.lastNames,
-    email: formData.value.email,
-    type_document_id: '1',
-    document_number: formData.value.documentNumber,
-    professional_level_id: formData.value.professionalLevel,
-    profession: formData.value.profession,
-    specialization: formData.value.specialization,
-    willing_to_relocate: formData.value.willingToRelocate,
-    ideas_and_projects: formData.value.ideas,
-    job_search_city_id: formData.value.city,
-    cell_phone_number: formData.value.phoneNumber,
-    linkedin: formData.value.linkedin,
-    added_value: formData.value.addedValue,
-    job_happiness: formData.value.happiness,
-    employment_training_types: JSON.stringify({
-      add_ids: selectedOptions.value[0],
-      remove_ids: []
-    }),
-    jornada_options: JSON.stringify({
-      add_ids: selectedOptions.value[1],
-      remove_ids: []
-    }),
-    cultures: JSON.stringify({
-      add_ids: selectedOptions.value[2],
-      remove_ids: []
-    }),
-    /*
-    cover_image: '',
-    photo: '',
-    salary_from: formData.value.salaryRange,
-    additional_information: additionalInfoFormData.value.additionalInformation, */
-    /* 
-    
-    job_skills: JSON.stringify({
-      add_ids: selectedJobSkills.value,
-      remove_ids: []
-    }) */
-  };
-  console.log(data);
-  try {
-    const response = await CandidateService.editCandidateProfile(token, data);
-    if (response && response.data.status_code === 201) {
-      ElMessage.success(response.data.message);
-      setTimeout(() => {
-        router.push({ name: "signIn" });
-      }, 3000);
-    } else {
-      ElMessage.error(response.data.message);
+    try {
+        const response = await CandidateService.getCandidateProfile(token);
+
+        // Obtener los elementos previamente seleccionados de la información del candidato
+        const previousSelection = {
+            employment_training_types: response.data?.data.employment_training_types?.map(item => item.id) || [],
+            jornada_options: response.data?.data.jornada_options?.map(item => item.id) || [],
+            cultures: response.data?.data.cultures?.map(item => item.id) || [],
+            job_skills: response.data?.data.job_skills?.map(item => item.id) || [],
+        };
+
+        // Función para calcular los add_ids y remove_ids
+        const getChanges = (previous, current) => {
+            const add_ids = current.filter(id => !previous.includes(id));
+            const remove_ids = previous.filter(id => !current.includes(id));
+            return { add_ids, remove_ids };
+        };
+
+        const employmentTrainingChanges = getChanges(previousSelection.employment_training_types, selectedOptions.value[0]);
+        const jornadaOptionsChanges = getChanges(previousSelection.jornada_options, selectedOptions.value[1]);
+        const culturesChanges = getChanges(previousSelection.cultures, selectedOptions.value[2]);
+
+        const jobSkillsChanges = getChanges(previousSelection.job_skills, additionalInfoFormData.value.profiency.map(skill => skill.id));
+
+        const data = {
+            name: formData.value.names,
+            last_name: formData.value.lastNames,
+            email: formData.value.email,
+            type_document_id: '1',
+            document_number: formData.value.documentNumber,
+            professional_level_id: formData.value.professionalLevel,
+            profession: formData.value.profession,
+            specialization: formData.value.specialization,
+            willing_to_relocate: formData.value.willingToRelocate,
+            ideas_and_projects: formData.value.ideas,
+            job_search_city_id: formData.value.city,
+            cell_phone_number: formData.value.phoneNumber,
+            linkedin: formData.value.linkedin,
+            added_value: formData.value.addedValue,
+            job_happiness: formData.value.happiness,
+            employment_training_types: JSON.stringify({
+                add_ids: employmentTrainingChanges.add_ids,
+                remove_ids: employmentTrainingChanges.remove_ids,
+            }),
+            jornada_options: JSON.stringify({
+                add_ids: jornadaOptionsChanges.add_ids,
+                remove_ids: jornadaOptionsChanges.remove_ids,
+            }),
+            cultures: JSON.stringify({
+                add_ids: culturesChanges.add_ids,
+                remove_ids: culturesChanges.remove_ids,
+            }),
+            additional_information: additionalInfoFormData.value.aditionalinfo,
+            job_skills: JSON.stringify({
+                add_ids: jobSkillsChanges.add_ids,
+                remove_ids: jobSkillsChanges.remove_ids,
+            }),
+        };
+        console.log(data);
+        const editResponse = await CandidateService.editCandidateProfile(token, data);
+        
+        if (editResponse?.data?.status_code === 200) {
+            ElMessage.success(editResponse.data.message);
+        } else {
+            ElMessage.error(editResponse.data.message);
+        }
+    } catch (error) {
+        const validationErrors = error.response?.data?.errors || [];
+        
+        // Mostrar el primer error de la lista si existen errores de validación
+        if (validationErrors.length > 0) {
+            ElMessage.error(validationErrors[0]); // Mostrar solo el primer error
+        } else {
+            // Mostrar mensaje general si no hay errores detallados
+            const errorMessage = error.response?.data?.message || "Error al guardar la información.";
+            ElMessage.error(errorMessage);
+        }
     }
-  } catch (error) {
-    ElMessage.error(error.response.data.message);
-  }
 };
 </script>
   

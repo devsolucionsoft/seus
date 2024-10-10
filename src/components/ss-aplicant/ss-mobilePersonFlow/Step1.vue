@@ -1,18 +1,24 @@
 <template>
   <div class="step1">
-    <div v-for="(option, index) in options" :key="index" class="option-group">
+    <div v-for="(option, categoryIndex) in options" :key="categoryIndex" class="option-group">
       <h3>{{ option.title }}</h3>
       <div class="options-wrapper">
-        <button v-if="showLeftArrow[index]" @click="scrollLeft(index)" class="scroll-button left">‹</button>
-        <div class="options" :ref="el => optionContainers[index] = el">
-          <div v-for="(item, idx) in option.items" :key="idx" class="option-item">
-            <div class="image-container" :class="{ selected: selectedOptions.includes(`${index}-${idx}`) }" @click="toggleSelection(`${index}-${idx}`)">
+        <button v-if="showLeftArrow[categoryIndex]" @click="scrollLeft(categoryIndex)" class="scroll-button left">‹</button>
+        
+        <div class="options" :ref="el => optionContainers[categoryIndex] = el">
+          <div v-for="(item) in option.items" :key="item.id" class="option-item">
+            <div 
+              class="image-container" 
+              :class="{ selected: selectedOptions[categoryIndex] && selectedOptions[categoryIndex].includes(item.id) }" 
+              @click="toggleSelection(categoryIndex, item.id)"
+            >
               <img :src="item.icon" :alt="item.name" />
             </div>
             <p>{{ item.name }}</p>
           </div>
         </div>
-        <button v-if="showRightArrow[index]" @click="scrollRight(index)" class="scroll-button right">›</button>
+        
+        <button v-if="showRightArrow[categoryIndex]" @click="scrollRight(categoryIndex)" class="scroll-button right">›</button>
       </div>
     </div>
     <p class="description">{{ finalNote }}</p>

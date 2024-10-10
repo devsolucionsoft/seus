@@ -177,7 +177,7 @@ export default {
           candidateData.value = response.data.data;
           errorMessage.value = null;
   
-          /* backgroundImageBanner.value = candidateData.value.cover_image || defaultBackgroundImageBanner;
+         /*  backgroundImageBanner.value = candidateData.value.cover_image || defaultBackgroundImageBanner;
           profileImage.value = candidateData.value.photo || defaultProfileImage; */
   
           const typesResult = await listTypeDocuments();
