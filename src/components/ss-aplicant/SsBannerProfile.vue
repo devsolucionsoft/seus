@@ -1,3 +1,66 @@
+<!-- <template>
+  <section v-if="!hideOnSmallScreens || windowWidth >= 1200" class="banner-profile">
+    <div v-if="visibleSections.bannerImage" class="banner-image">
+      <div :class="{'background-container': true, 'blue-overlay': $route.query.userType === 'coach'}">
+        <img v-if="$route.query.userType === 'coach'" :src="backgroundImageBannerCoach" alt="Background" class="background center">
+        <img v-else :src="backgroundImageBanner" alt="Background" class="background top">
+      </div>
+      <button @click="changeBackground" class="edit-btn">
+        <span>Editar</span>
+        <div class="img-container">
+          <img src="@/assets/icons/edit.svg" alt="Editar">
+        </div>
+      </button>
+      <div v-if="$route.query.userType === 'coach'" class="coachs-title">
+        <img src="@/assets/images/bg-coach.svg" alt="bg-image">
+        <h1>MENTORES</h1>
+      </div>
+    </div>
+    <div v-if="visibleSections.profileSection" class="profile-section">
+      <div class="profile-image" @click="changeProfileImage">
+        <img :src="profileImage" alt="Perfil">
+        <div class="gradient-overlay"></div>
+        <div class="upload-overlay">
+          <img :src="cameraIcon" alt="Camera Image">
+          <span>Sube una imagen de perfil</span>
+        </div>
+      </div>
+
+      <div v-if="visibleSections.basicInfo" class="basic-info">
+        <div class="text">
+          <span>Bienvenido <br><b>{{ candidateData.name }} {{ candidateData.last_name }}</b></span>
+          <div class="lineText" :style="{ background: lineTextColor }"></div>
+        </div>
+        <div v-if="visibleSections.otherElements" class="info">
+          <div class="element">
+            <span class="title">Email</span>
+            <span class="desc">{{ candidateData.user?.email }}</span>
+          </div>
+          <div class="element">
+            <span class="title">Documento</span>
+            <div class="document-container">
+              <span class="type">{{ candidateData.type_document_name }}</span>
+              <span class="#">#</span>
+              <span class="desc">{{ candidateData.document_number }}</span>
+            </div>
+          </div>
+          <div class="element">
+            <span class="title">Password</span>
+            <span class="desc">***********</span>
+          </div>
+        </div>
+        <button v-if="visibleSections.otherElements">Cambiar contraseña</button>
+        <div class="offertButton" v-if="$route.query.userType === 'recruiter' && createOffer">
+          <router-link :to="{ name: 'createOffer' }" class="button">
+            <img src="@/assets/icons/upload.svg" alt="upload" />
+            <span>Crear oferta de empleo</span>
+          </router-link>
+        </div>
+      </div>
+    </div>
+  </section>
+</template> -->
+
 <template>
   <section v-if="!hideOnSmallScreens || windowWidth >= 1200" class="banner-profile">
     <div v-if="visibleSections.bannerImage" class="banner-image">
@@ -111,11 +174,11 @@ export default {
         const response = await CandidateService.getCandidateProfile(token);
         
         if (response.status === 200) {
-          candidateData.value = response.data;
+          candidateData.value = response.data.data;
           errorMessage.value = null;
   
-          backgroundImageBanner.value = candidateData.value.cover_image || defaultBackgroundImageBanner;
-          profileImage.value = candidateData.value.photo || defaultProfileImage;
+          /* backgroundImageBanner.value = candidateData.value.cover_image || defaultBackgroundImageBanner;
+          profileImage.value = candidateData.value.photo || defaultProfileImage; */
   
           const typesResult = await listTypeDocuments();
           if (typesResult) {
@@ -156,7 +219,6 @@ export default {
 };
 </script>
 
-
 <style lang="sass">
 .banner-profile
   position: relative
@@ -173,8 +235,6 @@ export default {
       max-height: 112px
       @media (min-width: 768px) 
         max-height: 360px
-      
-
       img.background
         width: 100%
         max-height: 100%

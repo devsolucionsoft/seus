@@ -1,11 +1,11 @@
 <template>
-    <input
-      :type="type"
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      :placeholder="placeholder"
-      class="form-input"
-    />
+  <input
+    :type="type"
+    :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)"
+    :placeholder="placeholder"
+    class="form-input"
+  />
 </template>
   
 <script>

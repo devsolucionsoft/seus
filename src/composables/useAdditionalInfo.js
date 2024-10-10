@@ -1,5 +1,5 @@
 // src/composables/useAdditionalInfo.js
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, markRaw } from 'vue';
 import SsFormTextarea from '@/components/ss-form/SsFormTextarea.vue';
 import SsMultipleFormSelect from '@/components/ss-form/SsMultipleFormSelect.vue';
 import { useJobSkills } from '@/services/candidate/useJobSkills';
@@ -7,13 +7,13 @@ import { useJobSkills } from '@/services/candidate/useJobSkills';
 export default function useAdditionalInfo() {
     
     const additionalInfoFormData = ref(JSON.parse(localStorage.getItem('step5FormData')) || {
-        profiency: '',
+        profiency: [],
         aditionalinfo: '',
     });
 
     const additionalInfoFormFields = ref([
-        { label: 'Elige las 5 competencias que más te caracterizan', name: 'profiency', type: SsMultipleFormSelect, options: [],  modelValue: additionalInfoFormData.value.profiency },
-        { label: 'Datos complementarios', name: 'aditionalinfo', type: SsFormTextarea, placeholder: 'Añade información complementaria útil para reclutadores', optional: true },
+        { label: 'Elige las 5 competencias que más te caracterizan', name: 'profiency', type: markRaw(SsMultipleFormSelect), options: [], modelValue: additionalInfoFormData.value.profiency },
+        { label: 'Datos complementarios', name: 'aditionalinfo', type: markRaw(SsFormTextarea), placeholder: 'Añade información complementaria útil para reclutadores', optional: true },
     ]);
 
     const saveToLocalStorage = () => {

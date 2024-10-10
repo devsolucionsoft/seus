@@ -317,7 +317,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { useUpdateCandidateProfile } from '@/services/candidate/useUpdateCandidateProfile';
+import { useCandidateService } from '@/services/candidate/useCandidateService';
 import useOptions from '@/composables/useOptions.js';
 import useStep2Form from '@/composables/useStep2Form.js';   
 import useAdditionalInfo from '@/composables/useAdditionalInfo.js';
@@ -325,6 +325,9 @@ import useExperiences from '@/composables/useExperiences.js';
 import useFormations from '@/composables/useFormations.js';
 import { ElMessage } from 'element-plus';
 import { router } from 'vue-router';
+import store from 'store2';
+
+const token = store("token");
 
 const showFloatingButton = ref(false);
 const isRelativeButton = ref(false);
@@ -356,49 +359,17 @@ onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll);
 });
 
-const { updateCandidateProfile } = useUpdateCandidateProfile();
+const CandidateService = useCandidateService();
 
-const {
-    selectedOptions,
-    options,
-    toggleSelection,
-    scrollLeft,
-    scrollRight,
-    showLeftArrow,
-    showRightArrow,
-    optionContainers,
-    checkArrowsVisibility,
-    selectedCultures,
-    selectedTrainingTypes,
-    selectedJornadaOptions,
-    selectedJobSkills,
-} = useOptions();
+const {selectedOptions,options,toggleSelection,scrollLeft,scrollRight,showLeftArrow,showRightArrow,optionContainers,checkArrowsVisibility} = useOptions();
 checkArrowsVisibility();
 
 const { formFields, formData, handleInputChange } = useStep2Form();
 
-const {
-    formations,
-    newFormation,
-    formationFormFields,
-    deleteFormationDialogVisible,
-    saveFormation,
-    editFormation,
-    openDeleteFormationDialog,
-    confirmDeleteFormation,
+const {formations,newFormation,formationFormFields,deleteFormationDialogVisible,saveFormation,editFormation,openDeleteFormationDialog,confirmDeleteFormation,
 } = useFormations();
 
-const {
-    experiences,
-    newExperience,
-    experiencesFinalNote,
-    experiencesFormFields,
-    deleteExperienceDialogVisible,
-    editExperience,
-    openDeleteExperienceDialog,
-    saveExperience,
-    handleFileUpload,
-    confirmDeleteExperience
+const {experiences,newExperience,experiencesFinalNote,experiencesFormFields,deleteExperienceDialogVisible,editExperience,openDeleteExperienceDialog,saveExperience,handleFileUpload,confirmDeleteExperience
 } = useExperiences();
 
 const { additionalInfoFormFields, additionalInfoFormData} = useAdditionalInfo();
@@ -406,45 +377,48 @@ const finalNote = ref('Elegir una cultura específica no te descarta de ningún 
 
 const handleSave = async () => {
   const data = {
-    name: formData.value.fullName,
-    last_name: '',
+    name: formData.value.names,
+    last_name: formData.value.lastNames,
     email: formData.value.email,
-    type_document_id: '',
+    type_document_id: '1',
     document_number: formData.value.documentNumber,
-    salary_from: formData.value.salaryRange,
     professional_level_id: formData.value.professionalLevel,
     profession: formData.value.profession,
     specialization: formData.value.specialization,
     willing_to_relocate: formData.value.willingToRelocate,
-    cover_image: '',
-    photo: '',
+    ideas_and_projects: formData.value.ideas,
     job_search_city_id: formData.value.city,
     cell_phone_number: formData.value.phoneNumber,
     linkedin: formData.value.linkedin,
     added_value: formData.value.addedValue,
     job_happiness: formData.value.happiness,
-    ideas_and_projects: formData.value.ideas,
-    additional_information: additionalInfoFormData.value.additionalInformation,
-    cultures: JSON.stringify({
-      add_ids: selectedCultures.value,
-      remove_ids: []
-    }),
     employment_training_types: JSON.stringify({
-      add_ids: selectedTrainingTypes.value,
+      add_ids: selectedOptions.value[0],
       remove_ids: []
     }),
     jornada_options: JSON.stringify({
-      add_ids: selectedJornadaOptions.value,
+      add_ids: selectedOptions.value[1],
       remove_ids: []
     }),
+    cultures: JSON.stringify({
+      add_ids: selectedOptions.value[2],
+      remove_ids: []
+    }),
+    /*
+    cover_image: '',
+    photo: '',
+    salary_from: formData.value.salaryRange,
+    additional_information: additionalInfoFormData.value.additionalInformation, */
+    /* 
+    
     job_skills: JSON.stringify({
       add_ids: selectedJobSkills.value,
       remove_ids: []
-    })
+    }) */
   };
-
+  console.log(data);
   try {
-    const response = await updateCandidateProfile(data);
+    const response = await CandidateService.editCandidateProfile(token, data);
     if (response && response.data.status_code === 201) {
       ElMessage.success(response.data.message);
       setTimeout(() => {

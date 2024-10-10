@@ -5,7 +5,7 @@ const registerCandidate = async (data) => {
     const response = await api.post("v1/candidate", data);
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 };
@@ -17,7 +17,21 @@ const getCandidateProfile = async (token) => {
           Authorization: `Bearer ${token}`
       }
       });
-      return response.data.data; 
+      return response; 
+  } catch (error) {
+      console.error('Error fetching candidate profile:', error);
+      throw error;
+  }
+};
+
+const editCandidateProfile = async (token, data) => {
+  try {
+      const response = await api.post("v1/candidate/profile", data, {
+      headers: {
+          Authorization: `Bearer ${token}`
+      }
+      });
+      return response; 
   } catch (error) {
       console.error('Error fetching candidate profile:', error);
       throw error;
@@ -25,5 +39,5 @@ const getCandidateProfile = async (token) => {
 };
 
 export const useCandidateService = () => {
-  return { registerCandidate, getCandidateProfile };
+  return { registerCandidate, getCandidateProfile, editCandidateProfile };
 };
